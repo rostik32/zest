@@ -17,6 +17,6 @@ options:
 args:
   name: command
   generators:
-    script: "{ [ -x bin/magento ] && bin/magento list --raw || magento list --raw; } 2>/dev/null | sed -E 's/  +/\\t/'"
+    script: "{ [ -x bin/magento ] && bin/magento list --raw || magento list --raw; } 2>/dev/null | awk '{ sub(/  +/, \"\\t\"); print }'"
     descriptionSeparator: "\t"
     cache: { ttl: 300, cacheByDirectory: true }

@@ -25,6 +25,6 @@ options:
 args:
   name: command
   generators:
-    script: "drush list --raw 2>/dev/null | sed -E 's/  +/\\t/'"
+    script: "drush list --raw 2>/dev/null | awk '{ sub(/  +/, \"\\t\"); print }'"
     descriptionSeparator: "\t"
     cache: { ttl: 300, cacheByDirectory: true }
