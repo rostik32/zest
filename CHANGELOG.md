@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.2 — 2026-11-16
+
+- New spec: `tofu` (OpenTofu), with workspace and resource address suggestions. Thanks to
+  @chen-xiao-yuan for the first community contribution! (#4)
+- The `composer`, `drush` and `magento` specs work on every supported macOS version (their
+  generators use awk instead of sed to separate names and descriptions).
+
 ## 0.1.1 — 2026-11-15
 
 - Specs that only load another spec now work (`speedtest` → `speedtest-cli`).
