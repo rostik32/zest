@@ -1,4 +1,4 @@
-# Imported from withfig/autocomplete (MIT). You can edit this file; see docs/adding-a-command.md.
+# Adapted from terraform.yaml (withfig/autocomplete, MIT) for OpenTofu. See docs/adding-a-command.md.
 name: tofu
 description: OpenTofu CLI
 subcommands:
@@ -349,12 +349,8 @@ subcommands:
     args:
       name: address
       generators:
-        script:
-          - tofu
-          - state
-          - list
-        js:
-          postProcess: 0
+        script: "tofu state list 2>/dev/null | awk '{ sub(/^[* ]+/, \"\"); print $0 \"\\tAddress\" }'"
+        descriptionSeparator: "\t"
   - name: untaint
     description: Remove the 'tainted' state from a resource instance
     options:
@@ -462,23 +458,15 @@ subcommands:
             description: Disables output with coloring
         args:
           name: workspace name
-        generators:
-          script:
-            - tofu
-            - workspace
-            - list
-          js:
-            postProcess: 1
+          generators:
+            script: "tofu workspace list 2>/dev/null | awk '{ sub(/^[* ]+/, \"\"); print $0 \"\\tWorkspace\" }'"
+            descriptionSeparator: "\t"
       - name: select
         description: Change the current working workspace
         args:
           generators:
-            script:
-              - tofu
-              - workspace
-              - list
-            js:
-              postProcess: 1
+            script: "tofu workspace list 2>/dev/null | awk '{ sub(/^[* ]+/, \"\"); print $0 \"\\tWorkspace\" }'"
+            descriptionSeparator: "\t"
     options:
       - name: -help
         description: Show this help output, or the help for a specified subcommand
