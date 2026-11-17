@@ -1,0 +1,201 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# watchexec. Generated from crates/cli/src/args*.rs in github.com/watchexec/watchexec.
+name: watchexec
+description: Execute commands in response to file modifications
+args:
+  name: command
+  isCommand: true
+  isOptional: true
+options:
+  - name: "--manual"
+    description: "Show the manual page"
+  - name: "--completions"
+    description: "Generate a shell completions script"
+    args:
+      name: "completions"
+      suggestions: [bash, elvish, fish, nu, powershell, zsh]
+  - name: "--only-emit-events"
+    description: "Only emit events to stdout, run no commands"
+  - name: "--shell"
+    description: "Use a different shell"
+    args:
+      name: "shell"
+      suggestions: [none, bash, zsh, fish, sh]
+  - name: "-n"
+    description: "Shorthand for '--shell=none'"
+  - name: ["-E", "--env"]
+    description: "Add env vars to the command"
+    args:
+      name: "env"
+    isRepeatable: true
+  - name: "--no-process-group"
+    description: "Don't use a process group"
+  - name: "--wrap-process"
+    description: "Configure how the process is wrapped"
+    args:
+      name: "process"
+      suggestions: [auto, group, session, none]
+  - name: "--stop-signal"
+    description: "Signal to send to stop the command"
+    args:
+      name: "signal"
+  - name: "--stop-timeout"
+    description: "Time to wait for the command to exit gracefully"
+    args:
+      name: "timeout"
+  - name: "--timeout"
+    description: "Kill the command if it runs longer than this duration"
+    args:
+      name: "timeout"
+  - name: "--delay-run"
+    description: "Sleep before running the command"
+    args:
+      name: "run"
+  - name: "--workdir"
+    description: "Set the working directory"
+    args:
+      name: "workdir"
+      template: folders
+  - name: "--socket"
+    description: "Provide a socket to the command"
+    args:
+      name: "socket"
+  - name: ["-Q", "--quote"]
+    description: "Set whether or not to quote the command symbols when passing them to the shell"
+  - name: ["-o", "--on-busy-update"]
+    description: "What to do when receiving events while the command is running"
+    args:
+      name: "update"
+      suggestions: [queue, do-nothing, restart, signal]
+  - name: ["-r", "--restart"]
+    description: "Restart the process if it's still running"
+  - name: ["-s", "--signal"]
+    description: "Send a signal to the process when it's still running"
+    args:
+      name: "signal"
+  - name: "--map-signal"
+    description: "Translate signals from the OS to signals to send to the command"
+    args:
+      name: "signal"
+  - name: ["-d", "--debounce"]
+    description: "Time to wait for new events before taking action"
+    args:
+      name: "debounce"
+  - name: "--stdin-quit"
+    description: "Exit when stdin closes"
+  - name: ["-I", "--interactive"]
+    description: "Respond to keypresses to quit, restart, stop, or pause"
+  - name: "--exit-on-error"
+    description: "Exit when the command has an error"
+  - name: ["-p", "--postpone"]
+    description: "Wait until first change before running command"
+  - name: "--poll"
+    description: "Poll for filesystem changes"
+    args:
+      name: "poll"
+  - name: "--emit-events-to"
+    description: "Configure event emission"
+    args:
+      name: "to"
+      suggestions: [environment, stdio, file, json-stdio, json-file, none]
+  - name: ["-w", "--watch"]
+    description: "Watch a specific file or directory"
+    args:
+      name: "watch"
+      template: folders
+    isRepeatable: true
+  - name: ["-W", "--watch-non-recursive"]
+    description: "Watch a specific directory, non-recursively"
+    args:
+      name: "recursive"
+      template: folders
+    isRepeatable: true
+  - name: ["-F", "--watch-file"]
+    description: "Watch files and directories from a file"
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--no-vcs-ignore"
+    description: "Don't load gitignores"
+  - name: "--no-project-ignore"
+    description: "Don't load project-local ignores"
+  - name: "--no-global-ignore"
+    description: "Don't load global ignores"
+  - name: "--no-default-ignore"
+    description: "Don't use internal default ignores"
+  - name: "--no-discover-ignore"
+    description: "Don't discover ignore files at all"
+  - name: "--ignore-nothing"
+    description: "Don't ignore anything at all"
+  - name: ["-e", "--exts"]
+    description: "Filename extensions to filter to"
+    args:
+      name: "exts"
+    isRepeatable: true
+  - name: ["-f", "--filter"]
+    description: "Filename patterns to filter to"
+    args:
+      name: "filter"
+    isRepeatable: true
+  - name: "--filter-file"
+    description: "Files to load filters from"
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--project-origin"
+    description: "Set the project origin"
+    args:
+      name: "origin"
+      template: folders
+  - name: ["-j", "--filter-prog"]
+    description: "Filter programs"
+    args:
+      name: "prog"
+  - name: ["-i", "--ignore"]
+    description: "Filename patterns to filter out"
+    args:
+      name: "ignore"
+    isRepeatable: true
+  - name: "--ignore-file"
+    description: "Files to load ignores from"
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--fs-events"
+    description: "Filesystem events to filter to"
+    args:
+      name: "events"
+  - name: "--no-meta"
+    description: "Don't emit fs events for metadata changes"
+  - name: "--no-follow-symlinks"
+    description: "Don't follow directory symlinks when watching"
+  - name: ["-v", "--verbose"]
+    description: "Set diagnostic log level"
+  - name: "--log-file"
+    description: "Write diagnostic logs to a file"
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--print-events"
+    description: "Print events that trigger actions"
+  - name: ["-c", "--clear"]
+    description: "Clear screen before running command"
+    args:
+      name: "clear"
+      suggestions: [clear, reset]
+  - name: ["-N", "--notify"]
+    description: "Alert when commands start and end"
+    args:
+      name: "notify"
+      suggestions: [both, start, end]
+  - name: "--color"
+    description: "When to use terminal colours"
+    args:
+      name: "color"
+      suggestions: [auto, always, never]
+  - name: "--timings"
+    description: "Print how long the command took to run"
+  - name: ["-q", "--quiet"]
+    description: "Don't print starting and stopping messages"
+  - name: "--bell"
+    description: "Ring the terminal bell on command completion"

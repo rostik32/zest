@@ -1,0 +1,393 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Tilt. Generated from internal/cli/*.go in github.com/tilt-dev/tilt.
+name: tilt
+description: Multi-service development environments on Kubernetes
+options:
+  - name: [-v, --verbose]
+    description: Enable verbose logging
+    isPersistent: true
+  - name: [-d, --debug]
+    description: Enable debug logging
+    isPersistent: true
+  - name: --klog
+    description: Enable Kubernetes API logging
+    isPersistent: true
+    args:
+      name: level
+  - name: [-h, --help]
+    description: Help for tilt
+subcommands:
+  - name: "api-resources"
+    description: "Print the supported API resources"
+    options:
+      - name: "--api-group"
+        description: "Limit to resources in the specified API group"
+        args:
+          name: "group"
+      - name: "--namespaced"
+        description: "If false, non-namespaced resources will be returned, otherwise returning namespaced resources by default"
+      - name: "--verbs"
+        description: "Limit to resources that support the specified verbs"
+        args:
+          name: "verbs"
+      - name: "--sort-by"
+        description: "If non-empty, sort list of resources using specified field"
+        args:
+          name: "by"
+      - name: "--cached"
+        description: "Use the cached list of resources if available"
+  - name: "apply"
+    description: "Apply a configuration to a resource by filename or stdin"
+    options:
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "args"
+    description: "Changes the Tiltfile args in use by a running Tilt"
+    options:
+      - name: ["-f", "--file"]
+        description: "Path to the Tiltfile"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--clear"
+        description: "Clear the Tiltfile args, as if you'd run tilt with no args"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "ci"
+    description: "Start Tilt in CI/batch mode with the given Tiltfile args"
+    options:
+      - name: ["-f", "--file"]
+        description: "Path to the Tiltfile"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--logactions"
+        description: "Log all actions and state changes"
+      - name: "--output-snapshot-on-exit"
+        description: "If specified, Tilt will dump a snapshot of its state to the specified path when it exits"
+        args:
+          name: "exit"
+      - name: "--timeout"
+        description: "Timeout to wait for CI to pass"
+        args:
+          name: "timeout"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "create"
+    description: "Create a resource from a file or from stdin"
+    options:
+      - name: "--edit"
+        description: "Edit the API resource before creating"
+      - name: "--windows-line-endings"
+        description: "Only relevant if --edit=true"
+      - name: ["-l", "--selector"]
+        description: "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g"
+        args:
+          name: "selector"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "delete"
+    description: "Delete resources by filenames, stdin, resources and names, or by resources and label selector"
+    options:
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "demo"
+    description: "Creates a local, temporary Kubernetes cluster and runs a Tilt sample project"
+    options:
+      - name: "--teardown"
+        description: "Removes any leftover tilt-demo Kubernetes clusters and exits"
+      - name: "--legacy"
+        description: "If true, tilt will open in legacy HUD mode"
+      - name: "--tmpdir"
+        description: "Temporary directory to clone sample project to"
+        args:
+          name: "tmpdir"
+      - name: "--no-cluster"
+        description: "Skip ephemeral cluster creation (requires local K8s cluster to already be configured)"
+      - name: ["-r", "--repo"]
+        description: "Path to custom repo to use instead of Tiltfile"
+        args:
+          name: "repo"
+      - name: ["-f", "--file"]
+        description: "Path to custom Tiltfile to use instead of sample project"
+        args:
+          name: "file"
+          template: filepaths
+  - name: "describe"
+    description: "Show details of a specific resource or group of resources"
+    options:
+      - name: ["-l", "--selector"]
+        description: "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g"
+        args:
+          name: "selector"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "disable"
+    description: "Disables resources"
+    args:
+      name: resource
+      isOptional: true
+      isVariadic: true
+      generators:
+        script: "tilt get uiresources -o name 2>/dev/null | sed 's#.*/##'"
+    options:
+      - name: ["-l", "--labels"]
+        description: "Disable all resources with the specified labels"
+        args:
+          name: "labels"
+      - name: "--all"
+        description: "Disable all resources"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "docker"
+    description: "Execute Docker commands as Tilt would execute them"
+  - name: "docker-prune"
+    description: "Run docker prune as Tilt does"
+  - name: "doctor"
+    description: "Print diagnostic information about the Tilt environment, for filing bug reports"
+  - name: "down"
+    description: "Delete resources created by 'tilt up'"
+    options:
+      - name: ["-f", "--file"]
+        description: "Path to the Tiltfile"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--delete-namespaces"
+        description: "Delete namespaces defined in the Tiltfile (by default, don't)"
+      - name: "--delete-volumes"
+        description: "Delete docker volumes defined in the Tiltfile (by default, don't)"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "edit"
+    description: "Edit a resource on the server"
+    options:
+      - name: "--output-patch"
+        description: "Output the patch if the resource is edited"
+      - name: "--windows-line-endings"
+        description: "Defaults to the line ending native to your platform"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "enable"
+    description: "Enables resources"
+    args:
+      name: resource
+      isOptional: true
+      isVariadic: true
+      generators:
+        script: "tilt get uiresources -o name 2>/dev/null | sed 's#.*/##'"
+    options:
+      - name: ["-l", "--labels"]
+        description: "Enable all resources with the specified labels"
+        args:
+          name: "labels"
+      - name: "--only"
+        description: "Enable the specified resources, disable all others"
+      - name: "--all"
+        description: "Enable all resources"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "explain"
+    options:
+      - name: "--recursive"
+        description: "Print the fields of fields (Currently only 1 level deep)"
+      - name: "--api-version"
+        description: "Get different explanations for particular API version (API group/version)"
+        args:
+          name: "version"
+  - name: "get"
+    description: "Display one or many resources"
+    options:
+      - name: ["-w", "--watch"]
+        description: "After listing/getting the requested object, watch for changes"
+      - name: "--watch-only"
+        description: "Watch for changes to the requested object(s), without listing/getting first"
+      - name: "--ignore-not-found"
+        description: "If the requested object does not exist the command will return exit code 0"
+      - name: ["-l", "--selector"]
+        description: "Selector (label query) to filter on, supports '=', '==', and '!='.(e.g"
+        args:
+          name: "selector"
+      - name: "--field-selector"
+        description: "Selector (field query) to filter on, supports '=', '==', and '!='.(e.g"
+        args:
+          name: "selector"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "logs"
+    description: "Get logs from a running Tilt instance (optionally filtered for the specified resources)"
+    args:
+      name: resource
+      isOptional: true
+      isVariadic: true
+      generators:
+        script: "tilt get uiresources -o name 2>/dev/null | sed 's#.*/##'"
+    options:
+      - name: ["-f", "--follow"]
+        description: "If true, stream the requested logs; otherwise, print the requested logs at the current moment in time, then exit"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "patch"
+    description: "Update fields of a resource"
+    options:
+      - name: ["-p", "--patch"]
+        description: "The patch to be applied to the resource JSON file"
+        args:
+          name: "patch"
+      - name: "--patch-file"
+        description: "A file containing a patch to be applied to the resource"
+        args:
+          name: "file"
+      - name: "--local"
+        description: "If true, patch will operate on the content of the file, not the server-side resource"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "shell"
+    description: "Opens a shell into a container running in Tilt"
+    options:
+      - name: ["-c", "--container"]
+        description: "Name of the container within the pod"
+        args:
+          name: "container"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "trigger"
+    description: "Trigger an update for the specified resource"
+    args:
+      name: resource
+      isOptional: true
+      isVariadic: true
+      generators:
+        script: "tilt get uiresources -o name 2>/dev/null | sed 's#.*/##'"
+    options:
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "up"
+    description: "Start Tilt with the given Tiltfile args"
+    options:
+      - name: ["-f", "--file"]
+        description: "Path to the Tiltfile"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--legacy"
+        description: "If true, tilt will open in legacy terminal mode"
+      - name: "--stream"
+        description: "If true, tilt will stream logs in the terminal"
+      - name: "--logactions"
+        description: "Log all actions and state changes"
+      - name: "--output-snapshot-on-exit"
+        description: "If specified, Tilt will dump a snapshot of its state to the specified path when it exits"
+        args:
+          name: "exit"
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"
+  - name: "version"
+    description: "Current Tilt version"
+  - name: "wait"
+    description: "Experimental: Wait for a specific condition on one or many resources"
+    options:
+      - name: "--port"
+        description: "Port of the Tilt HTTP server"
+        args:
+          name: "port"
+      - name: "--host"
+        description: "Host of the Tilt HTTP server"
+        args:
+          name: "host"

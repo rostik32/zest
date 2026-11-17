@@ -1,86 +1,188 @@
-# Imported from withfig/autocomplete (MIT). You can edit this file; see docs/adding-a-command.md.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Next.js CLI. Generated from docs/01-app/03-api-reference/06-cli/next.mdx in github.com/vercel/next.js.
 name: next
-description: Next.js CLI to start, build and export your application
-subcommands:
-  - name: build
-    description: Create an optimized production build of your application
-    icon: https://nextjs.org/static/favicon/favicon-16x16.png
-    options:
-      - name: --profile
-        description: Enable production profiling
-      - name: --debug
-        description: Enable more verbose build output
-    args:
-      name: dir
-      description: Represent the directory of the Next.js application
-      isOptional: true
-      template: folders
-  - name: dev
-    description: Start the application in development mode
-    icon: https://nextjs.org/static/favicon/favicon-16x16.png
-    options:
-      - name:
-          - -p
-          - --port
-        description: A port number on which to start the application
-        args: {}
-      - name:
-          - -H
-          - --hostname
-        description: Hostname on which to start the application
-        args: {}
-    args:
-      name: dir
-      description: Represent the directory of the Next.js application
-      isOptional: true
-      template: folders
-  - name: start
-    description: Start the application in production mode
-    icon: https://nextjs.org/static/favicon/favicon-16x16.png
-    options:
-      - name:
-          - -p
-          - --port
-        description: A port number on which to start the application
-        args: {}
-      - name:
-          - -H
-          - --hostname
-        description: Hostname on which to start the application
-        args: {}
-    args:
-      name: dir
-      description: Represent the directory of the Next.js application
-      isOptional: true
-      template: folders
-  - name: export
-    description: Exports the application for production deployment
-    icon: https://nextjs.org/static/favicon/favicon-16x16.png
-    options:
-      - name: -s
-        description: Do not print any messages to console
-    args:
-      name: dir
-      description: Represent the directory of the Next.js application
-      isOptional: true
-      template: folders
-  - name: telemetry
-    description: Allows you to control Next.js' telemetry collection
-    icon: https://nextjs.org/static/favicon/favicon-16x16.png
-    args:
-      name: status
-      description: Turn Next.js' telemetry collection on or off
-      suggestions:
-        - name: enable
-          description: Enable Next.js' telemetry collection
-        - name: disable
-          description: Disable Next.js' telemetry collection
+description: The React framework for the web
 options:
-  - name:
-      - -h
-      - --help
-    description: Output usage information
-  - name:
-      - -v
-      - --version
-    description: Output the version number
+  - name: [-h, --help]
+    description: Show all available options
+  - name: [-v, --version]
+    description: Print the Next.js version
+subcommands:
+  - name: "dev"
+    description: "Starts Next.js in development mode with Hot Module Reloading, error reporting, and more"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+    options:
+      - name: "--turbopack"
+        description: "Force enable Turbopack (enabled by default)"
+      - name: "--webpack"
+        description: "Use the bundled Webpack instead of the default Turbopack bundler for development"
+      - name: "--custom-webpack"
+        description: "Use project-installed webpack for development"
+      - name: ["-p", "--port"]
+        description: "Specify a port number on which to start the application"
+        args:
+          name: "port"
+      - name: ["-H", "--hostname"]
+        description: "Specify a hostname on which to start the application"
+        args:
+          name: "hostname"
+      - name: "--experimental-https"
+        description: "Starts the server with HTTPS and generates a self-signed certificate"
+      - name: "--experimental-https-key"
+        description: "Path to a HTTPS key file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--experimental-https-cert"
+        description: "Path to a HTTPS certificate file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--experimental-https-ca"
+        description: "Path to a HTTPS certificate authority file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--experimental-upload-trace"
+        description: "Reports a subset of the debugging trace to a remote HTTP URL"
+        args:
+          name: "traceUrl"
+      - name: "--experimental-cpu-prof"
+        description: "Enables CPU profiling using V8's inspector"
+  - name: "build"
+    description: "Creates an optimized production build of your application"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+    options:
+      - name: "--turbopack"
+        description: "Force enable Turbopack (enabled by default)"
+      - name: "--webpack"
+        description: "Build using the bundled Webpack"
+      - name: "--custom-webpack"
+        description: "Build using project-installed webpack"
+      - name: "--analyze"
+        description: "Generate bundle analysis data for the interactive analyzer during a Turbopack build"
+      - name: ["-d", "--debug"]
+        description: "Enables a more verbose build output"
+      - name: "--profile"
+        description: "Enables production profiling for React"
+      - name: "--no-mangling"
+        description: "Disables mangling"
+      - name: "--experimental-app-only"
+        description: "Builds only App Router routes"
+      - name: "--experimental-build-mode"
+        description: "Uses an experimental build mode"
+        args:
+          name: "mode"
+          suggestions: ["compile", "generate"]
+      - name: "--debug-prerender"
+        description: "Debug prerender errors in development"
+      - name: "--debug-build-paths"
+        description: "Build only specific routes for debugging"
+        args:
+          name: "patterns"
+      - name: "--experimental-cpu-prof"
+        description: "Enables CPU profiling using V8's inspector"
+  - name: "start"
+    description: "Starts Next.js in production mode"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+    options:
+      - name: ["-p", "--port"]
+        description: "Specify a port number on which to start the application"
+        args:
+          name: "port"
+      - name: ["-H", "--hostname"]
+        description: "Specify a hostname on which to start the application (default: 0.0.0.0)"
+        args:
+          name: "hostname"
+      - name: "--keepAliveTimeout"
+        description: "Specify the maximum amount of milliseconds to wait before closing the inactive connections"
+        args:
+          name: "keepAliveTimeout"
+      - name: "--experimental-cpu-prof"
+        description: "Enables CPU profiling using V8's inspector"
+  - name: "info"
+    description: "Prints relevant details about the current system which can be used to report Next.js bugs"
+    options:
+      - name: "--verbose"
+        description: "Collects additional information for debugging"
+  - name: "telemetry"
+    description: "Allows you to enable or disable Next.js' completely anonymous telemetry collection"
+    args:
+      name: action
+      isOptional: true
+      suggestions: [enable, disable, status]
+    options:
+      - name: "--enable"
+        description: "Enables Next.js' telemetry collection"
+      - name: "--disable"
+        description: "Disables Next.js' telemetry collection"
+  - name: "typegen"
+    description: "Generates TypeScript definitions for routes, pages, layouts, and route handlers without running a full build"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+  - name: "upgrade"
+    description: "Upgrades your Next.js application to the latest version"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+    options:
+      - name: "--revision"
+        description: "Specify a Next.js version or tag to upgrade to (e.g., latest, canary, 15.0.0)"
+        args:
+          name: "revision"
+      - name: "--verbose"
+        description: "Show verbose output during the upgrade process"
+      - name: "--agent"
+        description: "Upgrade with a coding agent using security, latest, or experimental-future"
+        args:
+          name: "type"
+          suggestions: [security, latest, experimental-future]
+  - name: "analyze"
+    description: "Analyzes bundle output using Turbopack"
+    args:
+      name: directory
+      isOptional: true
+      template: folders
+    options:
+      - name: "--no-mangling"
+        description: "Disables mangling"
+      - name: "--profile"
+        description: "Enables production profiling for React"
+      - name: ["-o", "--output"]
+        description: "Build and save binary analyzer data and UI files to <distDir>/diagnostics/analyze without serving"
+      - name: "--snapshot"
+        description: "Save a named snapshot, replacing an earlier capture with the same name"
+        args:
+          name: "name"
+      - name: "--port"
+        description: "Specify a port number to serve the analyzer on"
+        args:
+          name: "port"
+    subcommands:
+      - name: "export"
+        options:
+          - name: "--snapshot"
+            description: "Select a saved snapshot by name"
+            args:
+              name: "name"
+          - name: "--route"
+            description: "Restrict export to one route (still includes the full module graph)"
+            args:
+              name: "route"
+          - name: "--dist-dir"
+            description: "Select an explicit relative or absolute build directory without reading next.config"
+            args:
+              name: "directory"
+              template: filepaths

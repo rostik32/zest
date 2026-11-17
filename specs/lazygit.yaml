@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# lazygit. Written from pkg/app/entry_point.go in github.com/jesseduffield/lazygit.
+name: lazygit
+description: A simple terminal UI for git commands
+args:
+  name: panel
+  description: Panel to focus when lazygit opens
+  isOptional: true
+  suggestions:
+    - name: status
+      description: Focus the status panel
+    - name: branch
+      description: Focus the branches panel
+    - name: log
+      description: Focus the commits panel
+    - name: stash
+      description: Focus the stash panel
+options:
+  - name: [-p, --path]
+    description: Path of the git repo (sets --work-tree and --git-dir)
+    args:
+      name: path
+      template: folders
+  - name: [-f, --filter]
+    description: Only show commits, reflog and stash entries that touch this path
+    args:
+      name: path
+      template: filepaths
+  - name: [-w, --work-tree]
+    description: Like git's --work-tree
+    args:
+      name: path
+      template: folders
+  - name: [-g, --git-dir]
+    description: Like git's --git-dir
+    args:
+      name: path
+      template: folders
+  - name: [-sm, --screen-mode]
+    description: Initial size of the focused panel
+    args:
+      name: mode
+      suggestions: [normal, half, full]
+  - name: [-ucd, --use-config-dir]
+    description: Use this config directory instead of the default one
+    args:
+      name: path
+      template: folders
+  - name: [-ucf, --use-config-file]
+    description: Comma-separated list of config files to use
+    args:
+      name: files
+      template: filepaths
+  - name: [-c, --config]
+    description: Print the default config
+  - name: [-cd, --print-config-dir]
+    description: Print the config directory
+  - name: [-d, --debug]
+    description: Run in debug mode with logging
+  - name: [-l, --logs]
+    description: Tail lazygit's logs (run lazygit --debug in another tab)
+  - name: --profile
+    description: Start the profiler on http port 6060
+  - name: [-v, --version]
+    description: Print the version
+  - name: [-h, --help]
+    description: Print help

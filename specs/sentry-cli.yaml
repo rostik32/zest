@@ -1,0 +1,674 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# sentry-cli. Generated from src/commands in github.com/getsentry/sentry-cli.
+name: sentry-cli
+description: Command line utility for Sentry
+options:
+  - name: --url
+    description: Sentry server URL
+    isPersistent: true
+    args:
+      name: url
+  - name: --auth-token
+    description: Authentication token
+    isPersistent: true
+    args:
+      name: token
+  - name: [-o, --org]
+    description: Organization ID or slug
+    isPersistent: true
+    args:
+      name: org
+  - name: [-p, --project]
+    description: Project ID or slug
+    isPersistent: true
+    args:
+      name: project
+  - name: [-H, --header]
+    description: Custom header to send to the server, KEY:VALUE
+    isPersistent: true
+    args:
+      name: header
+  - name: --log-level
+    description: Log level
+    isPersistent: true
+    args:
+      name: level
+      suggestions: [trace, debug, info, warn, error]
+  - name: [--quiet, --silent]
+    description: Don't print command output
+    isPersistent: true
+  - name: --allow-failure
+    description: Always exit with 0
+    isPersistent: true
+  - name: [-h, --help]
+    description: Print help
+  - name: [-V, --version]
+    description: Print version
+subcommands:
+  - name: "bash-hook"
+    description: "Prints out a bash script that does error handling"
+    options:
+      - name: "--no-exit"
+        description: "Do not turn on -e (exit immediately) flag automatically"
+      - name: "--cli"
+        description: "Explicitly set/override the sentry-cli command"
+        args:
+          name: "cli"
+      - name: "--tag"
+        description: "Add tags (key:value) to the event"
+        args:
+          name: "tag"
+      - name: "--release"
+        description: "Define release version for the event"
+        args:
+          name: "release"
+  - name: "build"
+    description: "Manage builds"
+    subcommands:
+      - name: "download"
+        description: "Download a build artifact"
+        options:
+          - name: ["-b", "--build-id"]
+            description: "The ID of the build to download"
+          - name: "--output"
+            description: "The output file path"
+      - name: "upload"
+        description: "Upload builds to a project"
+        options:
+          - name: "--build-configuration"
+            description: "The build configuration to use for the upload"
+          - name: "--release-notes"
+            description: "The release notes to use for the upload"
+          - name: "--install-group"
+            description: "The install group(s) for this build"
+            args:
+              name: "install-group"
+  - name: "code-mappings"
+    description: "Manage code mappings for Sentry"
+    subcommands:
+      - name: "upload"
+        description: "Upload code mappings for a project from a JSON file"
+        options:
+          - name: "--repo"
+            description: "The repository name (e.g"
+            args:
+              name: "repo"
+          - name: "--default-branch"
+            description: "The default branch name"
+            args:
+              name: "default-branch"
+  - name: "debug-files"
+    description: "Locate, analyze or upload debug information files"
+    subcommands:
+      - name: "bundle-sources"
+        description: "Create a source bundle for a given debug information file"
+        options:
+          - name: ["-o", "--output"]
+            description: "The path to the output folder"
+            args:
+              name: "output"
+      - name: "check"
+        description: "Check the debug info file at a given path"
+        options:
+          - name: ["-t", "--type"]
+            description: "Explicitly set the type of the debug info file"
+            args:
+              name: "type"
+          - name: "--json"
+            description: "Format outputs as JSON"
+      - name: "bundle-jvm"
+        description: "Create a source bundle for the given JVM based source files (e.g"
+        options:
+          - name: "--output"
+            description: "The path to the output folder"
+            args:
+              name: "output"
+          - name: "--debug-id"
+            description: "Debug ID (UUID) to use for the source bundle"
+            args:
+              name: "debug-id"
+          - name: "--exclude"
+            description: "Glob pattern to exclude files/directories"
+            args:
+              name: "exclude"
+      - name: "find"
+        description: "Locate debug information files for given debug identifiers"
+        options:
+          - name: ["-t", "--type"]
+            description: "Only consider debug information files of the given \\ type"
+            args:
+              name: "type"
+          - name: "--no-well-known"
+            description: "Do not look for debug symbols in well known locations"
+          - name: "--no-cwd"
+            description: "Do not look for debug symbols in the current working directory"
+          - name: ["-p", "--path"]
+            description: "Add a path to search recursively for debug info files"
+            args:
+              name: "path"
+          - name: "--json"
+            description: "Format outputs as JSON"
+      - name: "print-sources"
+        description: "Print source files linked by the given debug info file"
+      - name: "upload"
+        description: "Upload debugging information files"
+        options:
+          - name: ["-t", "--type"]
+            description: "Only consider debug information files of the given \\ type"
+            args:
+              name: "type"
+          - name: "--no-unwind"
+            description: "Do not scan for stack unwinding information"
+          - name: "--no-debug"
+            description: "Do not scan for debugging information"
+          - name: "--no-sources"
+            description: "Do not scan for source information"
+          - name: "--id"
+            description: "Search for specific debug identifiers"
+            args:
+              name: "id"
+          - name: "--require-all"
+            description: "Errors if not all identifiers specified with --id could be found"
+          - name: "--symbol-maps"
+            description: "Optional path to BCSymbolMap files which are used to \\ resolve hidden symbols in dSYM files downloaded from \\ iTunes Connect"
+            args:
+              name: "symbol-maps"
+          - name: "--derived-data"
+            description: "Search for debug symbols in Xcode's derived data"
+          - name: "--no-zips"
+            description: "Do not search in ZIP files"
+          - name: "--no-upload"
+            description: "Disable the actual upload.{n}This runs all steps for the \\ processing but does not trigger the upload"
+          - name: "--include-sources"
+            description: "Include sources from the local file system and upload them as source bundles"
+          - name: "--wait"
+            description: "Wait for the server to fully process uploaded files"
+          - name: "--il2cpp-mapping"
+            description: "Compute il2cpp line mappings and upload them along with sources"
+  - name: "deploys"
+    description: "Manage deployments for Sentry releases"
+    subcommands:
+      - name: "list"
+        description: "List all deployments of a release"
+      - name: "new"
+        description: "Creates a new release deployment"
+        options:
+          - name: ["-e", "--env"]
+            description: "Set the environment for this release.{n}This argument is required"
+            args:
+              name: "env"
+          - name: ["-n", "--name"]
+            description: "Optional human readable name for this deployment"
+            args:
+              name: "name"
+          - name: ["-u", "--url"]
+            description: "Optional URL that points to the deployment"
+            args:
+              name: "url"
+          - name: "--started"
+            description: "Optional unix timestamp when the deployment started"
+            args:
+              name: "started"
+          - name: "--finished"
+            description: "Optional unix timestamp when the deployment finished"
+            args:
+              name: "finished"
+          - name: ["-t", "--time"]
+            description: "Optional deployment duration in seconds.{n}\\ This can be specified alternatively to --started and --finished"
+            args:
+              name: "time"
+  - name: "events"
+    description: "Manage events on Sentry"
+    subcommands:
+      - name: "list"
+        description: "List all events in your organization"
+        options:
+          - name: ["-U", "--show-user"]
+            description: "Display the Users column"
+          - name: ["-T", "--show-tags"]
+            description: "Display the Tags column"
+          - name: "--max-rows"
+            description: "Maximum number of rows to print"
+            args:
+              name: "max-rows"
+          - name: "--pages"
+            description: "Maximum number of pages to fetch (100 events/page)"
+            args:
+              name: "pages"
+  - name: "info"
+    description: "Print information about the configuration and verify authentication"
+    options:
+      - name: "--config-status-json"
+        description: "Return the status of the config that sentry-cli loads \\ as JSON dump"
+      - name: "--no-defaults"
+        description: "Skip default organization and project checks"
+  - name: "issues"
+    description: "Manage issues in Sentry"
+    options:
+      - name: ["-s", "--status"]
+        description: "Select all issues matching a given status"
+        args:
+          name: "status"
+      - name: ["-a", "--all"]
+        description: "Select all issues (this might be limited)"
+    subcommands:
+      - name: "list"
+        description: "List all issues in your organization"
+        options:
+          - name: "--max-rows"
+            description: "Maximum number of rows to print"
+            args:
+              name: "max-rows"
+          - name: "--pages"
+            description: "Maximum number of pages to fetch (100 issues/page)"
+            args:
+              name: "pages"
+          - name: "--query"
+            description: "Query to filter issues"
+            args:
+              name: "query"
+      - name: "mute"
+        description: "Bulk mute all selected issues"
+      - name: "resolve"
+        description: "Bulk resolve all selected issues"
+        options:
+          - name: ["-n", "--next-release"]
+            description: "Only select issues in the next release"
+      - name: "unresolve"
+        description: "Bulk unresolve all selected issues"
+  - name: "login"
+    description: "Authenticate with the Sentry server"
+    options:
+      - name: ["-g", "--global"]
+        description: "Store authentication token globally rather than locally"
+  - name: "logs"
+  - name: "monitors"
+    description: "Manage cron monitors on Sentry"
+    subcommands:
+      - name: "list"
+        description: "List all monitors for an organization"
+      - name: "run"
+        description: "Wraps a command"
+        options:
+          - name: ["-e", "--environment"]
+            description: "Specify the environment of the monitor"
+          - name: ["-s", "--schedule"]
+            description: "Configure the cron monitor with the given schedule (crontab format)"
+          - name: "--check-in-margin"
+            description: "The allowed margin of minutes after the expected check-in time that the \\ monitor will not be considered missed for"
+            args:
+              name: "check-in-margin"
+          - name: "--max-runtime"
+            description: "The allowed duration in minutes that the monitor may be in progress for \\ before being considered failed due to timeout"
+            args:
+              name: "max-runtime"
+          - name: "--timezone"
+            description: "A tz database string (e.g"
+            args:
+              name: "timezone"
+          - name: "--failure-issue-threshold"
+            description: "The number of consecutive missed or error check-ins that trigger an \\ issue"
+            args:
+              name: "failure-issue-threshold"
+  - name: "organizations"
+    description: "Manage organizations on Sentry"
+    subcommands:
+      - name: "list"
+        description: "List all organizations available to the authenticated token"
+  - name: "proguard"
+    description: "Manage ProGuard mapping files"
+    subcommands:
+      - name: "upload"
+        description: "Upload ProGuard mapping files to a project"
+        options:
+          - name: "--no-upload"
+            description: "Disable the actual upload.{n}This runs all steps for the \\ processing but does not trigger the upload"
+          - name: "--write-properties"
+            description: "Write the UUIDs for the processed mapping files into \\ the given properties file"
+            args:
+              name: "write-properties"
+          - name: "--require-one"
+            description: "Requires at least one file to upload or the command will error"
+      - name: "uuid"
+        description: "Compute the UUID for a ProGuard mapping file"
+  - name: "projects"
+    description: "Manage projects on Sentry"
+    subcommands:
+      - name: "list"
+        description: "List all projects for an organization"
+  - name: "react-native"
+    description: "Upload build artifacts for react-native projects"
+    subcommands:
+      - name: "gradle"
+        description: "Upload react-native projects in a gradle build step"
+        options:
+          - name: "--sourcemap"
+            description: "The path to a sourcemap that should be uploaded"
+            args:
+              name: "sourcemap"
+          - name: "--bundle"
+            description: "The path to a bundle that should be uploaded"
+            args:
+              name: "bundle"
+          - name: "--release"
+            description: "The name of the release to publish"
+            args:
+              name: "release"
+          - name: "--dist"
+            description: "The names of the distributions to publish"
+            args:
+              name: "dist"
+          - name: "--wait"
+            description: "Wait for the server to fully process uploaded files"
+      - name: "xcode"
+        description: "Upload react-native projects in a Xcode build step"
+        options:
+          - name: ["-f", "--force"]
+            description: "Force the script to run, even in debug configuration.{n}This rarely \\ does what you want because the default build script does not actually \\ produce any information that the sentry build tool could pick up on"
+          - name: "--allow-fetch"
+            description: "Enable sourcemap fetching from the packager.{n}If this is enabled \\ the react native packager needs to run and sourcemaps are downloade \\ from it if the simulator platform is detected"
+          - name: "--fetch-from"
+            description: "Set the URL to fetch sourcemaps from.{n}\\ The default is http://127.0.0.1:8081/, where the react-native \\ packager runs by default"
+            args:
+              name: "fetch-from"
+          - name: "--force-foreground"
+            description: "Wait for the process to finish.{n}\\ By default part of the build process will when triggered from Xcode \\ detach and continue in the background"
+          - name: "--dist"
+            description: "The names of the distributions to publish"
+            args:
+              name: "dist"
+          - name: "--wait"
+            description: "Wait for the server to fully process uploaded files"
+          - name: "--wait-for"
+            description: "Wait for the server to fully process uploaded files, \\ but at most for the given number of seconds"
+            args:
+              name: "wait-for"
+          - name: "--no-auto-release"
+            description: "Don't try to automatically read release from Xcode project files"
+  - name: "releases"
+    description: "Manage releases on Sentry"
+    subcommands:
+      - name: "archive"
+        description: "Archive a release"
+      - name: "delete"
+        description: "Delete a release"
+      - name: "finalize"
+        description: "Mark a release as finalized and released"
+        options:
+          - name: "--url"
+            description: "Optional URL to the release for information purposes"
+            args:
+              name: "url"
+          - name: "--released"
+            description: "Set the release time"
+            args:
+              name: "released"
+      - name: "info"
+        description: "Print information about a release"
+        options:
+          - name: ["-P", "--show-projects"]
+            description: "Display the Projects column"
+          - name: ["-C", "--show-commits"]
+            description: "Display the Commits column"
+      - name: "list"
+        description: "List the most recent releases"
+        options:
+          - name: ["-P", "--show-projects"]
+            description: "Display the Projects column"
+          - name: ["-R", "--raw"]
+            description: "Print raw, delimiter separated list of releases"
+      - name: "new"
+        description: "Create a new release"
+        options:
+          - name: "--url"
+            description: "Optional URL to the release for information purposes"
+            args:
+              name: "url"
+      - name: "propose-version"
+        description: "Propose a version name for a new release"
+      - name: "restore"
+        description: "Restore a release"
+      - name: "set-commits"
+        description: "Set commits of a release"
+        options:
+          - name: "--clear"
+            description: "Clear all current commits from the release"
+          - name: "--auto"
+            description: "Enable completely automated commit management.{n}\\ This requires that the command is run from within a git repository"
+          - name: "--ignore-missing"
+            description: "When the flag is set and the previous release commit was not found in the repository, \\ will create a release with the default commits count (or the one specified with --initial-depth) \\ instead of failing the command"
+          - name: "--local"
+            description: "Set commits of a release from local git.{n}\\ This requires that the command is run from within a git repository"
+          - name: "--initial-depth"
+            description: "Set the number of commits of the initial release"
+            args:
+              name: "initial-depth"
+  - name: "repos"
+    description: "Manage repositories on Sentry"
+    subcommands:
+      - name: "list"
+        description: "List all repositories in your organization"
+  - name: "send-event"
+    description: "Send a manual event to Sentry"
+    options:
+      - name: "--raw"
+        description: "Send events using an envelope without attempting to parse their contents"
+      - name: ["-l", "--level"]
+        description: "Optional event severity/log level"
+        args:
+          name: "level"
+      - name: "--timestamp"
+        description: "Optional event timestamp in one of supported formats: unix timestamp, RFC2822 or RFC3339"
+        args:
+          name: "timestamp"
+      - name: ["-r", "--release"]
+        description: "Optional identifier of the release"
+        args:
+          name: "release"
+      - name: ["-d", "--dist"]
+        description: "Set the distribution"
+        args:
+          name: "dist"
+      - name: ["-E", "--env"]
+        description: "Send with a specific environment"
+        args:
+          name: "env"
+      - name: "--no-environ"
+        description: "Do not send environment variables along"
+      - name: ["-m", "--message"]
+        description: "The event message"
+        args:
+          name: "message"
+      - name: ["-a", "--message-arg"]
+        description: "Arguments for the event message"
+        args:
+          name: "message-arg"
+      - name: ["-p", "--platform"]
+        description: "Override the default 'other' platform specifier"
+        args:
+          name: "platform"
+      - name: ["-t", "--tag"]
+        description: "Add a tag (key:value) to the event"
+        args:
+          name: "tag"
+      - name: ["-e", "--extra"]
+        description: "Add extra information (key:value) to the event"
+        args:
+          name: "extra"
+      - name: ["-u", "--user"]
+        description: "Add user information (key:value) to the event"
+        args:
+          name: "user"
+      - name: ["-f", "--fingerprint"]
+        description: "Change the fingerprint of the event"
+        args:
+          name: "fingerprint"
+      - name: "--logfile"
+        args:
+          name: "logfile"
+      - name: "--with-categories"
+        description: "Parses off a leading category for breadcrumbs from the logfile"
+  - name: "send-envelope"
+    description: "Send a stored envelope to Sentry"
+    options:
+      - name: "--raw"
+        description: "Send envelopes without attempting to parse their contents"
+  - name: "snapshots"
+    description: "Manage and compare snapshots"
+    subcommands:
+      - name: "diff"
+        description: "Compare two directories of snapshot images locally using odiff"
+        options:
+          - name: ["-o", "--output"]
+            description: "Directory for diff mask images"
+            args:
+              name: "output"
+          - name: "--threshold"
+            description: "Pixel color difference threshold (0.0-1.0)"
+            args:
+              name: "threshold"
+          - name: "--no-antialiasing"
+            description: "Disable antialiasing detection"
+          - name: "--fail-on-diff"
+            description: "Exit with code 1 if any diffs are found"
+          - name: "--selective"
+            description: "Treat missing base images as skipped instead of removed"
+      - name: "download"
+        description: "Download baseline snapshot images from Sentry"
+        options:
+          - name: "--app-id"
+            description: "App identifier (e.g"
+            args:
+              name: "app-id"
+          - name: "--snapshot-id"
+            description: "Direct snapshot artifact ID"
+            args:
+              name: "snapshot-id"
+          - name: "--branch"
+            description: "Git branch filter (only with --app-id)"
+            args:
+              name: "branch"
+          - name: "--output"
+            description: "Directory for extracted images"
+            args:
+              name: "output"
+      - name: "upload"
+        description: "Upload snapshots to a project"
+        options:
+          - name: "--app-id"
+            description: "The application identifier"
+            args:
+              name: "app-id"
+          - name: "--diff-threshold"
+            description: "If set, Sentry will only report images as changed if their \\ difference % is greater than this value"
+            args:
+              name: "diff-threshold"
+          - name: "--selective"
+            description: "Indicates this upload contains only a subset of images"
+          - name: "--all-image-file-names"
+            description: "Comma-separated list of all image names (including subdirectory paths) \\ in the full test suite"
+            args:
+              name: "all-image-file-names"
+          - name: "--all-image-file-names-file"
+            description: "Path to a file containing all image names (including subdirectory paths), \\ one per line"
+            args:
+              name: "all-image-file-names-file"
+  - name: "sourcemaps"
+    description: "Manage sourcemaps for Sentry releases"
+    subcommands:
+      - name: "inject"
+        description: "Fixes up JavaScript source files and sourcemaps with debug ids"
+        options:
+          - name: ["-i", "--ignore"]
+            description: "Ignores all files and folders matching the given glob"
+            args:
+              name: "ignore"
+          - name: ["-I", "--ignore-file"]
+            description: "Ignore all files and folders specified in the given \\ ignore file, e.g"
+            args:
+              name: "ignore-file"
+          - name: ["-x", "--ext"]
+            description: "Set the file extensions of JavaScript files that are considered \\ for injection"
+            args:
+              name: "ext"
+          - name: "--dry-run"
+            description: "Don't modify files on disk"
+      - name: "resolve"
+        description: "Resolve sourcemap for a given line/column position"
+        options:
+          - name: ["-l", "--line"]
+            description: "Line number for minified source"
+            args:
+              name: "line"
+          - name: ["-c", "--column"]
+            description: "Column number for minified source"
+            args:
+              name: "column"
+      - name: "upload"
+        description: "Upload sourcemaps for a release"
+        options:
+          - name: ["-u", "--url-prefix"]
+            description: "The URL prefix to prepend to all filenames"
+            args:
+              name: "url-prefix"
+          - name: "--url-suffix"
+            description: "The URL suffix to append to all filenames"
+            args:
+              name: "url-suffix"
+          - name: ["-d", "--dist"]
+            description: "Optional distribution identifier for the sourcemaps"
+            args:
+              name: "dist"
+          - name: "--note"
+            description: "Adds an optional note to the uploaded artifact bundle"
+            args:
+              name: "note"
+          - name: "--validate"
+            description: "Enable basic sourcemap validation"
+          - name: "--decompress"
+            description: "Enable files gzip decompression prior to upload"
+          - name: "--wait"
+            description: "Wait for the server to fully process uploaded files"
+          - name: "--wait-for"
+            description: "Wait for the server to fully process uploaded files, \\ but at most for the given number of seconds"
+            args:
+              name: "wait-for"
+          - name: "--no-sourcemap-reference"
+            description: "Disable emitting of automatic sourcemap references.{n}\\ By default the tool will store a 'Sourcemap' header with \\ minified files so that sourcemaps are located automatically \\ if the tool can detect a link"
+          - name: "--debug-id-reference"
+            description: "Enable emitting of automatic debug id references.{n}\\ By default Debug ID reference has to be present both \\ in the source and the related sourcemap"
+          - name: "--no-rewrite"
+            description: "Disables rewriting of matching sourcemaps"
+          - name: "--strip-prefix"
+            description: "Strips the given prefix from all sources references inside the upload \\ sourcemaps (paths used within the sourcemap content, to map minified code \\ to it's original source)"
+            args:
+              name: "strip-prefix"
+          - name: "--strip-common-prefix"
+            description: "Similar to --strip-prefix but strips the most common \\ prefix on all sources references"
+          - name: ["-i", "--ignore"]
+            description: "Ignores all files and folders matching the given glob"
+            args:
+              name: "ignore"
+          - name: ["-I", "--ignore-file"]
+            description: "Ignore all files and folders specified in the given \\ ignore file, e.g"
+            args:
+              name: "ignore-file"
+          - name: "--bundle"
+            description: "Path to the application bundle (indexed, file, or regular)"
+            args:
+              name: "bundle"
+          - name: "--bundle-sourcemap"
+            description: "Path to the bundle sourcemap"
+            args:
+              name: "bundle-sourcemap"
+          - name: ["-x", "--ext"]
+            args:
+              name: "ext"
+  - name: "dart-symbol-map"
+  - name: "uninstall"
+    description: "Uninstall the sentry-cli executable"
+  - name: "update"
+    description: "Update the sentry-cli executable"
+  - name: "upload-dif"
+  - name: "upload-dsym"
+  - name: "upload-proguard"

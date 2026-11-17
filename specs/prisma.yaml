@@ -1,346 +1,324 @@
-# Imported from withfig/autocomplete (MIT). You can edit this file; see docs/adding-a-command.md.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Prisma ORM 7 CLI. Generated from apps/docs/content/docs/cli/v7 in github.com/prisma/docs.
 name: prisma
-description: Prisma is a modern DB toolkit to query, migrate and model your database
-icon: https://raw.githubusercontent.com/prisma/docs/main/src/images/favicon-16x16.png
+description: Prisma ORM command line interface
+options:
+  - name: [-h, --help]
+    description: Display help
+  - name: [-v, --version]
+    description: Print the Prisma version
 subcommands:
-  - name: init
-    description: Setup Prisma for your app
+  - name: "init"
+    description: "Set up a new Prisma project in the current directory"
     options:
-      - name:
-          - -h
-          - --help
-        description: Display this help message
-      - name: --datasource-provider
-        description: Define the datasource provider to use
+      - name: "--db"
+        description: "Provision a fully managed Prisma Postgres database on the Prisma Data Platform"
+      - name: "--datasource-provider"
+        description: "Define the datasource provider: postgresql, mysql, sqlite, sqlserver, mongodb, or cockroachdb"
         args:
-          description: Choose provider
-          suggestions:
-            - PostgreSQL
-            - MySQL
-            - SQLite
-            - SQLServer
-            - MongoDB
-            - CockroachDB
-          default: PostgreSQL
-      - name: --url
-        description: Define a custom datasource url
+          name: "provider"
+          suggestions: [postgresql, mysql, sqlite, sqlserver, mongodb, cockroachdb]
+      - name: "--generator-provider"
+        description: "Define the generator provider to use (default: prisma-client)"
         args:
-          name: full url
+          name: "provider"
+      - name: "--preview-feature"
+        description: "Define a preview feature to use (can be specified multiple times)"
+      - name: "--output"
+        description: "Define Prisma Client generator output path"
+        args:
+          name: "path"
           template: filepaths
-  - name: generate
-    description: Generate artifacts (e.g. Prisma Client)
+      - name: "--url"
+        description: "Define a custom datasource URL"
+        args:
+          name: "url"
+  - name: "generate"
+    description: "Generate artifacts like Prisma Client based on your Prisma schema"
     options:
-      - name:
-          - -h
-          - --help
-        description: Display this help message
-      - name: --schema
-        description: Custom path to your Prisma schema
+      - name: "--config"
+        description: "Custom path to your Prisma config file"
         args:
-          name: Schema path
+          name: "path"
           template: filepaths
-      - name: --data-proxy
-        description: Enable the Data Proxy in the Prisma Client
-      - name: --no-hints
-        description: Hides the hint messages but still outputs errors and warnings
-      - name: --no-engine
-        description: Generate a client for use with Accelerate only
-      - name: --watch
-        description: Watch the Prisma schema and rerun after a change
-      - name: --allow-no-models
-        description: Allow generating a client without models
-  - name: studio
-    description: Open Prisma Studio
-    options:
-      - name:
-          - -h
-          - --help
-        description: Display this help message
-      - name: --schema
-        description: Custom path to your Prisma schema
+      - name: "--schema"
+        description: "Custom path to your Prisma schema"
         args:
-          name: Schema path
+          name: "path"
           template: filepaths
-      - name:
-          - -p
-          - --port
-        description: Port to start Studio on
-        args:
-          name: port
-      - name:
-          - -b
-          - --browser
-        description: Browser to open Studio in
-        args:
-          name: Browser choice
-          suggestions:
-            - firefox
-            - chrome
-            - safari
-            - none
-      - name:
-          - -n
-          - --hostname
-        description: Hostname to bind the Express server to
-        args:
-          name: port
-  - name: format
-    description: Format your schema
-    options:
-      - name:
-          - -h
-          - --help
-        description: Display this help message
-      - name: --schema
-        description: Custom path to your Prisma schema
-        args:
-          name: Schema path
-          template: filepaths
-  - name: migrate
-    description: Migrate your database
+      - name: "--sql"
+        description: "Generate typed SQL module"
+      - name: "--watch"
+        description: "Watch the Prisma schema and regenerate after changes"
+      - name: "--generator"
+        description: "Generator to use (can be provided multiple times)"
+      - name: "--no-hints"
+        description: "Hide hint messages (still outputs errors and warnings)"
+      - name: "--require-models"
+        description: "Do not allow generating a client without models"
+  - name: "migrate"
+    description: "Update your database schema with migrations"
     subcommands:
-      - name: dev
-        description: The migrate dev command updates your database using migrations files during development
-        icon: 💻
+      - name: "deploy"
+        description: "Apply pending migrations to update the database schema in production/staging"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-          - name: --skip-seed
-            description: Skip triggering seed
-          - name: --skip-generate
-            description: Skip triggering generators (e.g. Prisma Client)
-          - name: --create-only
-            description: Create a new migration but do not apply it. The migration will be empty if there are no changes in Prisma schema
-          - name:
-              - -n
-              - --name
-            description: The name of the migration. If no name is provided, the CLI will prompt you
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
             args:
-              name: filename
-              isOptional: true
-      - name: reset
-        description: Reset your database and apply all migrations, all data will be lost
-        icon: 🔃
+              name: "path"
+              template: filepaths
+      - name: "dev"
+        description: "Create a migration from changes in Prisma schema, apply it to the database, and trigger generators"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-          - name: --skip-seed
-            description: Skip triggering seed
-          - name: --skip-generate
-            description: Skip triggering generators (e.g. Prisma Client)
-          - name:
-              - -f
-              - --force
-            description: Skip the confirmation prompt
-      - name: deploy
-        description: Apply pending migrations to update the database schema in production/staging
-        icon: 🚀
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
+            args:
+              name: "path"
+              template: filepaths
+          - name: "--url"
+            description: "Override the datasource URL from the Prisma config file"
+            args:
+              name: "url"
+          - name: ["-n", "--name"]
+            description: "Name the migration"
+            args:
+              name: "name"
+          - name: "--create-only"
+            description: "Create a new migration but do not apply it"
+      - name: "diff"
+        description: "Compare the database schema from two arbitrary sources"
+      - name: "reset"
+        description: "Reset your database and apply all migrations. All data will be lost"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-      - name: resolve
-        description: Resolve issues with database migrations in deployment databases
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
+            args:
+              name: "path"
+              template: filepaths
+          - name: ["-f", "--force"]
+            description: "Skip the confirmation prompt"
+      - name: "resolve"
+        description: "Resolve issues with database migrations in deployment databases"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-          - name: --applied
-            description: Record a specific migration as applied
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
             args:
-              name: migration file path
+              name: "path"
               template: filepaths
-          - name: --rolled-back
-            description: Record a specific migration as rolled back
+          - name: "--applied"
+            description: "Record a specific migration as applied"
             args:
-              name: migration file path
-              template: filepaths
-      - name: status
-        description: Check the status of your database migrations
+              name: "migration"
+              generators:
+                script: "ls prisma/migrations 2>/dev/null | grep -v migration_lock"
+          - name: "--rolled-back"
+            description: "Record a specific migration as rolled back"
+            args:
+              name: "migration"
+              generators:
+                script: "ls prisma/migrations 2>/dev/null | grep -v migration_lock"
+      - name: "status"
+        description: "Check the status of your database migrations"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-      - name: diff
-        description: Compares the database schema from two arbitrary sources, and outputs the differences either as a human-readable summary (by default) or an executable script
-        options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --from-url
-            description: A datasource url
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
             args:
-              name: full url
+              name: "path"
               template: filepaths
-          - name: --to-url
-            description: A datasource url
-            args:
-              name: full url
-              template: filepaths
-          - name: --from-empty
-            description: Flag to assume from is an empty datamodel
-          - name: --to-empty
-            description: Flag to assume to is an empty datamodel
-          - name: --from-schema-datamodel
-            description: Path to a Prisma schema file, uses the 'datamodel' for the diff
-            args:
-              name: filepath
-              template: filepaths
-          - name: --to-schema-datamodel
-            description: Path to a Prisma schema file, uses the 'datamodel' for the diff
-            args:
-              name: filepath
-              template: filepaths
-          - name: --from-schema-datasource
-            description: Path to a Prisma schema file, uses the 'datasource url' for the diff
-            args:
-              name: filepath
-              template: filepaths
-          - name: --to-schema-datasource
-            description: Path to a Prisma schema file, uses the 'datasource url' for the diff
-            args:
-              name: filepath
-              template: filepaths
-          - name: --from-migrations
-            description: Path to the Prisma Migrate migrations directory
-            args:
-              name: folder
-              template: folders
-          - name: --to-migrations
-            description: Path to the Prisma Migrate migrations directory
-            args:
-              name: folder
-              template: folders
-          - name: --shadow-database-url
-            description: URL for the shadow database. Only required if using --from-migrations or --to-migrations
-            args:
-              name: full url
-              template: filepaths
-          - name: --script
-            description: Render a SQL script to stdout instead of the default human readable summary (not supported on MongoDB)
-            args:
-              name: filepath
-              template: filepaths
-          - name: --exit-code
-            description: "Change the exit code behavior to signal if the diff is empty or not (Empty: 0, Error: 1, Not empty: 2). Default behavior is Success: 0, Error: 1.`"
-  - name: db
-    description: Manage your database schema and lifecycle (Preview)
+  - name: "db"
+    description: "Manage your database schema and lifecycle during development"
     subcommands:
-      - name: pull
+      - name: "execute"
+        description: "Execute native commands to your database"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-          - name: --force
-            description: Ignore current Prisma schema file
-          - name: --print
-            description: Print the introspected Prisma schema to stdout
-          - name: --url
-            description: The datasource url
+          - name: "--file"
+            description: "Path to a file containing the script to execute"
             args:
-              name: full url
+              name: "path"
               template: filepaths
-          - name: --composite-type-depth
-            description: Specify the depth for introspecting composite types (e.g. Embedded Documents in MongoDB). Number, default is -1 for infinite depth, 0 = off
-            args:
-              name: number
-      - name: push
-        description: This command pushes the state of your Prisma schema file to the database without using migrations files
+      - name: "pull"
+        description: "Pull the state from the database to the Prisma schema using introspection"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
-            args:
-              name: Schema path
-              template: filepaths
-          - name: --skip-generate
-            description: Skip generation of artifacts such as Prisma Client
-          - name: --force-reset
-            description: Resets the database and then updates the schema - useful if you need to start from scratch due to unexecutable migrations
-          - name: --accept-data-loss
-            description: Ignore data loss warnings. This option is required if as a result of making the schema changes, data may be lost
-      - name: seed
-        description: Seed your database
+          - name: "--force"
+            description: "Ignore current Prisma schema file"
+          - name: "--print"
+            description: "Print the introspected Prisma schema to stdout"
+      - name: "push"
+        description: "Push the state from your Prisma schema to your database"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-      - name: execute
-        description: Execute native commands to your database
+          - name: "--schema"
+            description: "Custom path to your Prisma schema"
+            args:
+              name: "path"
+              template: filepaths
+          - name: "--url"
+            description: "Override the datasource URL from the Prisma config file"
+            args:
+              name: "url"
+          - name: "--accept-data-loss"
+            description: "Ignore data loss warnings"
+          - name: "--force-reset"
+            description: "Force a reset of the database before push"
+      - name: "seed"
+        description: "Seed your database with test or initial data using custom scripts"
         options:
-          - name:
-              - -h
-              - --help
-            description: Display this help message
-          - name: --schema
-            description: Custom path to your Prisma schema
+          - name: "--config"
+            description: "Custom path to your Prisma config file"
             args:
-              name: Schema path
+              name: "path"
               template: filepaths
-          - name: --url
-            description: The datasource url
-            args:
-              name: full url
-              template: filepaths
-          - name: --file
-            description: Path to a file. The content will be sent as the script to be executed
-            args:
-              name: filepath
-              template: filepaths
-          - name: --stdin
-            description: Use the terminal standard input as the script to be executed
-  - name:
-      - version
-      - -v
-    description: Print current version of Prisma components
+          - name: "--"
+            description: "Pass custom arguments to the seed file"
+  - name: "studio"
+    description: "Browse and manage your database data with Prisma Studio web interface"
+    options:
+      - name: ["-p", "--port"]
+        description: "Port number to start Studio on                       | 5555"
+        args:
+          name: "port"
+      - name: ["-b", "--browser"]
+        description: "Browser to auto-open Studio in                       | System default"
+        args:
+          name: "browser"
+      - name: "--config"
+        description: "Custom path to your Prisma config file               |"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--url"
+        description: "Database connection string (overrides Prisma config) |"
+        args:
+          name: "url"
+  - name: "format"
+    description: "Format and validate your Prisma schema file with consistent structure"
+    options:
+      - name: "--config"
+        description: "Custom path to your Prisma config file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--schema"
+        description: "Custom path to your Prisma schema"
+        args:
+          name: "path"
+          template: filepaths
+  - name: "validate"
+    description: "Validate your Prisma schema for syntax errors and configuration issues"
+    options:
+      - name: "--config"
+        description: "Custom path to your Prisma config file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--schema"
+        description: "Custom path to your Prisma schema"
+        args:
+          name: "path"
+          template: filepaths
+  - name: "version"
+    description: "Display Prisma version information for CLI, Client, and engine binaries"
+    options:
+      - name: "--json"
+        description: "Output version information in JSON format"
+  - name: "debug"
+    description: "Display Prisma debug information including schema paths, engine binaries, environment variables, and cache directories for troubleshooting"
+    options:
+      - name: "--config"
+        description: "Custom path to your Prisma config file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--schema"
+        description: "Custom path to your Prisma schema"
+        args:
+          name: "path"
+          template: filepaths
+  - name: "dev"
+    description: "Start a local Prisma Postgres server for development"
+    options:
+      - name: ["-n", "--name"]
+        description: "Name of the server (helps isolate state between projects) | default"
+        args:
+          name: "name"
+      - name: ["-p", "--port"]
+        description: "Main port number the Prisma Dev server will listen on     | 51213"
+        args:
+          name: "port"
+      - name: ["-P", "--db-port"]
+        description: "Port number the database server will listen on            | 51214"
+        args:
+          name: "port"
+      - name: "--shadow-db-port"
+        description: "Port number the shadow database server will listen on     | 51215"
+        args:
+          name: "port"
+      - name: ["-d", "--detach"]
+        description: "Run the server in the background                          | false"
+      - name: "--debug"
+        description: "Enable debug logging                                      | false"
     subcommands:
-      - name: --json
-        description: Output JSON
+      - name: "ls"
+        description: "List available local Prisma Postgres servers"
+        options:
+          - name: "--debug"
+            description: "Enable debug logging | false"
+      - name: "rm"
+        description: "Remove local Prisma Postgres servers"
+        options:
+          - name: "--debug"
+            description: "Enable debug logging                          | false"
+          - name: "--force"
+            description: "Stop any running servers before removing them | false"
+      - name: "start"
+        description: "Start one or more stopped local Prisma Postgres servers"
+        options:
+          - name: "--debug"
+            description: "Enable debug logging | false"
+      - name: "stop"
+        description: "Stop local Prisma Postgres servers"
+        options:
+          - name: "--debug"
+            description: "Enable debug logging | false"
+  - name: "console"
+    description: "Prisma Data Platform commands"
+    subcommands:
+      - name: "status"
+        description: "Show Prisma Data Platform service status"
+        options:
+          - name: "--json"
+            description: "Output raw JSON from the status API"

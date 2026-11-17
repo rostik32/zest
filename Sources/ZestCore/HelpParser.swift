@@ -85,7 +85,10 @@ public enum HelpParser {
             let indent = line.prefix(while: { $0 == " " }).count
 
             if isHeader(stripped, indent: indent) {
-                mode = stripped.range(of: #"command|topic"#, options: [.regularExpression, .caseInsensitive]) != nil ? .commands : .options
+                // "HELP TOPICS" (gh, go) are not commands you can run.
+                let isCommands = stripped.range(of: "command", options: .caseInsensitive) != nil
+                    && stripped.range(of: "topic", options: .caseInsensitive) == nil
+                mode = isCommands ? .commands : .options
                 entryIndent = nil
                 last = nil
                 continue
@@ -115,13 +118,23 @@ public enum HelpParser {
             }
             if entryIndent == nil { entryIndent = indent }
 
+            // npm lists its commands as a paragraph: "access, adduser, audit, bugs, …".
+            if parts.description.isEmpty, stripped.contains(", "),
+               stripped.range(of: #"^[a-z][\w-]*(, [a-z][\w-]*)*,?$"#, options: .regularExpression) != nil {
+                for name in stripped.split(separator: ",").map({ $0.trimmingCharacters(in: .whitespaces) }) where !name.isEmpty {
+                    commands.append(Entry(names: [name], args: [], description: nil, isOption: false))
+                }
+                continue
+            }
+
             // yargs prints `gemini mcp  Manage MCP servers`: drop the program path.
             var words = head.split(separator: " ").map(String.init)
             while words.count > 1, programWords.contains(words[0]) { words.removeFirst() }
             let commandHead = words.joined(separator: " ")
             guard indent == entryIndent, matches(commandPattern, commandHead) else { continue }
 
-            let word = words[0]
+            // gh writes "auth:", docker marks plugins with "compose*".
+            let word = words[0].trimmingCharacters(in: CharacterSet(charactersIn: ":*"))
             let rest = words.dropFirst().joined(separator: " ")
             let names = word.split(separator: "|").map(String.init).filter { !$0.isEmpty }
             guard !names.isEmpty else { continue }

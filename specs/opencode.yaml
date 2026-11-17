@@ -1,0 +1,258 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# opencode. Generated from the CLI docs (cli.mdx) in github.com/anomalyco/opencode.
+name: opencode
+description: The open source AI coding agent
+args:
+  name: project
+  isOptional: true
+  template: folders
+options:
+  - name: ["-h", "--help"]
+    description: "Display help"
+  - name: ["-v", "--version"]
+    description: "Print version number"
+  - name: "--print-logs"
+    description: "Print logs to stderr"
+  - name: "--log-level"
+    description: "Log level (DEBUG, INFO, WARN, ERROR)"
+    args:
+      name: "log-level"
+  - name: "--pure"
+    description: "Run without external plugins"
+subcommands:
+  - name: "agent"
+    description: "Manage agents for OpenCode"
+    subcommands:
+      - name: "create"
+        description: "Create a new agent with custom configuration"
+        options:
+          - name: "--path"
+            description: "Config directory whose agents/ subdirectory receives the file (defaults to global or .opencode based on the prompt)"
+            args:
+              name: "path"
+          - name: "--description"
+            description: "What the agent should do"
+          - name: "--mode"
+            description: "Agent mode: all, primary, or subagent"
+          - name: "--permissions"
+            description: "Comma-separated list of permissions to allow (default: all). Available: bash, read, edit, glob, grep, webfetch, task, todowrite, websearch, lsp, skill. Anything omitted is denied. Alias: --tools"
+          - name: ["-m", "--model"]
+            description: "Model to use, in provider/model format"
+            args:
+              name: "model"
+      - name: "list"
+        description: "List all available agents"
+  - name: "attach"
+    description: "Attach a terminal to an already running OpenCode backend server started via serve or web commands"
+    options:
+      - name: "--dir"
+        description: "Working directory to start TUI in"
+        args:
+          name: "dir"
+          template: folders
+      - name: ["-c", "--continue"]
+        description: "Continue the last session"
+      - name: ["-s", "--session"]
+        description: "Session ID to continue"
+        args:
+          name: "session"
+      - name: "--fork"
+        description: "Fork the session when continuing (use with --continue or --session)"
+      - name: ["-p", "--password"]
+        description: "Basic auth password (defaults to OPENCODE_SERVER_PASSWORD)"
+        args:
+          name: "password"
+      - name: ["-u", "--username"]
+        description: "Basic auth username (defaults to OPENCODE_SERVER_USERNAME or opencode)"
+        args:
+          name: "username"
+  - name: "auth"
+    description: "Command to manage credentials and login for providers"
+    subcommands:
+      - name: "login"
+        description: "OpenCode is powered by the provider list at Models.dev, so you can use opencode auth login to configure API keys for any provider you'd like to use"
+        options:
+          - name: ["-p", "--provider"]
+            description: "Provider ID or name to log in to"
+            args:
+              name: "provider"
+          - name: ["-m", "--method"]
+            description: "Login method label to use, skipping method selection"
+            args:
+              name: "method"
+      - name: "list"
+        description: "Lists all the authenticated providers as stored in the credentials file"
+      - name: "logout"
+        description: "Logs you out of a provider by clearing it from the credentials file"
+  - name: "completion"
+    description: "Generate a shell completion script"
+  - name: "github"
+    description: "Manage the GitHub agent for repository automation"
+    subcommands:
+      - name: "install"
+        description: "Install the GitHub agent in your repository"
+      - name: "run"
+        description: "Run the GitHub agent"
+  - name: "mcp"
+    description: "Manage Model Context Protocol servers"
+    subcommands:
+      - name: "add"
+        description: "Add an MCP server to your configuration"
+      - name: "list"
+        description: "List all configured MCP servers and their connection status"
+      - name: "auth"
+        description: "Authenticate with an OAuth-enabled MCP server"
+      - name: "logout"
+        description: "Remove OAuth credentials for an MCP server"
+      - name: "debug"
+        description: "Debug OAuth connection issues for an MCP server"
+  - name: "models"
+    description: "List all available models from configured providers"
+  - name: "run"
+    description: "Run opencode in non-interactive mode by passing a prompt directly"
+    options:
+      - name: "--command"
+        description: "The command to run, use message for args"
+      - name: ["-c", "--continue"]
+        description: "Continue the last session"
+      - name: ["-s", "--session"]
+        description: "Session ID to continue"
+        args:
+          name: "session"
+      - name: "--fork"
+        description: "Fork the session when continuing (use with --continue or --session)"
+      - name: ["-m", "--model"]
+        description: "Model to use in the form of provider/model"
+        args:
+          name: "model"
+      - name: "--agent"
+        description: "Agent to use"
+        args:
+          name: "agent"
+      - name: ["-f", "--file"]
+        description: "File(s) to attach to message"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--format"
+        description: "Format: default (formatted) or json (raw JSON events)"
+        args:
+          name: "format"
+      - name: "--title"
+        description: "Title for the session (uses truncated prompt if no value provided)"
+        args:
+          name: "title"
+      - name: "--attach"
+        description: "Attach to a running opencode server (e.g., http://localhost:4096)"
+        args:
+          name: "attach"
+      - name: ["-p", "--password"]
+        description: "Basic auth password (defaults to OPENCODE_SERVER_PASSWORD)"
+        args:
+          name: "password"
+      - name: ["-u", "--username"]
+        description: "Basic auth username (defaults to OPENCODE_SERVER_USERNAME or opencode)"
+        args:
+          name: "username"
+      - name: "--dir"
+        description: "Directory to run in, or path on the remote server when attaching"
+        args:
+          name: "dir"
+          template: folders
+      - name: "--port"
+        description: "Port for the local server (defaults to random port)"
+        args:
+          name: "port"
+      - name: "--variant"
+        description: "Model variant (provider-specific reasoning effort)"
+        args:
+          name: "variant"
+      - name: "--thinking"
+        description: "Show thinking blocks"
+      - name: "--auto"
+        description: "Auto-approve permissions that are not explicitly denied"
+  - name: "serve"
+    description: "Start a headless OpenCode server for API access"
+  - name: "session"
+    description: "Manage OpenCode sessions"
+    subcommands:
+      - name: "list"
+        description: "List all OpenCode sessions"
+        options:
+          - name: ["-n", "--max-count"]
+            description: "Limit to N most recent sessions"
+            args:
+              name: "max-count"
+          - name: "--format"
+            description: "Output format: table or json (table)"
+      - name: "delete"
+        description: "Delete an OpenCode session"
+  - name: "stats"
+    description: "Show token usage and cost statistics for your OpenCode sessions"
+  - name: "export"
+    description: "Export session data as JSON"
+  - name: "import"
+    description: "Import session data from a JSON file"
+  - name: "web"
+    description: "Start a headless OpenCode server with a web interface"
+  - name: "acp"
+    description: "Start an ACP (Agent Client Protocol) server"
+  - name: "plugin"
+    description: "Install a plugin and update your config"
+    options:
+      - name: ["-g", "--global"]
+        description: "Install in global config"
+      - name: ["-f", "--force"]
+        description: "Replace existing plugin version"
+  - name: "pr"
+    description: "Fetch and checkout a GitHub PR branch, then run OpenCode"
+  - name: "db"
+    description: "Database tools"
+    subcommands:
+      - name: "path"
+        description: "Print the database path"
+  - name: "debug"
+    description: "Debugging and troubleshooting tools"
+    subcommands:
+      - name: "agent"
+        description: "Show a loaded agent's configuration"
+      - name: "config"
+        description: "Show the resolved configuration"
+      - name: "paths"
+        description: "Show global paths (data, config, cache, state)"
+      - name: "info"
+        description: "Show the version, OS, terminal, and configured plugins"
+      - name: "skill"
+        description: "List available skills"
+      - name: "scrap"
+        description: "List known projects"
+      - name: "file"
+        description: "List files in a directory"
+      - name: "rg"
+        description: "List files using ripgrep; accepts `--glob` and `--limit`"
+      - name: "lsp"
+        description: "Get LSP diagnostics for a file"
+      - name: "snapshot"
+        description: "Track the current snapshot state"
+      - name: "startup"
+        description: "Print startup timing"
+  - name: "uninstall"
+    description: "Uninstall OpenCode and remove all related files"
+    options:
+      - name: ["-c", "--keep-config"]
+        description: "Keep configuration files"
+      - name: ["-d", "--keep-data"]
+        description: "Keep session data and snapshots"
+      - name: "--dry-run"
+        description: "Show what would be removed without removing"
+      - name: ["-f", "--force"]
+        description: "Skip confirmation prompts"
+  - name: "upgrade"
+    description: "Updates opencode to the latest version or a specific version"
+    options:
+      - name: ["-m", "--method"]
+        description: "The installation method that was used; curl, npm, pnpm, bun, brew"
+        args:
+          name: "method"
+      - name: "--major"
+        description: "Upgrade to OpenCode 2 and remove OpenCode 1"

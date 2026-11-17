@@ -1,0 +1,313 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Colima. Generated from cmd/*.go in github.com/abiosoft/colima.
+name: colima
+description: Container runtimes on macOS with minimal setup
+options:
+  - name: [-p, --profile]
+    description: Profile name, for multiple instances
+    isPersistent: true
+    args:
+      name: profile
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+  - name: --verbose
+    description: Enable verbose log
+    isPersistent: true
+  - name: [-h, --help]
+    description: Help for colima
+subcommands:
+  - name: "start"
+    description: "Start the Kubernetes cluster"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+    options:
+      - name: ["-r", "--runtime"]
+        description: "Container runtime"
+        args:
+          name: "runtime"
+          suggestions: [docker, containerd, incus]
+      - name: ["-t", "--vm-type"]
+        description: "Virtual machine type"
+        args:
+          name: "type"
+          suggestions: [vz, qemu, krunkit]
+      - name: "--mount-type"
+        description: "Volume driver for the mounts"
+        args:
+          name: "type"
+          suggestions: [virtiofs, sshfs, 9p]
+      - name: "--activate"
+        description: "Set as active Docker/Kubernetes/Incus context on startup"
+      - name: ["-c", "--cpus"]
+        description: "Number of CPUs"
+        args:
+          name: "cpus"
+      - name: ["-m", "--memory"]
+        description: "Memory in GiB"
+        args:
+          name: "memory"
+      - name: ["-d", "--disk"]
+        description: "Disk size in GiB"
+        args:
+          name: "disk"
+      - name: "--root-disk"
+        description: "Disk size in GiB for the root filesystem"
+        args:
+          name: "disk"
+      - name: ["-a", "--arch"]
+        description: "Architecture (aarch64, x86_64)"
+        args:
+          name: "arch"
+          suggestions: [aarch64, x86_64]
+      - name: ["-f", "--foreground"]
+        description: "Keep colima in the foreground"
+      - name: "--hostname"
+        description: "Custom hostname for the virtual machine"
+        args:
+          name: "hostname"
+      - name: ["-i", "--disk-image"]
+        description: "File path to a custom disk image"
+        args:
+          name: "image"
+          template: filepaths
+      - name: "--disk-image-mirror"
+        description: "Mirror URL to replace the https://github.com prefix when downloading disk images"
+        args:
+          name: "mirror"
+      - name: "--force-disk-image"
+        description: "Load unsupported disk image"
+      - name: "--template"
+        description: "Use the template file for initial configuration"
+      - name: "--port-forwarder"
+        description: "Port forwarder to use (ssh, grpc, none)"
+        args:
+          name: "forwarder"
+          suggestions: [ssh, grpc, none]
+      - name: "--cpu"
+        description: "Number of CPUs"
+        args:
+          name: "cpu"
+      - name: "--network-host-addresses"
+        description: "Support port forwarding to specific host IP addresses"
+      - name: "--network-address"
+        description: "Assign reachable IP address to the VM"
+      - name: "--network-mode"
+        description: "Network mode (shared, bridged)"
+        args:
+          name: "mode"
+          suggestions: [shared, bridged]
+      - name: "--network-subnet"
+        description: "Subnet for shared mode (e.g. 192.168.107.0/24)"
+        args:
+          name: "subnet"
+      - name: "--network-interface"
+        description: "Host network interface to use for bridged mode"
+        args:
+          name: "interface"
+      - name: "--network-preferred-route"
+        description: "Use the assigned IP address as the preferred route for the VM (implies --network-address)"
+      - name: "--network-nat66-prefix"
+        description: "Nat66 ULA prefix for shared mode (optional, e.g. fd25:636f:6c69:6d61::)"
+        args:
+          name: "prefix"
+      - name: "--vz-rosetta"
+        description: "Enable Rosetta for amd64 emulation"
+      - name: "--model-runner"
+        description: "AI model runner (docker, ramalama)"
+        args:
+          name: "runner"
+          suggestions: [docker, ramalama]
+      - name: ["-z", "--nested-virtualization"]
+        description: "Enable nested virtualization"
+      - name: "--gateway-address"
+        description: "Gateway address"
+        args:
+          name: "address"
+      - name: ["-e", "--edit"]
+        description: "Edit the configuration file before starting"
+      - name: "--save-config"
+        description: "Persist and overwrite config file with (newly) specified flags"
+      - name: ["-V", "--mount"]
+        description: "Directories to mount, suffix ':w' for writable, disable with 'none'"
+        args:
+          name: "mount"
+          template: filepaths
+        isRepeatable: true
+      - name: "--mount-inotify"
+        description: "Propagate inotify file events to the VM"
+      - name: ["-s", "--ssh-agent"]
+        description: "Forward SSH agent to the VM"
+      - name: "--ssh-config"
+        description: "Generate SSH config in ~/.ssh/config"
+      - name: "--ssh-port"
+        description: "SSH server port"
+        args:
+          name: "port"
+      - name: ["-k", "--kubernetes"]
+        description: "Start with Kubernetes"
+      - name: "--with-kubernetes"
+        description: "Start with Kubernetes"
+      - name: "--kubernetes-version"
+        description: "Must match a k3s version https://github.com/k3s-io/k3s/releases"
+        args:
+          name: "version"
+      - name: "--kubernetes-disable"
+        description: "Components to disable for k3s e.g. traefik,servicelb"
+        args:
+          name: "disable"
+      - name: "--k3s-arg"
+        description: "Additional args to pass to k3s"
+        args:
+          name: "arg"
+        isRepeatable: true
+      - name: "--k3s-listen-port"
+        description: "K3s server listen port"
+        args:
+          name: "port"
+      - name: "--env"
+        description: "Environment variables for the VM"
+        args:
+          name: "env"
+        isRepeatable: true
+      - name: ["-n", "--dns"]
+        description: "DNS resolvers for the VM"
+        args:
+          name: "dns"
+        isRepeatable: true
+      - name: "--dns-host"
+        description: "Custom DNS names to provide to resolver"
+        args:
+          name: "host"
+      - name: "--registry-mirror"
+        description: "Registry mirrors to configure for docker, e.g. https://mirror.gcr.io"
+        args:
+          name: "mirror"
+      - name: "--downloader"
+        description: "Downloader to use (native, curl)"
+        args:
+          name: "downloader"
+  - name: "stop"
+    description: "Stop the Kubernetes cluster"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+    options:
+      - name: ["-f", "--force"]
+        description: "Stop without graceful shutdown"
+  - name: "restart"
+    description: "Restart Colima"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+    options:
+      - name: ["-f", "--force"]
+        description: "During restart, do stop without graceful shutdown"
+  - name: "status"
+    description: "Show the status of Colima"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+    options:
+      - name: ["-e", "--extended"]
+        description: "Include additional details"
+      - name: ["-j", "--json"]
+        description: "Print json output"
+  - name: ["list", "ls"]
+    description: "List instances"
+    options:
+      - name: ["-j", "--json"]
+        description: "Print json output"
+  - name: "delete"
+    description: "Delete the Kubernetes cluster"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+    options:
+      - name: ["-f", "--force"]
+        description: "Do not prompt for yes/no"
+      - name: ["-d", "--data"]
+        description: "Delete container runtime data"
+  - name: ["ssh", "exec", "x"]
+    description: "SSH into the VM"
+    args:
+      name: command
+      isOptional: true
+      isCommand: true
+  - name: "ssh-config"
+    description: "Show SSH connection config"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+  - name: ["update", "u", "up"]
+    description: "Update the container runtime"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+  - name: ["template", "tmpl", "tpl", "t"]
+    description: "Edit the template for default configurations"
+  - name: "clone"
+    description: "Clone Colima profile"
+  - name: "prune"
+    description: "Prune cached downloaded assets"
+    options:
+      - name: ["-f", "--force"]
+        description: "Do not prompt for yes/no"
+      - name: ["-a", "--all"]
+        description: "Include Lima assets"
+  - name: "version"
+    description: "Print the version of Colima"
+    args:
+      name: profile
+      isOptional: true
+      generators:
+        script: "colima list --json 2>/dev/null | sed -n 's/.*\"name\":\"\\([^\"]*\\)\".*/\\1/p'"
+  - name: ["kubernetes", "kube", "k8s", "k3s", "k"]
+    description: "Manage Kubernetes cluster"
+    subcommands:
+      - name: start
+        description: "Start the Kubernetes cluster"
+      - name: stop
+        description: "Stop the Kubernetes cluster"
+      - name: delete
+        description: "Delete the Kubernetes cluster"
+      - name: reset
+        description: "Reset the Kubernetes cluster"
+  - name: ["nerdctl", "nerd", "n"]
+    description: "Run nerdctl (requires containerd runtime)"
+    args:
+      name: args
+      isOptional: true
+      isVariadic: true
+    subcommands:
+      - name: install
+        description: Install the nerdctl alias script on the host
+  - name: "model"
+    description: "Manage AI models (requires docker runtime and krunkit VM type)"
+    subcommands:
+      - name: [setup, update]
+        description: Install or update the AI model runner in the VM
+      - name: serve
+        description: Serve a model API
+        args:
+          name: model
+          isOptional: true
+  - name: "completion"
+    description: "Generate completion script"
+    args:
+      name: shell
+      suggestions: [bash, zsh, fish, powershell]

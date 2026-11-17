@@ -2,6 +2,120 @@
 name: bundle
 description: Ruby Dependency Management
 subcommands:
+  - name: env
+    description: '# Print information about the environment Bu...'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
+  - name: info
+    description: '# Show information for the given gem'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
+    args:
+      name: OPTIONS
+      isOptional: true
+  - name: issue
+    description: '# Learn how to report an issue in Bundler'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
+  - name: licenses
+    description: '# Prints the license of all gems in the bundle'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
+  - name: plugin
+    description: '# Install the plugin from the source'
+    subcommands:
+    - name: help
+      description: '# Describe subcommands or one specific subco...'
+      args:
+        name: COMMAND
+        isOptional: true
+    - name: install
+      description: '# Install the plugin from the source'
+  - name: pristine
+    description: '# Restores installed gems to pristine condition'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
+    - name: --force
+    args:
+      name: GEMS
+      isOptional: true
+      isVariadic: true
+  - name: remove
+    description: '# Removes gems from the Gemfile'
+    args:
+      name: 'GEM [GEM '
+      isOptional: true
+      isVariadic: true
+  - name: version
+    description: '# Prints the bundler''s version information'
+    options:
+    - name: -r
+      description: '# Specify the number of times you wish to attempt network commands'
+      args:
+        name: --retry=NUM
+        isOptional: true
+    - name: -V
+      description: '# Enable verbose output mode'
+      args:
+      - name: --verbose
+        isOptional: true
+      - name: --no-verbose
+        isOptional: true
   - name: install
     description: Install the gems specified by the Gemfile or Gemfile.lock
     options:

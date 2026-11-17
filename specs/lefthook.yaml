@@ -1,0 +1,122 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Lefthook. Generated from cmd/*.go in github.com/evilmartians/lefthook.
+name: lefthook
+description: Fast and powerful Git hooks manager
+options:
+  - name: [-h, --help]
+    description: Show help
+subcommands:
+  - name: "add"
+    description: "Add scripts directory and install the hook"
+    args:
+      name: hook
+      generators:
+        script: "cat lefthook.yml lefthook.yaml .lefthook.yml .lefthook.yaml lefthook-local.yml 2>/dev/null | awk -F: '/^[a-z][a-z0-9_-]*:/{print $1}' | grep -vxE 'min_version|colors|no_tty|output|source_dir|source_dir_local|extends|remotes|rc|skip_output|assert_lefthook_installed|skip_lfs|glob_matcher|templates|lefthook|no_auto_install' | sort -u"
+      suggestions: [pre-commit, pre-push, commit-msg, prepare-commit-msg, post-checkout, post-merge, post-commit, pre-rebase, post-rewrite]
+    options:
+      - name: ["-f", "--force"]
+      - name: ["--dirs", "--create-dirs"]
+        description: "Create directories for scripts"
+      - name: ["-v", "--verbose"]
+  - name: "check-install"
+    description: "Check if hooks are installed"
+    options:
+      - name: ["-v", "--verbose"]
+  - name: "dump"
+    description: "Print config merged from all extensions"
+    options:
+      - name: ["-f", "--format"]
+        description: "'yaml', 'toml', or 'json' (default: 'yaml')"
+        args:
+          name: "format"
+  - name: "install"
+    description: "Install Git hook from the config or create a blank lefthook.yml"
+    options:
+      - name: ["-f", "--force"]
+        description: "Overwrite .old files and proceed even if core.hooksPath is set"
+      - name: ["-r", "--reset-hooks-path"]
+        description: "Automatically unset core.hooksPath configuration"
+      - name: ["-v", "--verbose"]
+  - name: "run"
+    description: "Execute a group of hooks"
+    args:
+      name: hook
+      generators:
+        script: "cat lefthook.yml lefthook.yaml .lefthook.yml .lefthook.yaml lefthook-local.yml 2>/dev/null | awk -F: '/^[a-z][a-z0-9_-]*:/{print $1}' | grep -vxE 'min_version|colors|no_tty|output|source_dir|source_dir_local|extends|remotes|rc|skip_output|assert_lefthook_installed|skip_lfs|glob_matcher|templates|lefthook|no_auto_install' | sort -u"
+      suggestions: [pre-commit, pre-push, commit-msg, prepare-commit-msg, post-checkout, post-merge, post-commit, pre-rebase, post-rewrite]
+    options:
+      - name: ["-v", "--verbose"]
+        description: "Enable debug logs"
+      - name: "--colors"
+        description: "On, off, or auto (default: auto)"
+        args:
+          name: "colors"
+          suggestions: [auto, "on", "off"]
+      - name: "--job"
+        description: "Run only jobs with names"
+        isRepeatable: true
+        args:
+          name: "job"
+      - name: "--tag"
+        description: "Run only jobs with tag names"
+        isRepeatable: true
+        args:
+          name: "tag"
+      - name: "--command"
+        description: "Run only commands"
+        isRepeatable: true
+        args:
+          name: "command"
+      - name: "--exclude"
+        description: "Exclude files from all templates"
+        isRepeatable: true
+        args:
+          name: "exclude"
+          template: filepaths
+      - name: "--file"
+        description: "Overwrite file templates with files"
+        isRepeatable: true
+        args:
+          name: "file"
+          template: filepaths
+      - name: ["-f", "--force"]
+        description: "Do not skip if no files changed"
+      - name: "--all-files"
+        description: "Replace files templates with {all_files}"
+      - name: "--no-auto-install"
+        description: "Do not implicitly install hooks"
+      - name: "--no-stage-fixed"
+        description: "Ignore 'stage_fixed: true' setting"
+      - name: "--no-tty"
+        description: "Act as if no TTY is connected"
+      - name: "--skip-lfs"
+        description: "Do not run LFS hooks"
+      - name: "--files-from-stdin"
+        description: "Parse filelist from STDIN"
+      - name: ["--fail-on-changes", "--no-fail-on-changes"]
+        description: "Exit with 1 if some of the files were changed"
+  - name: "self-update"
+    description: "Update lefthook executable"
+    options:
+      - name: ["-y", "--yes"]
+        description: "Do not prompt y/n"
+      - name: ["-f", "--force"]
+        description: "Force reinstall"
+      - name: ["-v", "--verbose"]
+  - name: "uninstall"
+    description: "Delete installed hooks"
+    options:
+      - name: ["-v", "--verbose"]
+      - name: ["-f", "--force"]
+        description: "Remove all Git hooks"
+      - name: "--remove-configs"
+        description: "Remove lefthook configs"
+  - name: "validate"
+    description: "Validate lefthook config"
+    options:
+      - name: ["-v", "--verbose"]
+  - name: "version"
+    description: "Print version"
+    options:
+      - name: ["-v", "--verbose"]
+      - name: ["-f", "--full"]

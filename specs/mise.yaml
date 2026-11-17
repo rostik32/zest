@@ -1,0 +1,3011 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# mise. Generated from mise.usage.kdl (the CLI's usage spec) in github.com/jdx/mise.
+name: mise
+description: Dev tools, env vars and tasks in one CLI
+args:
+  - name: "task"
+    isOptional: true
+    description: "Task to run"
+    generators:
+      script: "mise tasks ls --complete"
+      descriptionSeparator: ":"
+options:
+  - name: ["-C", "--cd"]
+    description: "Run as if mise were started in DIR"
+    args:
+      name: "dir"
+      template: folders
+  - name: ["-E", "--env"]
+    description: "Load the mise.<ENV>.toml config files (same as MISE_ENV)"
+    isRepeatable: true
+    args:
+      name: "env"
+  - name: ["-j", "--jobs"]
+    description: "How many jobs to run in parallel; defaults to the jobs setting"
+    args:
+      name: "jobs"
+  - name: ["-q", "--quiet"]
+    description: "Suppress non-error messages"
+  - name: ["-v", "--verbose"]
+    description: "Show extra output (use -vv for even more)"
+    isRepeatable: true
+  - name: ["-y", "--yes"]
+    description: "Answer yes to all confirmation prompts"
+  - name: ["-h", "--help"]
+    description: "Print help"
+subcommands:
+  - name: "activate"
+    description: "Print the script to activate mise in an interactive shell"
+    args:
+      - name: "shell_type"
+        isOptional: true
+        description: "Shell type to generate the script for"
+    options:
+      - name: ["-q", "--quiet"]
+        description: "Suppress non-error messages from the hook that runs at each prompt"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["tool-alias", "alias"]
+    description: "Manage tool backend and version aliases"
+    options:
+      - name: ["-p", "--tool"]
+        description: "Filter aliases by tool"
+        args:
+          name: "tool"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "get"
+        description: "Show the version a tool's version alias stands for"
+        args:
+          - name: "tool"
+            description: "The tool to show the alias for"
+          - name: "alias"
+            description: "The alias to show"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "List tool version aliases"
+        args:
+          - name: "tool"
+            isOptional: true
+            description: "Only show aliases for this tool"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["set", "add"]
+        description: "Set a backend alias or a version alias in the global config"
+        args:
+          - name: "tool"
+            description: "The tool to alias"
+          - name: "alias"
+            description: "The version alias to set, or the backend when VALUE is omitted"
+          - name: "value"
+            isOptional: true
+            description: "The version request the alias stands for"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["unset", "rm"]
+        description: "Remove a backend alias or a version alias from the global config"
+        args:
+          - name: "tool"
+            description: "The tool to remove the alias from"
+          - name: "alias"
+            isOptional: true
+            description: "The version alias to remove; omit it to remove the backend alias"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["backends", "b"]
+    description: "Manage backends"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["ls", "list"]
+        description: "List built-in backends"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "switch"
+        description: "Switch tools to the backend the registry now installs them from"
+        args:
+          - name: "tool@version"
+            isOptional: true
+            isVariadic: true
+            description: "Tools to switch"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show what would switch without changing the lockfile or installs"
+          - name: ["-g", "--global"]
+            description: "Switch tools in the global config's lockfile instead of the project's"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "bin-paths"
+    description: "List the bin directories of the active tools"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Only list these tools, such as ruby@3"
+    options:
+      - name: ["-J", "--json"]
+        description: "Print executables as JSON objects with name, path, and symlink (implies --bin-names)"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["bootstrap", "bs"]
+    description: "Set up this machine from your mise config"
+    options:
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change without changing anything"
+      - name: ["-y", "--yes"]
+        description: "Skip confirmation prompts"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "accounts"
+        description: "Manage Linux users and groups"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Create, update, or remove the configured Linux users and groups"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of the configured Linux users and groups"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "compose"
+        description: "Manage Docker Compose projects from [bootstrap.compose]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Apply Docker Compose projects from [bootstrap.compose]"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of Docker Compose projects from [bootstrap.compose]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "files"
+        description: "Manage system files and directories declared in [bootstrap]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Create, update, or remove the configured system files and directories"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of the configured system files and directories"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "firewall"
+        description: "Manage the Linux host firewall from [bootstrap.linux.firewall]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Apply the firewall from [bootstrap.linux.firewall]"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of the firewall from [bootstrap.linux.firewall]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "linux"
+        description: "Manage systemd user units from [bootstrap.linux.systemd.units]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: ["systemd-units", "systemd"]
+            description: "Manage systemd user units from [bootstrap.linux.systemd.units]"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+            subcommands:
+              - name: "apply"
+                description: "Install and start the configured systemd user units"
+                options:
+                  - name: ["-n", "--dry-run"]
+                    description: "Show what would change without changing anything"
+                  - name: ["-y", "--yes"]
+                    description: "Skip the confirmation prompt"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+              - name: "status"
+                description: "Show the state of the configured systemd user units"
+                options:
+                  - name: ["-J", "--json"]
+                    description: "Output in JSON format"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+      - name: "macos"
+        description: "Manage macOS preferences and LaunchAgents from [bootstrap.settings.macos] and [bootstrap.macos.launchd]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "defaults"
+            description: "Manage macOS preferences such as Dock, Finder, and keyboard settings"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+            subcommands:
+              - name: "apply"
+                description: "Write the configured macOS preferences"
+                options:
+                  - name: ["-n", "--dry-run"]
+                    description: "Show what would change without changing anything"
+                  - name: ["-y", "--yes"]
+                    description: "Skip the confirmation prompt"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+              - name: "status"
+                description: "Show the state of the configured macOS preferences"
+                options:
+                  - name: ["-J", "--json"]
+                    description: "Output in JSON format"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+          - name: ["launchd-agents", "launchd"]
+            description: "Manage macOS LaunchAgents from [bootstrap.macos.launchd.agents]"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+            subcommands:
+              - name: "apply"
+                description: "Install and load LaunchAgents from [bootstrap.macos.launchd.agents]"
+                options:
+                  - name: ["-n", "--dry-run"]
+                    description: "Show what would change without changing anything"
+                  - name: ["-y", "--yes"]
+                    description: "Skip the confirmation prompt"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+              - name: "status"
+                description: "Show the state of the configured LaunchAgents"
+                options:
+                  - name: ["-J", "--json"]
+                    description: "Output in JSON format"
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+      - name: ["mise-shell-activate", "shell"]
+        description: "Manage mise shell activation from [bootstrap.mise_shell_activate]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Write mise activation into the configured shell startup files"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of the configured shell activation"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "packages"
+        description: "Manage packages from [bootstrap.packages]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: ["apply", "i"]
+            description: "Install or remove packages to match [bootstrap.packages]"
+            args:
+              - name: "package"
+                isOptional: true
+                isVariadic: true
+                description: "Packages as manager:package; defaults to every package in [bootstrap.packages]"
+            options:
+              - name: ["-m", "--manager"]
+                description: "Only apply packages for this built-in or plugin manager"
+                args:
+                  name: "manager"
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "brew"
+            description: "Manage Homebrew tap URLs in [bootstrap.brew.taps]"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+            subcommands:
+              - name: "tap"
+                description: "Add a Homebrew tap URL to the global [bootstrap.brew.taps]"
+                args:
+                  - name: "tap"
+                    description: "Tap name, e.g"
+                  - name: "url"
+                    isOptional: true
+                    description: "GitHub URL of the tap; defaults to https://github.com/<owner>/homebrew-<repo>.git"
+                options:
+                  - name: ["-l", "--local"]
+                    description: "Write to the local config instead of the global config"
+                  - name: ["-n", "--dry-run"]
+                    description: "Show the config change without writing it"
+                  - name: ["-p", "--path", "--file"]
+                    description: "Write to this config file or directory"
+                    args:
+                      name: "path"
+                      template: folders
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+              - name: ["untap", "remove"]
+                description: "Remove Homebrew tap URLs from [bootstrap.brew.taps]"
+                args:
+                  - name: "taps"
+                    isVariadic: true
+                    description: "Tap names, e.g"
+                options:
+                  - name: ["-l", "--local"]
+                    description: "Write to the local config instead of the global config"
+                  - name: ["-n", "--dry-run"]
+                    description: "Show the config change without writing it"
+                  - name: ["-p", "--path", "--file"]
+                    description: "Write to this config file or directory"
+                    args:
+                      name: "path"
+                      template: folders
+                  - name: ["-h", "--help"]
+                    description: "Print help"
+          - name: "export"
+            description: "Print the configured nix: packages as a NixOS module"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "import"
+            description: "Record installed Homebrew formulae in [bootstrap.packages]"
+            options:
+              - name: ["-e", "--env"]
+                description: "Write to the config file for this environment (mise.<ENV>.toml)"
+                args:
+                  name: "env"
+              - name: ["-g", "--global"]
+                description: "Write to the global config (~/.config/mise/config.toml)"
+              - name: ["-m", "--manager"]
+                description: "Package manager to import from"
+                args:
+                  name: "manager"
+              - name: ["-n", "--dry-run"]
+                description: "Show the entries that would be written without writing them"
+              - name: ["-p", "--path", "--file"]
+                description: "Write to this config file or directory"
+                args:
+                  name: "path"
+                  template: folders
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "prune"
+            description: "Uninstall packages that no config declares"
+            options:
+              - name: ["-m", "--manager"]
+                description: "Package manager to prune: brew, brew-cask, or a package plugin"
+                args:
+                  name: "manager"
+              - name: ["-n", "--dry-run"]
+                description: "Show what would be removed without removing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: ["status", "ls"]
+            description: "Show the state of packages from [bootstrap.packages]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: ["upgrade", "up"]
+            description: "Upgrade installed packages from [bootstrap.packages]"
+            args:
+              - name: "package"
+                isOptional: true
+                isVariadic: true
+                description: "Packages as manager:package; defaults to every package in [bootstrap.packages]"
+            options:
+              - name: ["-m", "--manager"]
+                description: "Only upgrade packages for this built-in or plugin manager"
+                args:
+                  name: "manager"
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: ["use", "u"]
+            description: "Add packages to [bootstrap.packages] and install them"
+            args:
+              - name: "package"
+                isVariadic: true
+                description: "Packages in manager:package[@version] form"
+            options:
+              - name: ["-e", "--env"]
+                description: "Write to the config file for this environment (mise.<ENV>.toml)"
+                args:
+                  name: "env"
+              - name: ["-g", "--global"]
+                description: "Write to the global config (~/.config/mise/config.toml) instead of the local one"
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without writing config or installing"
+              - name: ["-p", "--path", "--file"]
+                description: "Write to this config file or directory"
+                args:
+                  name: "path"
+                  template: folders
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "where"
+            description: "Print the opt path of an installed Homebrew formula"
+            args:
+              - name: "package"
+                description: "Formula to locate, as brew:<formula> or brew:<owner>/<tap>/<formula>"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "plan"
+        description: "Show what applying bootstrap resources would change"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output a stable machine-readable plan in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "plugins"
+        description: "Manage package manager plugins declared in [bootstrap.plugins]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Install package manager plugins declared in [bootstrap.plugins]"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show which plugins would be installed without installing them"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show whether declared package manager plugins are installed"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "remote"
+        description: "Bootstrap one or more machines over SSH"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Inventory host names from [bootstrap.remote.hosts]"
+        options:
+          - name: ["-i", "--identity-file"]
+            description: "SSH identity file, overriding the inventory and SSH config"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-n", "--dry-run"]
+            description: "Show what would change on each target without changing it"
+          - name: ["-y", "--yes"]
+            description: "Skip confirmation prompts on each target"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "repos"
+        description: "Manage Git repositories from [bootstrap.repos]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Clone missing Git repositories and check out configured refs"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "exec"
+            description: "Run a command in each configured Git repository"
+            args:
+              - name: "path"
+                isOptional: true
+                isVariadic: true
+                description: "Run only in repositories at these paths, as written in config or expanded"
+                template: folders
+              - name: "value"
+                isVariadic: true
+                description: "Command and arguments to run in each repository"
+            options:
+              - name: ["-c", "--continue-on-error"]
+                description: "Continue running in other repositories after a command fails"
+              - name: ["-n", "--dry-run"]
+                description: "Print the commands that would run without running them"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of Git repositories from [bootstrap.repos]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "update"
+            description: "Clone missing Git repositories and fast-forward the rest"
+            args:
+              - name: "path"
+                isOptional: true
+                isVariadic: true
+                description: "Only update repositories at these paths, as written in config or expanded (for example ~/src/mise)"
+                template: folders
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "secrets"
+        description: "Inspect bootstrap secret inputs without revealing their values"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "status"
+            description: "Show whether declared bootstrap secret inputs are available"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "services"
+        description: "Manage services from [bootstrap.services]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Apply the service state declared in [bootstrap.services]"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "remove"
+            description: "Uninstall a user-scope service"
+            args:
+              - name: "name"
+                description: "Name of the installed user service"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would be removed without removing it"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show the state of services from [bootstrap.services]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "settings"
+        description: "[experimental] Apply [bootstrap.settings] through bootstrap settings plugins"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Write the settings that differ from [bootstrap.settings]"
+            args:
+              - name: "plugin"
+                isOptional: true
+                isVariadic: true
+                description: "Plugins whose sections to apply; all of them by default"
+                generators:
+                  script: "mise plugins --core --user"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show which settings would change without changing them"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show each setting in [bootstrap.settings] and its current value"
+            args:
+              - name: "plugin"
+                isOptional: true
+                isVariadic: true
+                description: "Plugins whose sections to show; all of them by default"
+                generators:
+                  script: "mise plugins --core --user"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: ["status", "ls"]
+        description: "Show the state of every configured bootstrap part"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "unapply"
+        description: "Remove what a config environment's bootstrap sections created"
+        args:
+          - name: "env"
+            isVariadic: true
+            description: "Config environments whose resources should be removed"
+        options:
+          - name: ["-f", "--force"]
+            description: "Remove targets that changed since they were applied"
+          - name: ["-n", "--dry-run"]
+            description: "Show what would be removed without removing anything"
+          - name: ["-y", "--yes"]
+            description: "Skip the confirmation prompt"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "user"
+        description: "Manage your login shell from [bootstrap.user]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "apply"
+            description: "Set your login shell from [bootstrap.user]"
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "status"
+            description: "Show whether your login shell matches [bootstrap.user]"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+  - name: "cache"
+    description: "Manage the mise cache"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["clear", "c"]
+        description: "Delete cached data"
+        args:
+          - name: "tool"
+            isOptional: true
+            isVariadic: true
+            description: "Only clear the cache of these tools, such as node"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["path", "dir"]
+        description: "Print the cache directory path"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["prune", "p"]
+        description: "Remove cache files that have not been accessed recently"
+        args:
+          - name: "tool"
+            isOptional: true
+            isVariadic: true
+            description: "Only prune the cache of these tools, such as node"
+        options:
+          - name: ["-v", "--verbose"]
+            description: "Show pruned files"
+            isRepeatable: true
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "task"
+        description: "[experimental] Inspect artifact cache entries for a task"
+        args:
+          - name: "task"
+            description: "Task name or pattern to inspect"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["completion", "complete"]
+    description: "Generate shell completions"
+    args:
+      - name: "shell"
+        isOptional: true
+        description: "Shell type to generate completions for (required)"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["config", "cfg"]
+    description: "Manage config files"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "explain"
+        description: "Describe each key in a mise TOML file"
+        args:
+          - name: "key"
+            isOptional: true
+            description: "Dotted key path to describe, with the keys under it; omit for the whole file"
+        options:
+          - name: ["-f", "--file", "--path"]
+            description: "Config file to read, or a directory whose config file to read"
+            args:
+              name: "file"
+              template: filepaths
+          - name: ["-g", "--global"]
+            description: "Read the global config file"
+          - name: ["-J", "--json"]
+            description: "Print the keys as JSON"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "get"
+        description: "Print a value from one mise TOML file"
+        args:
+          - name: "key"
+            isOptional: true
+            description: "Dotted key path to print, such as tools.python; omit to print the whole file"
+        options:
+          - name: ["-f", "--file", "--path"]
+            description: "Config file to read, or a directory whose config file to read"
+            args:
+              name: "file"
+              template: filepaths
+          - name: ["-g", "--global"]
+            description: "Read the global config file"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "List config files currently in use, from lowest to highest precedence"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "set"
+        description: "Set a value in one mise TOML file"
+        args:
+          - name: "key"
+            description: "Dotted key path to set, such as tools.python"
+          - name: "value"
+            isOptional: true
+            description: "The value to set the key to (optional if provided as KEY=VALUE)"
+        options:
+          - name: ["-f", "--file", "--path"]
+            description: "Config file to edit, or a directory whose config file to edit"
+            args:
+              name: "file"
+              template: filepaths
+          - name: ["-g", "--global"]
+            description: "Edit the global config file"
+          - name: ["-t", "--type"]
+            description: "TOML type to store the value as; inferred from the value by default"
+            args:
+              name: "type"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "deactivate"
+    description: "Print the script to disable mise in the current shell session"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["daemons", "daemon"]
+    description: "[experimental] Manage project daemons with pitchfork"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "providers"
+        description: "[experimental] Manage shared servers from global [daemon_providers]"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "ls"
+            description: "[experimental] List shared servers"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "start"
+            description: "[experimental] Start shared servers"
+            args:
+              - name: "names"
+                isOptional: true
+                isVariadic: true
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "stop"
+            description: "[experimental] Stop shared servers (data is kept)"
+            args:
+              - name: "names"
+                isOptional: true
+                isVariadic: true
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "restart"
+            description: "[experimental] Restart shared servers with their current configuration"
+            args:
+              - name: "names"
+                isOptional: true
+                isVariadic: true
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "start"
+        description: "[experimental] Start project daemons and the daemons they depend on"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Daemon names (short, such as api, or qualified, such as shop/api), --group NAME, and flags passed to pitchfork"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "register"
+        description: "[experimental] Register project daemons for on-demand startup"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "stop"
+        description: "[experimental] Stop project daemons"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Daemon names (short, such as api, or qualified, such as shop/api), --group NAME, and flags passed to pitchfork"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "restart"
+        description: "[experimental] Restart project daemons"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Daemon names (short, such as api, or qualified, such as shop/api), --group NAME, and flags passed to pitchfork"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "[experimental] List project daemons"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "urls"
+        description: "[experimental] Show each daemon's URL and port"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "logs"
+        description: "[experimental] Show the output of project daemons"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Daemon names (short, such as api, or qualified, such as shop/api), --group NAME, and flags passed to pitchfork"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "status"
+        description: "[experimental] Show the status of project daemons"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Daemon names (short, such as api, or qualified, such as shop/api), --group NAME, and flags passed to pitchfork"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "tui"
+        description: "[experimental] Open the pitchfork dashboard"
+        args:
+          - name: "args"
+            isOptional: true
+            isVariadic: true
+            description: "Flags passed to pitchfork tui"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "prune"
+        description: "[experimental] Remove daemon state left by deleted projects"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show what would be removed without deleting anything"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["dotfiles", "dot"]
+    description: "Deploy, track, and sync dotfiles"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "add"
+        description: "Start deploying a file, or copy its edits back to the source"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Targets to add or update"
+        options:
+          - name: ["-f", "--force"]
+            description: "Overwrite existing sources without prompting"
+          - name: ["-g", "--global"]
+            description: "Write to the global config (the default)"
+          - name: ["-l", "--local"]
+            description: "Write to the project config instead of the global config"
+          - name: ["-m", "--mode"]
+            description: "Mode for a target that is not managed yet: symlink, symlink-each, copy, or template (default: the dotfiles.default_mode setting)"
+            args:
+              name: "mode"
+          - name: ["-n", "--dry-run"]
+            description: "Print the config and source changes without writing anything"
+          - name: ["-p", "--path"]
+            description: "Write to this config file or directory"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-s", "--source"]
+            description: "Source path to use for a single target"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-y", "--yes"]
+            description: "Skip the confirmation prompt"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "apply"
+        description: "Link, copy, and render [dotfiles] entries into place"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Only apply these targets"
+        options:
+          - name: ["-f", "--force"]
+            description: "Overwrite existing files that conflict with whole-file dotfile entries"
+          - name: ["-n", "--dry-run"]
+            description: "Print the actions that would run without writing anything"
+          - name: ["-y", "--yes"]
+            description: "Skip the confirmation prompt"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "capture"
+        description: "Run a command and save tracked files before and after it"
+        args:
+          - name: "value"
+            isVariadic: true
+            description: "Command and arguments to run, after --"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "conflicts"
+        description: "Compare both sides of a sync conflict"
+        args:
+          - name: "path"
+            isOptional: true
+            isVariadic: true
+            description: "Only inspect these conflicted paths"
+            template: folders
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "diff"
+        description: "Show what mise dot apply would change"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Only show these targets"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "edit"
+        description: "Open a dotfile's source in your editor"
+        args:
+          - name: "target"
+            description: "Target to edit"
+        options:
+          - name: ["-m", "--mode"]
+            description: "Mode to use if the target is not managed yet: symlink, symlink-each, copy, or template (default: the dotfiles.default_mode setting)"
+            args:
+              name: "mode"
+          - name: ["-s", "--source"]
+            description: "Source path to use if the target is not yet managed"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-y", "--yes"]
+            description: "Skip the confirmation prompt when adding an unmanaged target"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "exclude"
+        description: "Never save paths matching a glob"
+        args:
+          - name: "glob"
+            description: "A glob such as ~/.config/hypr/plugins/**"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "files"
+        description: "List a directory's files and whether each one is tracked"
+        args:
+          - name: "path"
+            isOptional: true
+            description: "The directory or file to list; defaults to the current directory"
+            template: folders
+        options:
+          - name: ["-r", "--recursive"]
+            description: "List files in subdirectories too, instead of one row per subdirectory"
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "history"
+        description: "Browse saved versions of your tracked files"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-n", "--limit"]
+            description: "Show at most this many checkpoints (0 for all)"
+            args:
+              name: "limit"
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "describe"
+            description: "Set the description of a checkpoint"
+            args:
+              - name: "ref"
+                description: "Numeric checkpoint ID, latest, latest~N, or commit:<sha>"
+              - name: "text"
+                description: "The new description"
+            options:
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "diff"
+            description: "Compare checkpoints, or your files against one"
+            args:
+              - name: "a"
+                isOptional: true
+                description: "Numeric checkpoint ID, latest, latest~N, or commit:<sha>"
+              - name: "b"
+                isOptional: true
+                description: "Compare A with this checkpoint instead of its predecessor"
+            options:
+              - name: ["-p", "--patch"]
+                description: "Print the full patch instead of a per-file summary"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: ["ls", "list"]
+            description: "List checkpoints, newest first"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-n", "--limit"]
+                description: "Show at most this many checkpoints (0 for all)"
+                args:
+                  name: "limit"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "purge"
+            description: "Erase a path's saved versions from history"
+            args:
+              - name: "path"
+                isVariadic: true
+                description: "Files or directories to erase from history"
+                template: folders
+            options:
+              - name: ["-n", "--dry-run"]
+                description: "Show what would change without changing anything"
+              - name: ["-y", "--yes"]
+                description: "Rewrite without prompting"
+              - name: ["-h", "--help"]
+                description: "Print help"
+          - name: "show"
+            description: "Show a checkpoint: its trigger, changes, and operation journal"
+            args:
+              - name: "ref"
+                isOptional: true
+                description: "Numeric checkpoint ID, latest (the default), latest~N, or commit:<sha>"
+            options:
+              - name: ["-J", "--json"]
+                description: "Output in JSON format"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "include"
+        description: "Stop excluding paths matching a glob"
+        args:
+          - name: "glob"
+            description: "The glob as written by mise dot exclude"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "notify"
+        description: "Send a test desktop notification"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "origin"
+        description: "Show, connect, or disconnect the origin repository"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+        subcommands:
+          - name: "set"
+            description: "Connect an origin repository"
+            args:
+              - name: "url"
+                description: "The repository URL (any Git URL; use a private repository)"
+            options:
+              - name: ["-y", "--yes"]
+                description: "Skip the confirmation prompt"
+              - name: ["-h", "--help"]
+                description: "Print help"
+      - name: "paths"
+        description: "List tracked paths and how they are saved"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "pull"
+        description: "Write fetched changes from other machines to tracked files"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show the plan without changing anything"
+          - name: ["-y", "--yes"]
+            description: "Accepted for compatibility; pull skips the apply confirmation"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "recover"
+        description: "Recover an interrupted dotfile operation"
+        args:
+          - name: "operation"
+            isOptional: true
+            description: "The operation's checkpoint ID (see mise dot history --pending) or a unique prefix of its UUID"
+        options:
+          - name: ["-y", "--yes"]
+            description: "Discard the operation's recovery copies without prompting"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "rollback"
+        description: "Return files to the version a checkpoint holds"
+        args:
+          - name: "path"
+            isOptional: true
+            isVariadic: true
+            description: "Paths to roll back (files or directories)"
+            template: folders
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show the plan without changing anything"
+          - name: ["-y", "--yes"]
+            description: "Apply without prompting"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "save"
+        description: "Save a checkpoint of the tracked files now"
+        args:
+          - name: "path"
+            isOptional: true
+            isVariadic: true
+            description: "Paths to save; every one must be tracked"
+            template: folders
+        options:
+          - name: ["-d", "--description"]
+            description: "A description for the checkpoint"
+            args:
+              name: "text"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["status", "ls"]
+        description: "Show the state of your dotfiles and their history"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Only show these targets"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-v", "--verbose"]
+            description: "List every entry, including those already applied or tracked"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "sync"
+        description: "Push saved checkpoints and fetch incoming changes"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "track"
+        description: "Track a file or directory in place"
+        args:
+          - name: "path"
+            isVariadic: true
+            description: "Paths to track (a relative path starts from the current directory)"
+            template: folders
+        options:
+          - name: ["-y", "--yes"]
+            description: "Accepted for compatibility; track no longer asks to confirm the paths"
+          - name: ["-n", "--dry-run"]
+            description: "Show what each path expands to (files, size, what is left out) without tracking it"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "unapply"
+        description: "Remove files that mise dot apply deployed"
+        args:
+          - name: "target"
+            isOptional: true
+            isVariadic: true
+            description: "Only unapply these targets"
+        options:
+          - name: ["-f", "--force"]
+            description: "Remove modified or otherwise ambiguous managed files and lines"
+          - name: ["-n", "--dry-run"]
+            description: "Print the actions that would run without writing anything"
+          - name: ["-y", "--yes"]
+            description: "Skip the confirmation prompt"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "undo"
+        description: "Reverse the tracked-file changes from an operation"
+        args:
+          - name: "ref"
+            isOptional: true
+            description: "The operation's checkpoint: numeric ID, latest, latest~N, or commit:<sha>"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show the plan without changing anything"
+          - name: ["-y", "--yes"]
+            description: "Apply without prompting"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "untrack"
+        description: "Stop tracking a file or directory"
+        args:
+          - name: "path"
+            isVariadic: true
+            description: "Paths to stop tracking"
+            template: folders
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "watch"
+        description: "Save tracked files as they change"
+        options:
+          - name: ["-J", "--json"]
+            description: "Print one JSON object per line instead of log lines"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["doctor", "dr"]
+    description: "Check your mise setup for problems"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["path", "paths"]
+        description: "Print the directories mise adds to PATH"
+        options:
+          - name: ["-f", "--full"]
+            description: "Print every PATH entry, including those mise does not provide"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "project"
+        description: "Run the project's diagnostic checks"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output the complete report as JSON"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "en"
+    description: "Start a subshell with mise's tools and environment"
+    args:
+      - name: "dir"
+        isOptional: true
+        description: "Directory to start the shell in"
+        template: folders
+    options:
+      - name: ["-s", "--shell"]
+        description: "Shell to start; defaults to $SHELL"
+        args:
+          name: "shell"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["env", "e"]
+    description: "Print the environment for the current configuration"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to include in addition to those in the config, such as node@24"
+    options:
+      - name: ["-D", "--dotenv"]
+        description: "Output in dotenv format"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-s", "--shell"]
+        description: "Shell type to generate environment variables for"
+        args:
+          name: "shell"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["exec", "x"]
+    description: "Run a command with mise's tools and environment"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to add or override, such as node@24 python@3.13"
+      - name: "value"
+        isVariadic: true
+        description: "Executable and arguments to run directly, after --"
+    options:
+      - name: ["-c", "--command"]
+        description: "Command string to run through a shell (supports pipes and redirection)"
+        args:
+          name: "command"
+      - name: ["-j", "--jobs"]
+        description: "How many tools to install in parallel; defaults to the jobs setting"
+        args:
+          name: "jobs"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "fmt"
+    description: "Format mise TOML configuration"
+    options:
+      - name: ["-a", "--all"]
+        description: "Format every config file mise loads, not only those in the current directory"
+      - name: ["-c", "--check"]
+        description: "Check whether the configs are formatted without rewriting them; exits 1 if any are not"
+      - name: ["-s", "--stdin"]
+        description: "Format TOML from stdin and print it to stdout, without touching any file"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["generate", "gen"]
+    description: "Generate project files such as CI workflows, git hooks, and scripts"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "config"
+        description: "Generate a mise.toml file"
+        args:
+          - name: "path"
+            isOptional: true
+            description: "Config file to edit or create; defaults to mise.toml"
+            template: folders
+        options:
+          - name: ["-g", "--global"]
+            description: "Generate the global config file (~/.config/mise/config.toml)"
+          - name: ["-n", "--dry-run"]
+            description: "Print the result instead of writing it to the file"
+          - name: ["-f", "--force"]
+            description: "Replace an existing file with the starter template when not opening the editor"
+          - name: ["-t", "--tool-versions"]
+            description: "Copy the tools from this .tool-versions file into the config, without opening the editor"
+            args:
+              name: "file"
+              template: filepaths
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "devcontainer"
+        description: "Generate a devcontainer configuration that installs mise and the project's tools"
+        options:
+          - name: ["-i", "--image"]
+            description: "Base image; defaults to mcr.microsoft.com/devcontainers/base:ubuntu"
+            args:
+              name: "image"
+          - name: ["-m", "--mount-mise-data"]
+            description: "Keep installed tools in a mise-data-volume Docker volume so they survive rebuilds"
+          - name: ["-n", "--name"]
+            description: "Container name; defaults to mise"
+            args:
+              name: "name"
+          - name: ["-w", "--write"]
+            description: "Write to .devcontainer/devcontainer.json instead of printing"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["git-pre-commit", "pre-commit"]
+        description: "Generate a git hook that runs a mise task"
+        args:
+          - name: "value"
+            isVariadic: true
+            description: "mise flags to embed in the generated hook, given after --"
+        options:
+          - name: ["-t", "--task"]
+            description: "The task to run when the hook is triggered"
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-w", "--write"]
+            description: "Write the hook to the hooks directory and make it executable"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "github-action"
+        description: "Generate a GitHub Actions workflow that runs a mise task"
+        options:
+          - name: ["-t", "--task"]
+            description: "The task to run when the workflow is triggered"
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-w", "--write"]
+            description: "Write the workflow to .github/workflows/<NAME>.yml instead of printing it"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "install-script"
+        description: "Generate a script that downloads and runs a pinned mise"
+        options:
+          - name: ["-l", "--localize"]
+            description: "Keep mise data and cache in a project-local directory (.mise by default)"
+          - name: ["-V", "--version"]
+            description: "mise version to pin; defaults to the release mise self-update would install"
+            args:
+              name: "version"
+          - name: ["-w", "--write"]
+            description: "Write the script to PATH (./bin/mise when no path is given) and make it executable, instead of printing it"
+            args:
+              name: "path"
+              isOptional: true
+              template: folders
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "task-docs"
+        description: "Generate Markdown documentation for project tasks"
+        options:
+          - name: ["-i", "--inject"]
+            description: "Replace the marked section of the --output file"
+          - name: ["-I", "--index"]
+            description: "Write only an index of tasks, intended for use with --multi"
+          - name: ["-m", "--multi"]
+            description: "Render each task as a separate document; requires --output to be a directory"
+          - name: ["-o", "--output"]
+            description: "Write the generated docs to a file or directory"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "task-stubs"
+        description: "Generate scripts that run mise tasks"
+        options:
+          - name: ["-d", "--dir"]
+            description: "Directory to create task stubs inside of"
+            args:
+              name: "dir"
+              template: folders
+          - name: ["-m", "--mise-bin"]
+            description: "mise executable the stubs run; defaults to mise from PATH"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "tool-stub"
+        description: "Generate or update a tool stub"
+        args:
+          - name: "output"
+            description: "Output file path for the tool stub"
+        options:
+          - name: ["-b", "--bin"]
+            description: "Binary path within the extracted archive"
+            args:
+              name: "bin"
+          - name: ["-u", "--url"]
+            description: "URL to download the tool from"
+            args:
+              name: "url"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "implode"
+    description: "Remove the mise CLI and all related data"
+    options:
+      - name: ["-n", "--dry-run"]
+        description: "Print what would be removed, without removing anything"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "edit"
+    description: "Edit mise.toml interactively"
+    args:
+      - name: "path"
+        isOptional: true
+        description: "Config file to edit or create; defaults to mise.toml"
+        template: folders
+    options:
+      - name: ["-g", "--global"]
+        description: "Edit the global config file (~/.config/mise/config.toml)"
+      - name: ["-n", "--dry-run"]
+        description: "Print the result instead of writing it to the file"
+      - name: ["-f", "--force"]
+        description: "Replace an existing file with the starter template when not opening the editor"
+      - name: ["-t", "--tool-versions"]
+        description: "Copy the tools from this .tool-versions file into the config, without opening the editor"
+        args:
+          name: "file"
+          template: filepaths
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["install", "i"]
+    description: "Install the tools in your config, or specific tool versions"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to install, such as node@24; defaults to every tool in the config"
+    options:
+      - name: ["-f", "--force"]
+        description: "Reinstall even if already installed"
+      - name: ["-j", "--jobs"]
+        description: "How many tools to install in parallel; defaults to the jobs setting"
+        args:
+          name: "jobs"
+      - name: ["-n", "--dry-run"]
+        description: "Show what would be installed, without installing anything"
+      - name: ["-v", "--verbose"]
+        description: "Show installer output"
+        isRepeatable: true
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "install-into"
+    description: "Install a tool version into a directory outside mise"
+    args:
+      - name: "tool@version"
+        description: "Tool and version to install, such as node@24"
+      - name: "path"
+        description: "Directory to install into; its existing contents are deleted"
+        template: folders
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "installs"
+    description: "[experimental] Inspect and choose identity-layout installations"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["ls", "list"]
+        description: "List the installations of the identity install layout"
+        args:
+          - name: "tool"
+            isOptional: true
+            isVariadic: true
+            description: "Only show the installations of these tools"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "migrate"
+        description: "Reinstall legacy installations into the identity install layout"
+        args:
+          - name: "tool@version"
+            isOptional: true
+            isVariadic: true
+            description: "Only migrate these tools, or these versions of them"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show what would move without changing anything"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "select"
+        description: "Choose which installation mise uses when no lockfile pins one"
+        args:
+          - name: "installation"
+            description: "The installation to select: its directory name, or its path"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "latest"
+    description: "Print the latest version that matches a version request"
+    args:
+      - name: "tool@version"
+        description: "Tool, optionally with a version prefix, such as node or node@22"
+    options:
+      - name: ["-i", "--installed"]
+        description: "Print the latest installed version instead of the latest available one"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["link", "ln"]
+    description: "Symlink a tool version into mise"
+    args:
+      - name: "tool@version"
+        description: "Tool and version to create a symlink for"
+      - name: "path"
+        description: "Directory of the existing installation, such as ~/.nvm/versions/node/v24.11.0"
+        template: folders
+    options:
+      - name: ["-f", "--force"]
+        description: "Replace an existing installation of this version"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "lock"
+    description: "Create or refresh lockfile versions, checksums, and download URLs"
+    args:
+      - name: "tool"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to lock, such as node python; defaults to every configured tool and every tool a task needs"
+    options:
+      - name: ["-g", "--global"]
+        description: "Lock only the global and system config lockfiles"
+      - name: ["-j", "--jobs"]
+        description: "How many jobs to run in parallel; defaults to the jobs setting"
+        args:
+          name: "jobs"
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change, without writing anything"
+      - name: ["-p", "--platform"]
+        description: "Platforms to lock, comma-separated, such as linux-x64,macos-arm64"
+        isRepeatable: true
+        args:
+          name: "platform"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["ls", "list"]
+    description: "List installed and active tool versions"
+    args:
+      - name: "installed_tool"
+        isOptional: true
+        isVariadic: true
+        description: "Only show these tools"
+        generators:
+          script: "mise ls -i | awk '{print $1}' | uniq"
+    options:
+      - name: ["-b", "--backend"]
+        description: "Only show tools from this backend, such as aqua, cargo, core, or go"
+        isRepeatable: true
+        args:
+          name: "backend"
+          generators:
+            script: "mise backends"
+      - name: ["-c", "--current"]
+        description: "Only show versions the loaded config files request"
+      - name: ["-g", "--global"]
+        description: "Only show versions the global config requests"
+      - name: ["-i", "--installed"]
+        description: "Only show installed versions"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-l", "--local"]
+        description: "Deprecated alias for --no-global"
+      - name: ["-m", "--missing"]
+        description: "Only show requested versions that are not installed"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["ls-remote", "list-all"]
+    description: "List tool versions available to install"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        description: "Tool to get versions for"
+      - name: "prefix"
+        isOptional: true
+        description: "Version prefix to filter by; same as TOOL@PREFIX"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format, with metadata such as created_at when available"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "lsp"
+    description: "Run the language server for mise config files over stdin/stdout"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "mcp"
+    description: "Run the Model Context Protocol server over stdin/stdout"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "oci"
+    description: "[experimental] Build, push, and run OCI images of a project's tools"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "build"
+        description: "[experimental] Build an OCI image from the current mise.toml"
+        options:
+          - name: ["-o", "--output"]
+            description: "Output directory for the OCI image layout"
+            args:
+              name: "output"
+          - name: ["-t", "--tag"]
+            description: "Tag to record in the image index (the org.opencontainers.image.ref.name annotation)"
+            args:
+              name: "tag"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "push"
+        description: "[experimental] Build an OCI image and push it to a registry"
+        args:
+          - name: "ref"
+            description: "Destination registry reference (e.g"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "run"
+        description: "[experimental] Build the project's image and run a command in it"
+        args:
+          - name: "value"
+            isVariadic: true
+            description: "Command and arguments to run inside the container (after --)"
+        options:
+          - name: ["-e", "--env"]
+            description: "Set environment variable in the container (repeatable, KEY=VAL)"
+            isRepeatable: true
+            args:
+              name: "key=val"
+          - name: ["-i", "--interactive"]
+            description: "Run interactively (pass -i to the engine)"
+          - name: ["-t", "--tty"]
+            description: "Allocate a TTY (pass -t to the engine)"
+          - name: ["-w", "--workdir"]
+            description: "Working directory inside the container"
+            args:
+              name: "workdir"
+              template: folders
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "packslip"
+    description: "Inspect and reset the signers mise has pinned for packslip tools"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "forget"
+        description: "Forget a project's pinned signer so the next accepted release sets it"
+        args:
+          - name: "project"
+            description: "The project whose pin to drop"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["pins", "list"]
+        description: "List the signer mise has pinned for each packslip project"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "outdated"
+    description: "Show outdated tool versions"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to check, such as node@20 python@3.10"
+    options:
+      - name: ["-b", "--bump"]
+        description: "Compare against the newest release overall, not only the configured range"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "patrons"
+    description: "Show the individuals supporting mise as Patron-tier members"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["plugins", "p"]
+    description: "Manage plugins"
+    options:
+      - name: ["-c", "--core"]
+        description: "List the core tools built into mise instead of installed plugins"
+      - name: ["-u", "--urls"]
+        description: "Show each plugin's Git URL, ref, and commit"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["install", "i"]
+        description: "Install plugins from a configured source, Git URL, or archive"
+        args:
+          - name: "new_plugin"
+            isOptional: true
+            description: "The plugin to install, or a URL to infer its name from"
+            generators:
+              script: "mise plugins --all"
+          - name: "git_url"
+            isOptional: true
+            description: "Where to install from: a Git URL (optionally ending in #ref) or an archive URL"
+        options:
+          - name: ["-a", "--all"]
+            description: "Install every plugin the current config needs that is not installed yet"
+          - name: ["-f", "--force"]
+            description: "Reinstall even if the plugin is already installed"
+          - name: ["-j", "--jobs"]
+            description: "Number of plugins to install in parallel (default: the jobs setting)"
+            args:
+              name: "jobs"
+          - name: ["-v", "--verbose"]
+            description: "Show installation output"
+            isRepeatable: true
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["link", "ln"]
+        description: "Link a local plugin directory into mise for development"
+        args:
+          - name: "name"
+            description: "The plugin name, or the plugin directory when DIR is omitted"
+          - name: "dir"
+            isOptional: true
+            description: "The local path to the plugin, such as ./mise-my-tool"
+            template: folders
+        options:
+          - name: ["-f", "--force"]
+            description: "Replace an existing plugin with the same name"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "List installed plugins"
+        options:
+          - name: ["-c", "--core"]
+            description: "List the core tools built into mise instead of installed plugins"
+          - name: ["-o", "--outdated"]
+            description: "Only show plugins whose Git remote has newer commits"
+          - name: ["-u", "--urls"]
+            description: "Show each plugin's Git URL, ref, and commit"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls-remote", "list-remote"]
+        description: "List registry tools that have an asdf or vfox plugin backend"
+        options:
+          - name: ["-u", "--urls"]
+            description: "Show the plugin source for each shorthand, e.g"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["uninstall", "remove"]
+        description: "Remove an installed plugin"
+        args:
+          - name: "plugin"
+            isOptional: true
+            isVariadic: true
+            description: "Plugins to remove"
+            generators:
+              script: "mise plugins --core --user"
+        options:
+          - name: ["-a", "--all"]
+            description: "Remove all plugins"
+          - name: ["-p", "--purge"]
+            description: "Also remove a tool plugin's installs, downloads, and cache"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["update", "up"]
+        description: "Update installed plugins"
+        args:
+          - name: "plugin"
+            isOptional: true
+            isVariadic: true
+            description: "Plugins to update; append #ref to switch to a branch, tag, or commit"
+            generators:
+              script: "mise plugins --core --user"
+        options:
+          - name: ["-j", "--jobs"]
+            description: "Number of plugins to update in parallel (default: the jobs setting)"
+            args:
+              name: "jobs"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["deps", "dep"]
+    description: "[experimental] Manage project dependencies"
+    args:
+      - name: "provider"
+        isOptional: true
+        description: "Run only this provider, or explain it with --explain"
+    options:
+      - name: ["-f", "--force"]
+        description: "Run providers even when their outputs are up to date"
+      - name: ["-n", "--dry-run"]
+        description: "Show which providers would run, without running them"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "add"
+        description: "Add packages to the project's dependencies"
+        args:
+          - name: "packages"
+            isVariadic: true
+            description: "Packages to add, such as npm:react or npm:@types/react@19"
+        options:
+          - name: ["-D", "--dev"]
+            description: "Add as a development dependency"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "install"
+        description: "Install project dependencies"
+        args:
+          - name: "provider"
+            isOptional: true
+            description: "Run only this provider, or explain it with --explain"
+        options:
+          - name: ["-f", "--force"]
+            description: "Run providers even when their outputs are up to date"
+          - name: ["-n", "--dry-run"]
+            description: "Show which providers would run, without running them"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "remove"
+        description: "Remove packages from the project's dependencies"
+        args:
+          - name: "packages"
+            isVariadic: true
+            description: "Packages to remove, such as npm:lodash"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "prune"
+    description: "Delete tool versions that nothing uses"
+    args:
+      - name: "installed_tool"
+        isOptional: true
+        isVariadic: true
+        description: "Prune only these tools"
+        generators:
+          script: "mise ls -i | awk '{print $1}' | uniq"
+    options:
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change without changing anything"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "registry"
+    description: "List registry shorthand names and their backends"
+    args:
+      - name: "name"
+        isOptional: true
+        description: "Show only this tool's backends, in the order mise prefers them"
+    options:
+      - name: ["-b", "--backend"]
+        description: "Show only tools for this backend"
+        args:
+          name: "backend"
+          generators:
+            script: "mise backends"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "reshim"
+    description: "Create shims for executables provided by installed tools"
+    options:
+      - name: ["-f", "--force"]
+        description: "Rebuild all mise-owned shims"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["run", "r"]
+    description: "Run tasks and their dependencies"
+    options:
+      - name: ["-c", "--continue-on-error"]
+        description: "Continue running tasks even if one fails"
+      - name: ["-C", "--cd"]
+        description: "Change to this directory before running the tasks"
+        args:
+          name: "dir"
+          template: folders
+      - name: ["-f", "--force"]
+        description: "Run the tasks even if their outputs are up to date"
+      - name: ["-j", "--jobs"]
+        description: "Number of tasks to run in parallel (default: the jobs setting)"
+        args:
+          name: "jobs"
+      - name: ["-n", "--dry-run"]
+        description: "Print the tasks in the order they would run, without running them"
+      - name: ["-o", "--output"]
+        description: "How task output is displayed"
+        args:
+          name: "output"
+      - name: ["-q", "--quiet"]
+        description: "Do not show extra output"
+      - name: ["-r", "--raw"]
+        description: "Connect the tasks directly to stdin, stdout, and stderr instead of reading their output by line"
+      - name: ["-s", "--shell"]
+        description: "Shell used to run TOML tasks that do not set their own shell"
+        args:
+          name: "shell"
+      - name: ["-S", "--silent"]
+        description: "Do not show any output except for errors"
+      - name: ["-t", "--tool"]
+        description: "Extra tools to use with the tasks, e.g"
+        isRepeatable: true
+        args:
+          name: "tool@version"
+  - name: "search"
+    description: "Search for available tools"
+    args:
+      - name: "name"
+        isOptional: true
+        description: "The tool to search for"
+    options:
+      - name: ["-a", "--all"]
+        description: "Search every source: the registry, aqua, installed backend plugins, and the npm, cargo, gem, and dotnet package registries"
+      - name: ["-i", "--interactive"]
+        description: "Show an interactive search menu"
+      - name: ["-m", "--match-type"]
+        description: "Match type: equal, contains, or fuzzy"
+        args:
+          name: "match_type"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "secrets"
+    description: "[experimental] Inspect the project's secrets source"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["ls", "list"]
+        description: "[experimental] List secret names from the project's secrets source"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "self-update"
+    description: "Update mise itself"
+    args:
+      - name: "version"
+        isOptional: true
+        description: "Update to a specific version, skipping the minimum release age"
+    options:
+      - name: ["-f", "--force"]
+        description: "Update even if already up to date"
+      - name: ["-y", "--yes"]
+        description: "Skip confirmation prompt"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["set", "ev"]
+    description: "Set, show, or list environment variables in mise.toml"
+    args:
+      - name: "env_var"
+        isOptional: true
+        isVariadic: true
+        description: "Environment variables to set, such as NODE_ENV=production"
+        generators:
+          script: "mise set --complete | awk '{print $1\"=\"}'"
+    options:
+      - name: ["-E", "--env"]
+        description: "Write to mise.<ENV>.toml in the current directory, or to .mise.<ENV>.toml if that exists"
+        args:
+          name: "env"
+      - name: ["-g", "--global"]
+        description: "Set the environment variable in the global config file"
+      - name: ["--file", "--path"]
+        description: "The TOML file to update"
+        args:
+          name: "file"
+          template: filepaths
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "settings"
+    description: "Manage settings"
+    args:
+      - name: "setting"
+        isOptional: true
+        description: "Only show this setting, or the settings under this prefix such as python"
+        generators:
+          script: "mise settings --complete"
+          descriptionSeparator: ":"
+      - name: "value"
+        isOptional: true
+        description: "The value to set"
+    options:
+      - name: ["-a", "--all"]
+        description: "List all settings"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-l", "--local"]
+        description: "Use only the nearest project config"
+      - name: ["-T", "--toml"]
+        description: "Output in TOML format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "add"
+        description: "Append a value to an array setting"
+        args:
+          - name: "setting"
+            description: "The array setting to append to"
+            generators:
+              script: "mise settings --complete"
+              descriptionSeparator: ":"
+          - name: "value"
+            isOptional: true
+            description: "The value to append (or pass SETTING=VALUE)"
+        options:
+          - name: ["-l", "--local"]
+            description: "Write to the nearest project config instead of the global config"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "get"
+        description: "Show the effective value of a setting"
+        args:
+          - name: "setting"
+            description: "The setting to show"
+            generators:
+              script: "mise settings --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-l", "--local"]
+            description: "Read only the explicit settings in the nearest project config"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "List configured settings and their sources"
+        args:
+          - name: "setting"
+            isOptional: true
+            description: "Only show this setting, or the settings under this prefix such as python"
+            generators:
+              script: "mise settings --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-a", "--all"]
+            description: "List all settings"
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-l", "--local"]
+            description: "Use only the nearest project config"
+          - name: ["-T", "--toml"]
+            description: "Output in TOML format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["set", "create"]
+        description: "Set a setting"
+        args:
+          - name: "setting"
+            description: "The setting to set"
+            generators:
+              script: "mise settings --complete"
+              descriptionSeparator: ":"
+          - name: "value"
+            isOptional: true
+            description: "The value to set (or pass SETTING=VALUE)"
+        options:
+          - name: ["-l", "--local"]
+            description: "Write to the nearest project config instead of the global config"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["unset", "rm"]
+        description: "Remove a setting from the global or project config"
+        args:
+          - name: "key"
+            description: "The setting to remove"
+        options:
+          - name: ["-l", "--local"]
+            description: "Write to the nearest project config instead of the global config"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["shell", "sh"]
+    description: "Set a tool version for the current shell session"
+    args:
+      - name: "tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to set, such as node@20"
+    options:
+      - name: ["-j", "--jobs"]
+        description: "Number of jobs to run in parallel (default: the jobs setting)"
+        args:
+          name: "jobs"
+      - name: ["-u", "--unset"]
+        description: "Remove a version set earlier with mise shell"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "ssh"
+    description: "Open an SSH session, optionally borrowing read-only GitHub access"
+    args:
+      - name: "destination"
+        isOptional: true
+        description: "OpenSSH destination or SSH config alias (required)"
+      - name: "command"
+        isOptional: true
+        isVariadic: true
+        description: "Command to execute after --; omit for an interactive shell"
+    options:
+      - name: ["-i", "--identity-file"]
+        description: "SSH identity file"
+        args:
+          name: "identity_file"
+          template: filepaths
+      - name: ["-p", "--port"]
+        description: "SSH port"
+        args:
+          name: "port"
+      - name: ["-o", "--ssh-option"]
+        description: "OpenSSH option; repeat for multiple options"
+        isRepeatable: true
+        args:
+          name: "ssh_option"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "shell-alias"
+    description: "Manage shell aliases"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "get"
+        description: "Show the command for a shell alias"
+        args:
+          - name: "shell_alias"
+            description: "The alias to show"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["ls", "list"]
+        description: "List shell aliases"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["set", "add"]
+        description: "Set a shell alias in the global config"
+        args:
+          - name: "shell_alias"
+            description: "The alias name"
+          - name: "command"
+            isOptional: true
+            description: "The command to run (or pass ALIAS=COMMAND)"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["unset", "rm"]
+        description: "Remove a shell alias from the global config"
+        args:
+          - name: "shell_alias"
+            description: "The alias to remove"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["skills", "skill"]
+    description: "List and link the agent skills that active tools ship"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["ls", "list"]
+        description: "List the skills the active tools declare"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "sync"
+        description: "Link the active tools' skills where an agent looks for them"
+        options:
+          - name: ["-g", "--global"]
+            description: "Link into the skills.dir directory under your home directory instead of the project's"
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "sponsors"
+    description: "Show the companies sponsoring mise and the jdx.dev open source tools"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "sync"
+    description: "Use tool versions installed by other version managers"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "node"
+        description: "Symlink node versions installed by nvm, nodenv, or Homebrew into mise"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "python"
+        description: "Symlink python versions installed by pyenv or uv into mise"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "ruby"
+        description: "Symlink ruby versions installed by Homebrew into mise"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["tasks", "t"]
+    description: "Manage tasks"
+    args:
+      - name: "task"
+        isOptional: true
+        description: "Task to show, as mise tasks info does"
+        generators:
+          script: "mise tasks ls --complete"
+          descriptionSeparator: ":"
+    options:
+      - name: ["-g", "--global"]
+        description: "Only show global tasks"
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-l", "--local"]
+        description: "Deprecated alias for --no-global"
+      - name: ["-x", "--extended"]
+        description: "Show all columns"
+      - name: ["-a", "--all"]
+        description: "Include tasks from every project in the monorepo, not only the current directory's hierarchy"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "add"
+        description: "Add a task"
+        args:
+          - name: "task"
+            description: "Name of the task to add"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+          - name: "value"
+            isVariadic: true
+            description: "Command to run, given after --"
+        options:
+          - name: ["-f", "--file"]
+            description: "Create a file task instead of a TOML task"
+          - name: ["-F", "--force"]
+            description: "Replace a task that already has this name in the file"
+          - name: ["-n", "--dry-run"]
+            description: "Show what would be written without writing it"
+          - name: ["-J", "--json"]
+            description: "Print what was written as JSON"
+          - name: ["-e", "--env"]
+            description: "Use mise.<ENV>.toml in the current directory, or .mise.<ENV>.toml if that exists"
+            args:
+              name: "env"
+          - name: ["-g", "--global"]
+            description: "Use the global config file"
+          - name: ["-p", "--path"]
+            description: "Use this config file, or the config file in this directory"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-a", "--alias"]
+            description: "Other names for the task"
+            isRepeatable: true
+            args:
+              name: "alias"
+          - name: ["-d", "--depends"]
+            description: "Tasks to run before this one"
+            isRepeatable: true
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-D", "--dir"]
+            description: "Run the task in a specific directory"
+            args:
+              name: "dir"
+              template: folders
+          - name: ["-H", "--hide"]
+            description: "Hide the task from mise tasks and completions"
+          - name: ["-q", "--quiet"]
+            description: "Do not print the command before running"
+          - name: ["-r", "--raw"]
+            description: "Connect the task directly to the terminal's stdin, stdout, and stderr"
+          - name: ["-s", "--sources"]
+            description: "Glob patterns of files this task uses as input"
+            isRepeatable: true
+            args:
+              name: "glob"
+          - name: ["-w", "--wait-for"]
+            description: "Wait for these tasks to finish if they are also being run"
+            isRepeatable: true
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "deps"
+        description: "Show the dependency tree of tasks"
+        args:
+          - name: "tasks"
+            isOptional: true
+            isVariadic: true
+            description: "Tasks to show (default: all tasks)"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "edit"
+        description: "Open a task in your editor"
+        args:
+          - name: "task"
+            description: "Task to edit"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-p", "--path"]
+            description: "Print the task's file path instead of opening it"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "graph"
+        description: "Show the monorepo project graph"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output the project graph as JSON"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "history"
+        description: "Show recent task runs and how long they took"
+        args:
+          - name: "task"
+            isOptional: true
+            description: "Only show runs of this task"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-s", "--summary"]
+            description: "Show one line per task: runs, failures, median and last duration, last status"
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "info"
+        description: "Show a task's definition"
+        args:
+          - name: "task"
+            description: "Name of the task to get information about"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "log"
+        description: "Print the output of a task's last run"
+        args:
+          - name: "task"
+            description: "Name of the task"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "ls"
+        description: "List available tasks"
+        options:
+          - name: ["-g", "--global"]
+            description: "Only show global tasks"
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-l", "--local"]
+            description: "Deprecated alias for --no-global"
+          - name: ["-x", "--extended"]
+            description: "Show all columns"
+          - name: ["-a", "--all"]
+            description: "Include tasks from every project in the monorepo, not only the current directory's hierarchy"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["rm", "remove"]
+        description: "Remove tasks"
+        args:
+          - name: "tasks"
+            isVariadic: true
+            description: "Tasks to remove"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show what would be removed without removing it"
+          - name: ["-J", "--json"]
+            description: "Print what was removed as JSON"
+          - name: ["-e", "--env"]
+            description: "Use mise.<ENV>.toml in the current directory, or .mise.<ENV>.toml if that exists"
+            args:
+              name: "env"
+          - name: ["-g", "--global"]
+            description: "Use the global config file"
+          - name: ["-p", "--path"]
+            description: "Use this config file, or the config file in this directory"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "set"
+        description: "Change fields of an existing TOML task"
+        args:
+          - name: "task"
+            description: "Name of the task to change"
+            generators:
+              script: "mise tasks ls --complete"
+              descriptionSeparator: ":"
+          - name: "value"
+            isVariadic: true
+            description: "Command to run instead of the current one, given after --"
+        options:
+          - name: ["-n", "--dry-run"]
+            description: "Show what would be written without writing it"
+          - name: ["-J", "--json"]
+            description: "Print what was written as JSON"
+          - name: ["-u", "--unset"]
+            description: "Remove this field from the task; repeat for several"
+            isRepeatable: true
+            args:
+              name: "field"
+          - name: ["-e", "--env"]
+            description: "Use mise.<ENV>.toml in the current directory, or .mise.<ENV>.toml if that exists"
+            args:
+              name: "env"
+          - name: ["-g", "--global"]
+            description: "Use the global config file"
+          - name: ["-p", "--path"]
+            description: "Use this config file, or the config file in this directory"
+            args:
+              name: "path"
+              template: folders
+          - name: ["-a", "--alias"]
+            description: "Other names for the task"
+            isRepeatable: true
+            args:
+              name: "alias"
+          - name: ["-d", "--depends"]
+            description: "Tasks to run before this one"
+            isRepeatable: true
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-D", "--dir"]
+            description: "Run the task in a specific directory"
+            args:
+              name: "dir"
+              template: folders
+          - name: ["-H", "--hide"]
+            description: "Hide the task from mise tasks and completions"
+          - name: ["-q", "--quiet"]
+            description: "Do not print the command before running"
+          - name: ["-r", "--raw"]
+            description: "Connect the task directly to the terminal's stdin, stdout, and stderr"
+          - name: ["-s", "--sources"]
+            description: "Glob patterns of files this task uses as input"
+            isRepeatable: true
+            args:
+              name: "glob"
+          - name: ["-w", "--wait-for"]
+            description: "Wait for these tasks to finish if they are also being run"
+            isRepeatable: true
+            args:
+              name: "task"
+              generators:
+                script: "mise tasks ls --complete"
+                descriptionSeparator: ":"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "validate"
+        description: "Check task definitions for errors"
+        args:
+          - name: "tasks"
+            isOptional: true
+            isVariadic: true
+            description: "Tasks to validate (default: all tasks)"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "test-tool"
+    description: "Test that a tool installs and runs"
+    args:
+      - name: "tools"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to test"
+    options:
+      - name: ["-a", "--all"]
+        description: "Test every registry tool that defines a test and supports this OS"
+      - name: ["-j", "--jobs"]
+        description: "Number of tools to test in parallel (default 4)"
+        args:
+          name: "jobs"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "token"
+    description: "Show which Git provider token mise uses"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: "forgejo"
+        description: "Show the Forgejo token mise uses for a host"
+        args:
+          - name: "host"
+            isOptional: true
+            description: "Forgejo hostname"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "github"
+        description: "Show the GitHub token mise uses for a host"
+        args:
+          - name: "host"
+            isOptional: true
+            description: "GitHub hostname"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "gitlab"
+        description: "Show the GitLab token mise uses for a host"
+        args:
+          - name: "host"
+            isOptional: true
+            description: "GitLab hostname"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: "tool"
+    description: "Show information about a tool"
+    args:
+      - name: "tool"
+        description: "The tool, such as node or aqua:jqlang/jq"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "tool-stub"
+    description: "Run a tool stub file"
+    args:
+      - name: "file"
+        description: "Path to the TOML tool stub file to execute"
+        template: filepaths
+      - name: "args"
+        isOptional: true
+        isVariadic: true
+        description: "Arguments to pass to the tool"
+  - name: "trust"
+    description: "Mark a config file as trusted"
+    args:
+      - name: "config_file"
+        isOptional: true
+        description: "The config file whose trust status to change"
+        template: filepaths
+    options:
+      - name: ["-a", "--all"]
+        description: "Trust all config files in the current directory, its parents, and its subdirectories"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "uninstall"
+    description: "Remove installed tool versions"
+    args:
+      - name: "installed_tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to remove, such as node@22.0.0"
+        generators:
+          script: "mise ls -i | awk '{print $1}' | uniq"
+    options:
+      - name: ["-a", "--all"]
+        description: "Remove every installed version of the named tools, or of every tool when none is named"
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change without changing anything"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "unset"
+    description: "Remove environment variables from mise.toml"
+    args:
+      - name: "env_key"
+        isOptional: true
+        isVariadic: true
+        description: "Environment variables to remove, such as NODE_ENV"
+        generators:
+          script: "mise set --complete"
+    options:
+      - name: ["-f", "--file", "--path"]
+        description: "The TOML file to edit instead of the default target"
+        args:
+          name: "file"
+          template: filepaths
+      - name: ["-g", "--global"]
+        description: "Use the global config file"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "untrust"
+    description: "Remove explicit trust for a config"
+    args:
+      - name: "config_file"
+        isOptional: true
+        description: "The config file to untrust"
+        template: filepaths
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["unuse", "rm"]
+    description: "Remove tool requests from config files and prune unused installations"
+    args:
+      - name: "installed_tool@version"
+        isVariadic: true
+        description: "Tools to remove from the config, with the version written as in the config"
+        generators:
+          script: "mise ls -i | awk '{print $1}' | uniq"
+    options:
+      - name: ["-e", "--env"]
+        description: "Edit mise.<ENV>.toml in the current directory, or .mise.<ENV>.toml if that exists"
+        args:
+          name: "env"
+      - name: ["-g", "--global"]
+        description: "Use the global config file (~/.config/mise/config.toml) instead of the local one"
+      - name: ["-p", "--path", "--file"]
+        description: "Edit this config file, or the config file in this directory"
+        args:
+          name: "path"
+          template: folders
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["upgrade", "up"]
+    description: "Upgrade outdated tools"
+    args:
+      - name: "installed_tool@version"
+        isOptional: true
+        isVariadic: true
+        description: "Tools to upgrade, such as node@20 python@3.10"
+        generators:
+          script: "mise ls -i | awk '{print $1}' | uniq"
+    options:
+      - name: ["-b", "--bump"]
+        description: "Upgrade past the configured range to the newest release, and update the config to match"
+      - name: ["-i", "--interactive"]
+        description: "Choose which tools to upgrade from a multiselect menu"
+      - name: ["-j", "--jobs"]
+        description: "Number of jobs to run in parallel (default: the jobs setting)"
+        args:
+          name: "jobs"
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change without changing anything"
+      - name: ["-x", "--exclude"]
+        description: "Tools to exclude from upgrading, such as go python"
+        isRepeatable: true
+        args:
+          name: "installed_tool"
+          generators:
+            script: "mise ls -i | awk '{print $1}' | uniq"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["use", "u"]
+    description: "Install a tool and add it to configuration"
+    options:
+      - name: ["-e", "--env"]
+        description: "Write mise.<ENV>.toml in the current directory, or .mise.<ENV>.toml if that exists"
+        args:
+          name: "env"
+      - name: ["-f", "--force"]
+        description: "Reinstall even if already installed"
+      - name: ["-g", "--global"]
+        description: "Write to the global config instead of the project config"
+      - name: ["-j", "--jobs"]
+        description: "Number of jobs to run in parallel (default: the jobs setting)"
+        args:
+          name: "jobs"
+      - name: ["-n", "--dry-run"]
+        description: "Show what would change without changing anything"
+      - name: ["-p", "--path"]
+        description: "Write to this config file, or to the config file in this directory"
+        args:
+          name: "path"
+          template: folders
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "vars"
+    description: "List, set, and ask for config vars"
+    args:
+      - name: "name[=value"
+        isOptional: true
+        isVariadic: true
+        description: "Values to save (NAME=VALUE) or to print (NAME)"
+    options:
+      - name: ["-J", "--json"]
+        description: "Output in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+    subcommands:
+      - name: ["ls", "list"]
+        description: "List every var, with the file it comes from"
+        options:
+          - name: ["-J", "--json"]
+            description: "Output in JSON format"
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: "prompt"
+        description: "Ask for the prompt vars that have no saved answer, or set answers directly"
+        args:
+          - name: "name[=value"
+            isOptional: true
+            isVariadic: true
+            description: "Vars to ask for (NAME) or answers to save (NAME=VALUE)"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+      - name: ["unset", "rm"]
+        description: "Forget saved answers so they are asked for again"
+        args:
+          - name: "name"
+            isOptional: true
+            isVariadic: true
+            description: "The vars whose answers to forget"
+        options:
+          - name: ["-h", "--help"]
+            description: "Print help"
+  - name: ["version", "v"]
+    description: "Show the version of mise"
+    options:
+      - name: ["-J", "--json"]
+        description: "Print the version information in JSON format"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: ["watch", "w"]
+    description: "Run tasks and rerun them when files change"
+    args:
+      - name: "task"
+        isOptional: true
+        description: "Task to watch (default: default); separate several tasks with :::"
+        generators:
+          script: "mise tasks ls --complete"
+          descriptionSeparator: ":"
+      - name: "args"
+        isOptional: true
+        isVariadic: true
+        description: "Arguments for the task; ::: starts the next task"
+    options:
+      - name: ["-g", "--glob"]
+        description: "Globs to watch instead of the tasks' sources"
+        isRepeatable: true
+        args:
+          name: "glob"
+      - name: ["-w", "--watch"]
+        description: "Watch a file or directory"
+        isRepeatable: true
+        args:
+          name: "path"
+          template: folders
+      - name: ["-W", "--watch-non-recursive"]
+        description: "Watch a directory without recursing into it"
+        isRepeatable: true
+        args:
+          name: "path"
+          template: folders
+      - name: ["-F", "--watch-file"]
+        description: "Read paths to watch from a file, one per line"
+        args:
+          name: "path"
+          template: folders
+      - name: ["-c", "--clear"]
+        description: "Clear the screen before each run"
+        args:
+          name: "mode"
+          isOptional: true
+      - name: ["-o", "--on-busy-update"]
+        description: "What to do when files change while the tasks are running"
+        args:
+          name: "mode"
+      - name: ["-r", "--restart"]
+        description: "Restart the tasks if they are still running when files change"
+      - name: ["-s", "--signal"]
+        description: "Signal to send to the running tasks when files change"
+        args:
+          name: "signal"
+      - name: ["-d", "--debounce"]
+        description: "How long to wait for more changes before running (default: 50ms)"
+        args:
+          name: "timeout"
+      - name: ["-p", "--postpone"]
+        description: "Wait for the first change before running the tasks"
+      - name: ["-N", "--notify"]
+        description: "Alert when commands start and end"
+      - name: ["-e", "--exts"]
+        description: "Only react to files with these extensions, e.g"
+        isRepeatable: true
+        args:
+          name: "extensions"
+      - name: ["-f", "--filter"]
+        description: "Only react to files that match this glob"
+        isRepeatable: true
+        args:
+          name: "pattern"
+      - name: ["-J", "--filter-prog"]
+        description: "[experimental] Filter programs"
+        isRepeatable: true
+        args:
+          name: "expression"
+      - name: ["-i", "--ignore"]
+        description: "Ignore files that match this glob"
+        isRepeatable: true
+        args:
+          name: "pattern"
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "where"
+    description: "Show the install directory of a tool version"
+    args:
+      - name: "tool@version"
+        description: "Tool to look up, such as ruby@3"
+    options:
+      - name: ["-h", "--help"]
+        description: "Print help"
+  - name: "which"
+    description: "Show the path a tool's executable resolves to"
+    args:
+      - name: "bin_name"
+        isOptional: true
+        description: "The executable to look up"
+        generators:
+          script: "mise which --complete"
+    options:
+      - name: ["-t", "--tool"]
+        description: "Look in a specific tool version, such as mise which npm --tool=node@20"
+        args:
+          name: "tool@version"
+      - name: ["-h", "--help"]
+        description: "Print help"

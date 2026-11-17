@@ -2,6 +2,370 @@
 name: docker
 description: A self-sufficient runtime for containers
 subcommands:
+  - name: agent
+    description: Docker AI Agent Runner
+    subcommands:
+    - name: getting-started
+    - name: run
+      description: Run an agent
+    - name: setup
+      description: Interactively set up a model (API key or local)
+    - name: share
+      description: Share agents
+    - name: doctor
+      description: Diagnose model and credential setup
+    - name: models
+      description: List available models
+    - name: alias
+      description: Manage aliases
+    - name: board
+      description: Orchestrate agents on a Kanban board
+    - name: eval
+      description: Run evaluations for an agent
+    - name: new
+      description: Create a new agent configuration
+    - name: sandbox
+      description: Manage docker-agent sandbox settings
+    - name: serve
+      description: Start an agent as a server
+    - name: version
+      description: Print the version information
+    options:
+    - name: --cache-dir
+      description: 'Override the cache directory (default: ~/Library/Caches/cagent on macOS)'
+    - name: --config-dir
+      description: 'Override the config directory (default: ~/.config/cagent)'
+    - name: --data-dir
+      description: 'Override the data directory (default: ~/.cagent)'
+    - name:
+      - -d
+      - --debug
+      description: Enable debug logging
+    - name: --log-file
+      description: 'Path to debug log file (default: ~/.cagent/cagent.debug.log; only used with --debug)'
+    - name:
+      - -o
+      - --otel
+      description: Enable OpenTelemetry tracing
+  - name: ai
+    description: Docker AI Agent - Ask Gordon
+    subcommands:
+    - name: version
+      description: Show the version information
+    options:
+    - name:
+      - -C
+      - --working-dir
+      description: Sets the working directory for the command
+  - name: bake
+    description: Build from a file
+    options:
+    - name: --allow
+      description: Allow build to access specified resources
+    - name: --builder
+      description: Override the configured builder instance (default "desktop-linux")
+    - name: --call
+      description: Set method for evaluating build ("check", "outline", "targets") (default "build")
+    - name: --check
+      description: Shorthand for "--call=check"
+    - name:
+      - -D
+      - --debug
+      description: Enable debug logging
+    - name:
+      - -f
+      - --file
+      description: Build definition file
+    - name: --list
+      description: List targets or variables
+    - name: --load
+      description: Shorthand for "--set=*.output=type=docker". Conditional.
+    - name: --metadata-file
+      description: Write build result metadata to a file
+    - name: --no-cache
+      description: Do not use cache when building the image
+    - name: --policy
+      description: 'Global policy evaluation options (format: "[disabled=true|false][,strict=true|false][,log-level=level]")'
+    - name: --print
+      description: Print the options without building
+    - name: --progress
+      description: Set type of progress output ("auto", "none",  "plain", "quiet", "rawjson", "tty"). Use plain to show container output (default "auto")
+    - name: --provenance
+      description: Shorthand for "--set=*.attest=type=provenance"
+    - name: --pull
+      description: Always attempt to pull all referenced images
+    - name: --push
+      description: Shorthand for "--set=*.output=type=registry". Conditional.
+    - name: --sbom
+      description: Shorthand for "--set=*.attest=type=sbom"
+    - name: --set
+      description: Override target value (e.g., "targetpattern.key=value")
+    - name: --var
+      description: Set a variable value (e.g., "name=value")
+  - name: checkpoint
+    description: Manage checkpoints
+    subcommands:
+    - name: create
+      description: Create a checkpoint from a running container
+    - name: ls
+      description: List checkpoints for a container
+    - name: rm
+      description: Remove a checkpoint
+  - name: debug
+    description: Get a shell into any image or container
+    subcommands:
+    - name: docker-cli-plugin-hooks
+    options:
+    - name:
+      - -c
+      - --command
+      description: Evaluate the specified commands instead, passing additional positional arguments through $argv.
+    - name: --host
+      description: 'Daemon docker socket to connect to. E.g.: ''ssh://root@example.org'', ''unix:///some/path/docker.sock'''
+    - name: --preserve-user
+      description: 'Running containers only: Use same user as the running container. Default is root.'
+    - name: --privileged
+      description: 'Running containers only: Give privileges to the shell (all capabilities).'
+    - name: --shell
+      description: 'Select a shell. Supported: "bash", "fish", "zsh", "auto". (default auto)'
+    - name: --version
+      description: Display version of the docker-debug plugin
+  - name: desktop
+    description: Docker Desktop commands
+    subcommands:
+    - name: disable
+      description: Disable a feature
+    - name: enable
+      description: Enable a feature
+    - name: kubernetes
+      description: Manage Kubernetes
+    - name: diagnose
+      description: Diagnose Docker Desktop
+    - name: logs
+      description: Print log entries
+    - name: restart
+      description: Restart Docker Desktop
+    - name: start
+      description: Start Docker Desktop
+    - name: status
+      description: Show the status of the Docker Desktop engines
+    - name: stop
+      description: Stop Docker Desktop
+    - name: update
+      description: Manage Docker Desktop updates
+    - name: version
+      description: Show the Docker Desktop CLI plugin version information
+  - name: dhi
+    description: CLI for managing Docker Hardened Images
+    subcommands:
+    - name: attestation
+      description: View attestations for Docker Hardened Images
+    - name: auth
+      description: Authenticate with Docker Hub
+    - name: catalog
+      description: Browse the Docker Hardened Images catalog
+    - name: customization
+    - name: mirror
+      description: Mirror Docker Hardened Images to your organization
+    options:
+    - name:
+      - -v
+      - --version
+      description: version for dhi
+  - name: extension
+    description: Manages Docker extensions
+    subcommands:
+    - name: dev
+      description: Extension development helpers
+    - name: init
+      description: Create a new Docker Extension based on a template.
+    - name: install
+      description: Install a Docker extension with the specified image
+    - name: ls
+      description: List installed Docker extensions
+    - name: rm
+      description: Remove a Docker extension
+    - name: share
+      description: Generate a link to share the extension.
+    - name: update
+      description: Remove and re-install a Docker extension
+    - name: validate
+      description: Validate an extension image or metadata file
+    - name: version
+      description: Print the client and server versions
+    options:
+    - name: --socket
+      description: The Desktop extension manager socket
+  - name: init
+    description: Creates Docker-related starter files for your project
+    options:
+    - name: --version
+      description: Display version of the init plugin
+  - name: manifest
+    description: Manage Docker image manifests and manifest lists
+    subcommands:
+    - name: annotate
+      description: Add additional information to a local image manifest
+    - name: create
+      description: Create a local manifest list for annotating and pushing to a registry
+    - name: inspect
+      description: Display an image manifest, or manifest list
+    - name: push
+      description: Push a manifest list to a repository
+    - name: rm
+      description: Delete one or more manifest lists from local storage
+  - name: mcp
+    description: Docker MCP Plugin
+    subcommands:
+    - name: catalog
+      description: Manage MCP server OCI catalogs
+    - name: client
+      description: Manage MCP clients
+    - name: feature
+      description: Manage experimental features
+    - name: gateway
+      description: Manage the MCP Server gateway
+    - name: oauth
+      description: Manage OAuth app authorizations
+    - name: profile
+      description: Manage profiles
+    - name: secret
+      description: Manage secrets in the local OS Keychain
+    - name: server
+      description: Manage servers
+    - name: template
+      description: Manage starter profile templates
+    - name: tools
+      description: Manage tools
+    - name: version
+      description: Show the version information
+    options:
+    - name:
+      - -v
+      - --version
+      description: Print version information and quit
+  - name: model
+    description: Docker Model Runner
+    subcommands:
+    - name: context
+      description: Manage Docker Model Runner contexts
+    - name: bench
+      description: Benchmark a model's performance at different concurrency levels
+    - name: df
+      description: Show Docker Model Runner disk usage
+    - name: gateway
+      description: Run an OpenAI-compatible LLM gateway
+    - name: inspect
+      description: Display detailed information on one model
+    - name: install-runner
+      description: Install Docker Model Runner (Docker Engine only)
+    - name: launch
+      description: Launch an app configured to use Docker Model Runner
+    - name: list
+      description: List the models pulled to your local environment
+    - name: logs
+      description: Fetch the Docker Model Runner logs
+    - name: package
+      description: Package a model into a Docker Model OCI artifact
+    - name: ps
+      description: List running models
+    - name: pull
+      description: Pull a model from Docker Hub or HuggingFace to your local environment
+    - name: purge
+      description: Remove all models
+    - name: push
+      description: Push a model to Docker Hub or Hugging Face
+    - name: reinstall-runner
+    - name: requests
+      description: Fetch requests+responses from Docker Model Runner
+    - name: restart-runner
+      description: Restart Docker Model Runner (Docker Engine only)
+    - name: rm
+      description: Remove local models downloaded from Docker Hub
+    - name: run
+      description: Run a model and interact with it using a submitted prompt or chat mode
+    - name: search
+      description: Search for models on Docker Hub and HuggingFace
+    - name: show
+      description: Show information for a model
+    - name: skills
+      description: Install Docker Model Runner skills for AI coding assistants
+    - name: start-runner
+      description: Start Docker Model Runner (Docker Engine only)
+    - name: status
+      description: Check if the Docker Model Runner is running
+    - name: stop-runner
+      description: Stop Docker Model Runner (Docker Engine only)
+    - name: tag
+      description: Tag a model
+    - name: uninstall-runner
+    - name: unload
+      description: Unload running models
+    - name: version
+      description: Show the Docker Model Runner version
+  - name: offload
+    description: Docker Offload
+    subcommands:
+    - name: start
+      description: Start a Docker Offload session
+    - name: status
+      description: Show the status of the Docker Offload connection
+    - name: stop
+      description: Stop a Docker Offload session
+    - name: version
+      description: Prints the version
+  - name: pass
+    description: Docker Pass Secrets Manager Plugin (beta)
+    subcommands:
+    - name: get
+      description: Get a secret from a keystore.
+    - name: ls
+      description: List all secrets from local keychain.
+    - name: plugins
+      description: Manage secrets engine plugins.
+    - name: rm
+      description: Remove secrets from local keychain.
+    - name: run
+      description: Run a command with `se://` environment references resolved.
+    - name: set
+      description: Set a secret
+  - name: scout
+    description: Docker Scout
+    subcommands:
+    - name: attestation
+      description: Manage attestations on images
+    - name: cache
+      description: Manage Docker Scout cache and temporary files
+    - name: compare
+      description: Compare two images and display differences (experimental)
+    - name: config
+      description: Manage Docker Scout configuration
+    - name: cves
+      description: Display CVEs identified in a software artifact
+    - name: enroll
+      description: Enroll an organization with Docker Scout
+    - name: environment
+      description: Manage environments (experimental)
+    - name: help
+      description: Display information about the available commands
+    - name: integration
+      description: Commands to list, configure, and delete Docker Scout integrations
+    - name: policy
+      description: Evaluate local Rego policies against an image and display the results (experimental)
+    - name: push
+      description: Push an image or image index to Docker Scout
+    - name: quickview
+      description: Quick overview of an image
+    - name: recommendations
+      description: Display available base image updates and remediation recommendations
+    - name: repo
+      description: Commands to list, enable, and disable Docker Scout on repositories
+    - name: version
+      description: Show Docker Scout version information
+    - name: vex
+      description: Manage VEX attestations on images
+    - name: watch
+      description: Watch repositories in a registry and push images and indexes to Docker Scout
   - name: attach
     description: Attach local standard input, output, and error streams to a running container,
     options:

@@ -2,6 +2,88 @@
 name: turbo
 description: Turborepo is a high-performance build system for JavaScript and TypeScript codebases
 subcommands:
+  - name: "boundaries"
+    description: "Boundaries ensure that Turborepo features work correctly by checking for package manager Workspace violations"
+  - name: "devtools"
+    description: "Visualize your monorepo's package graph in the browser"
+    options:
+    - name: "--port"
+      description: "The port to run the devtools server on"
+    - name: "--no-open"
+      description: "Do not automatically open the browser when the server starts"
+  - name: "generate"
+    description: "Extend your Turborepo with new apps and packages"
+  - name: "info"
+    description: "Print debugging information about your Turborepo"
+  - name: "ls"
+    description: "List packages in your monorepo"
+    options:
+    - name: ["--filter", "-F"]
+      description: "Use pnpm-style package selectors to narrow the package list"
+    - name: "--affected"
+      description: "Automatically filter to only packages that are affected by changes on the current branch"
+    - name: "--output"
+      description: "Format to output the results"
+      args:
+        name: "format"
+  - name: "query"
+    description: "Run GraphQL queries against your monorepo"
+    options:
+    - name: "--schema"
+      description: "Output the GraphQL introspection schema"
+    - name: ["--variables", "-V"]
+      description: "Path to a JSON file containing query variables"
+  - name: "scan"
+    description: "Enable faster tooling for your Turborepo locally with one, interactive command"
+  - name: "telemetry"
+    description: "Manage telemetry for this machine"
+  - name: "trace"
+    description: "turbo trace selects the test files that a change can affect"
+    options:
+    - name: "--base"
+      description: "The base git ref for comparison"
+      args:
+        name: "ref"
+    - name: "--head"
+      description: "The head git ref for comparison"
+      args:
+        name: "ref"
+    - name: "--changed"
+      description: "Use these files as the changes instead of reading them from git"
+      args:
+        name: "file..."
+        template: filepaths
+    - name: ["--filter", "-F"]
+      description: "Show only the tests of the packages that match the filter"
+      args:
+        name: "selector"
+    - name: "--tests"
+      description: "Report only tests of these frameworks: jest, vitest, gotest, cargo-test, or all"
+      args:
+        name: "framework..."
+    - name: "--strict"
+      description: "Make no assumptions: every uncertainty selects the tests it may affect"
+    - name: "--explain"
+      description: "Explain why each of the given test files is or is not selected, instead of listing the selection"
+      args:
+        name: "test..."
+    - name: "--json"
+      description: "Print the selection as JSON"
+    - name: "--exit-code"
+      description: "Exit with code 1 when a test is selected or a task must run whole, 0 when nothing must run, or 2 on errors"
+    - name: "--cache-dir"
+      description: "The filesystem cache directory the graph is fetched from and, in CI, put into, as turbo run --cache-dir"
+      args:
+        name: "path"
+        template: filepaths
+    - name: "--cache"
+      description: "Read and write the graph in the local and remote caches as turbo run --cache does for task outputs"
+      args:
+        name: "options"
+    - name: "--json"
+      description: "Print the findings as JSON"
+  - name: "watch"
+    description: "Re-run tasks in your repository, based on code changes"
   - name: bin
     description: Get the path to the turbo binary
   - name: link
@@ -130,6 +212,69 @@ subcommands:
           suggestions:
             - json
         requiresSeparator: true
+      - name: "--affected"
+        description: "Filter to only packages that are affected by changes on the current branch"
+      - name: "--cache"
+        description: "Default: local:rw,remote:rw"
+        args:
+          name: "options"
+      - name: "--cache-workers"
+        description: "Default: 10"
+        args:
+          name: "number"
+      - name: "--cwd"
+        description: "Default: Directory of root turbo.json"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--dangerously-disable-package-manager-check"
+        description: "Turborepo uses your repository's lockfile to determine caching behavior, Package Graphs, and more"
+      - name: "--env-mode"
+        description: "type: string"
+        args:
+          name: "option"
+          suggestions: ["strict", "loose"]
+      - name: "--filter"
+        description: "Specify targets to execute from your repository's graph"
+        args:
+          name: "string"
+      - name: "--framework-inference"
+        description: "Default: true"
+      - name: "--json"
+        description: "Output machine-readable NDJSON to stdout instead of human-readable text"
+      - name: "--log-file"
+        description: "Write structured JSON logs to a file"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--log-order"
+        description: "Default: auto"
+        args:
+          name: "option"
+      - name: "--log-prefix"
+        description: "Default: auto"
+        args:
+          name: "option"
+      - name: ["--daemon", "--no-daemon"]
+        description: "Deprecated: The daemon is no longer used for turbo run"
+      - name: "--only"
+        description: "Default: false"
+      - name: "--preflight"
+        description: "Only applicable when Remote Caching is configured"
+      - name: "--anon-profile"
+        description: "This flag works the same as --profile, but attempts to redacts sensitive information"
+      - name: "--remote-cache-timeout"
+        description: "Default: 30"
+      - name: "--remote-only"
+        description: "Default: false"
+      - name: "--single-package"
+        description: "Run turbo in single-package workspace mode, treating the repository as one package instead of discovering workspace packages"
+      - name: "--summarize"
+        description: "Generates a JSON file in .turbo/runs containing metadata about the run, including:"
+      - name: "--ui"
+        description: "Specify the UI to use for output"
+      - name: "--verbosity"
+        description: "To specify log level, use --verbosity=<num> or -v, -vv, -vvv"
     args:
       name: tasks
       isVariadic: true

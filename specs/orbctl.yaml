@@ -1,0 +1,182 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# OrbStack. Written from docs.orbstack.dev/machines/commands.
+name: orbctl
+description: Manage OrbStack and its Linux machines
+subcommands:
+  - name: completion
+    description: Generate a completion script
+    args:
+      name: shell
+      suggestions: [bash, zsh, fish, powershell]
+  - name: config
+    description: Change OrbStack settings
+  - name: create
+    description: Create a new machine
+    args:
+      - name: distro
+        suggestions: [ubuntu, debian, fedora, arch, alpine, centos, rocky, alma, opensuse, nixos, kali, gentoo, void, devuan, oracle, openeuler]
+      - name: name
+  - name: debug
+    description: Debug a Docker container with extra commands
+    args:
+      - name: container
+  - name: default
+    description: Get or set the default machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: delete
+    description: Delete a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: docker
+    description: Show commands for using Docker
+  - name: info
+    description: Get info about a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: k8s
+    description: Show commands for using Kubernetes
+  - name: list
+    description: List machines
+  - name: login
+    description: Log in and activate your OrbStack license
+  - name: logout
+    description: Log out of your OrbStack account
+  - name: logs
+    description: Show logs for a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: migrate
+    description: Migrate data from Docker Desktop to OrbStack
+  - name: pull
+    description: Copy files from Linux
+    args:
+      - name: path
+        template: filepaths
+        isVariadic: true
+    options:
+      - name: [-m, --machine]
+        description: Machine to use
+        args:
+          name: machine
+          generators:
+            script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+      - name: [-u, --user]
+        description: User to log in as
+        args:
+          name: user
+      - name: [-w, --workdir]
+        description: Working directory in Linux
+        args:
+          name: path
+  - name: push
+    description: Copy files to Linux
+    args:
+      - name: path
+        template: filepaths
+        isVariadic: true
+    options:
+      - name: [-m, --machine]
+        description: Machine to use
+        args:
+          name: machine
+          generators:
+            script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+      - name: [-u, --user]
+        description: User to log in as
+        args:
+          name: user
+      - name: [-w, --workdir]
+        description: Working directory in Linux
+        args:
+          name: path
+  - name: rename
+    description: Rename a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+      - name: new name
+  - name: report
+    description: Gather info for a bug report
+  - name: reset
+    description: Delete all Linux and Docker data
+  - name: restart
+    description: Restart a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: run
+    description: Run a command on Linux
+    args:
+      - name: command
+        isCommand: true
+    options:
+      - name: [-m, --machine]
+        description: Machine to use
+        args:
+          name: machine
+          generators:
+            script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+      - name: [-u, --user]
+        description: User to log in as
+        args:
+          name: user
+      - name: [-w, --workdir]
+        description: Working directory in Linux
+        args:
+          name: path
+  - name: shell
+    description: Start a shell on Linux
+    options:
+      - name: [-m, --machine]
+        description: Machine to use
+        args:
+          name: machine
+          generators:
+            script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+      - name: [-u, --user]
+        description: User to log in as
+        args:
+          name: user
+      - name: [-w, --workdir]
+        description: Working directory in Linux
+        args:
+          name: path
+  - name: ssh
+    description: Show SSH details
+  - name: start
+    description: Start OrbStack or a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: status
+    description: Check whether OrbStack is running
+  - name: stop
+    description: Stop OrbStack or a machine
+    args:
+      - name: machine
+        isOptional: true
+        generators:
+          script: "orbctl list 2>/dev/null | awk 'NR>1{print $1}'"
+  - name: update
+    description: Update OrbStack
+  - name: version
+    description: Show OrbStack version

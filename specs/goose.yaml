@@ -1,0 +1,356 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# goose. Generated from documentation/docs/guides/goose-cli-commands.md in github.com/block/goose.
+name: goose
+description: An open source AI agent from Block
+subcommands:
+  - name: "configure"
+    description: "Configure goose settings - providers, extensions, etc"
+  - name: "info"
+    description: "Shows goose information, including the version, configuration file location, session storage, and logs"
+    options:
+      - name: ["-v", "--verbose"]
+        description: "Show detailed configuration settings, including environment variables and enabled extensions"
+  - name: "version"
+    description: "Check the current goose version you have installed"
+  - name: "update"
+    description: "Update the goose CLI to a newer version"
+    options:
+      - name: ["--canary", "-c"]
+        description: "Update to the canary (development) version instead of the stable version"
+      - name: ["--reconfigure", "-r"]
+        description: "Forces goose to reset configuration settings during the update process"
+  - name: "completion"
+    description: "Generate shell-specific scripts to enable tab completion of goose commands, subcommands, and options"
+  - name: "session"
+    description: "Start or resume interactive chat sessions"
+    options:
+      - name: "--session-id"
+        description: "Specify a session by its ID (e.g., '20251108_1')"
+        args:
+          name: "session_id"
+      - name: ["-n", "--name"]
+        description: "Give the session a name"
+        args:
+          name: "name"
+      - name: "--path"
+        description: "Legacy parameter for specifying session by file path"
+        args:
+          name: "path"
+          template: filepaths
+      - name: ["-r", "--resume"]
+        description: "Resume a previous session"
+      - name: "--edit"
+        description: "Open the session's conversation in your editor ($VISUAL / $EDITOR / vi) as YAML"
+      - name: "--fork"
+        description: "Create a new duplicate session with copied history"
+      - name: "--history"
+        description: "Show previous messages when resuming a session"
+      - name: "--container"
+        description: "Run extensions inside a Docker container"
+        args:
+          name: "container_id"
+      - name: "--debug"
+        description: "Enable debug mode to output complete tool responses, detailed parameter values, and full file paths"
+      - name: "--max-tool-repetitions"
+        description: "Set the maximum number of times the same tool can be called consecutively with identical parameters"
+        args:
+          name: "number"
+      - name: "--max-turns"
+        description: "Set the maximum number of turns allowed without user input (default: 1000)"
+        args:
+          name: "number"
+      - name: "--with-extension"
+        description: "Add stdio extensions"
+        args:
+          name: "command"
+      - name: "--with-streamable-http-extension"
+        description: "Add remote extensions over Streamable HTTP"
+        args:
+          name: "url"
+      - name: "--with-builtin"
+        description: "Enable built-in extensions (e.g., 'developer', 'computercontroller')"
+        args:
+          name: "id"
+    subcommands:
+      - name: "list"
+        description: "List all saved sessions"
+        options:
+          - name: ["-f", "--format"]
+            description: "Specify output format (text or json)"
+            args:
+              name: "format"
+          - name: "--ascending"
+            description: "Sort sessions by date in ascending order (oldest first)"
+          - name: ["-w", "--working_dir"]
+            description: "Filter sessions by working directory"
+            args:
+              name: "path"
+              template: filepaths
+          - name: ["-l", "--limit"]
+            description: "Limit the number of results"
+            args:
+              name: "number"
+      - name: "remove"
+        description: "Remove one or more saved sessions"
+        options:
+          - name: "--session-id"
+            description: "Remove a specific session by its session ID"
+            args:
+              name: "session_id"
+          - name: ["-n", "--name"]
+            description: "Remove a specific session by its name"
+            args:
+              name: "name"
+          - name: ["-r", "--regex"]
+            description: "Remove sessions matching a regex pattern"
+            args:
+              name: "pattern"
+          - name: "--path"
+            description: "Remove a specific session by its file path (legacy)"
+            args:
+              name: "path"
+              template: filepaths
+      - name: "rename"
+        description: "Rename a saved session"
+        options:
+          - name: "--session-id"
+            description: "Rename a specific session by its session ID (e.g., 20251108_3)"
+            args:
+              name: "session_id"
+          - name: ["-n", "--new-name"]
+            description: "The new name for the session (required)"
+            args:
+              name: "name"
+      - name: "export"
+        description: "Export sessions in different formats for backup, sharing, migration, or documentation purposes"
+        options:
+          - name: "--session-id"
+            description: "Export a specific session by ID"
+            args:
+              name: "session_id"
+          - name: ["-n", "--name"]
+            description: "Export a specific session by name"
+            args:
+              name: "name"
+          - name: "--path"
+            description: "Export a specific session by file path (legacy)"
+            args:
+              name: "path"
+              template: filepaths
+          - name: ["-o", "--output"]
+            description: "Save exported content to a file (default: stdout)"
+            args:
+              name: "file"
+              template: filepaths
+          - name: "--format"
+            description: "Output format: markdown, json, yaml"
+            args:
+              name: "format"
+      - name: "diagnostics"
+        description: "Generate a comprehensive diagnostics JSON report for troubleshooting issues with a specific session"
+        options:
+          - name: "--session-id"
+            description: "Generate diagnostics for a specific session by ID"
+            args:
+              name: "session_id"
+          - name: ["-n", "--name"]
+            description: "Generate diagnostics for a specific session by name"
+            args:
+              name: "name"
+          - name: "--path"
+            description: "Generate diagnostics for a specific session by file path (legacy)"
+            args:
+              name: "path"
+              template: filepaths
+          - name: ["-o", "--output"]
+            description: "Save diagnostics report to a specific file path (default: diagnostics_{session_id}.json)"
+            args:
+              name: "file"
+              template: filepaths
+  - name: "run"
+    description: "Execute commands from an instruction file or stdin"
+    options:
+      - name: ["-i", "--instructions"]
+        description: "Path to instruction file containing commands"
+        args:
+          name: "file"
+          template: filepaths
+      - name: ["-t", "--text"]
+        description: "Input text to provide to goose directly"
+        args:
+          name: "text"
+      - name: "--system"
+        description: "Provide additional system instructions to customize the agent's behavior"
+        args:
+          name: "text"
+      - name: "--recipe"
+        description: "Load a custom recipe in current session"
+        args:
+          name: "recipe_file_name"
+          template: filepaths
+      - name: "--params"
+        description: "Key-value parameters to pass to the recipe file"
+        args:
+          name: "key=value"
+      - name: "--sub-recipe"
+        description: "Specify sub-recipes to include alongside the main recipe"
+        args:
+          name: "recipe"
+      - name: ["-s", "--interactive"]
+        description: "Continue in interactive mode after processing initial input"
+      - name: ["-n", "--name"]
+        description: "Name for this run session (e.g"
+        args:
+          name: "name"
+      - name: ["-r", "--resume"]
+        description: "Resume from a previous run"
+      - name: "--path"
+        description: "Path for this run session (e.g"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--container"
+        description: "Run extensions inside a Docker container"
+        args:
+          name: "container_id"
+      - name: "--no-session"
+        description: "Run goose commands without creating or storing a session file"
+      - name: "--with-extension"
+        description: "Add stdio extensions (can be used multiple times)"
+        args:
+          name: "command"
+      - name: "--with-streamable-http-extension"
+        description: "Add remote extensions over Streamable HTTP (can be used multiple times)"
+        args:
+          name: "url"
+      - name: "--with-builtin"
+        description: "Add builtin extensions by name (e.g., 'developer' or multiple: 'developer,github')"
+        args:
+          name: "name"
+      - name: "--debug"
+        description: "Output complete tool responses, detailed parameter values, and full file paths"
+      - name: "--max-tool-repetitions"
+        description: "Maximum number of times the same tool can be called consecutively with identical parameters"
+        args:
+          name: "number"
+      - name: "--max-turns"
+        description: "Maximum number of turns allowed without user input (default: 1000)"
+        args:
+          name: "number"
+      - name: "--explain"
+        description: "Show a recipe's title, description, and parameters"
+      - name: "--render-recipe"
+        description: "Print the rendered recipe instead of running it"
+      - name: ["-q", "--quiet"]
+        description: "Quiet mode"
+      - name: "--output-format"
+        description: "Output format (text, json, or stream-json)"
+        args:
+          name: "format"
+      - name: "--provider"
+        description: "Specify the provider to use for this session (overrides environment variable)"
+      - name: "--model"
+        description: "Specify the model to use for this session (overrides environment variable)"
+  - name: "recipe"
+    description: "Used to validate recipe files, manage recipe sharing, list available recipes, and open recipes in goose desktop"
+    subcommands:
+      - name: "deeplink"
+        description: "Generate a shareable link for a recipe file"
+        options:
+          - name: ["-p", "--param"]
+            description: "Pre-fill recipe parameter (can be specified multiple times)"
+            args:
+              name: "key=value"
+      - name: "list"
+        description: "List all available recipes from local directories and configured GitHub repositories"
+        options:
+          - name: "--format"
+            description: "Output format (text or json)"
+            args:
+              name: "format"
+          - name: ["-v", "--verbose"]
+            description: "Show verbose information including recipe titles and full file paths"
+      - name: "open"
+        description: "Open a recipe file directly in goose desktop"
+        options:
+          - name: ["-p", "--param"]
+            description: "Pre-fill recipe parameter (can be specified multiple times)"
+            args:
+              name: "key=value"
+      - name: "validate"
+        description: "Validate a recipe file"
+  - name: "plugin"
+    description: "Install and update git-backed plugins that provide skills or other Open Plugins components"
+    subcommands:
+      - name: "install"
+        description: "Install a plugin from a git repository URL"
+        options:
+          - name: "--auto-update"
+            description: "Automatically check for updates before plugin skills are loaded"
+      - name: "update"
+        description: "Update an installed git-backed plugin by name"
+  - name: "skills"
+    description: "List skills available to the goose agent"
+    subcommands:
+      - name: "list"
+        description: "List installed and discoverable skills, including token counts and source locations"
+  - name: "local-models"
+    description: "Search, download, list, and delete local inference models"
+    subcommands:
+      - name: "search"
+        description: "Search Hugging Face for compatible GGUF and MLX models"
+        options:
+          - name: ["-l", "--limit"]
+            description: "Maximum number of results to show"
+            args:
+              name: "number"
+      - name: "download"
+        description: "Download and register a model from a search result, such as user/repo:Q4_K_M"
+      - name: "list"
+        description: "List downloaded local models"
+      - name: "delete"
+        description: "Delete a downloaded local model"
+  - name: "schedule"
+    description: "Automate recipes by running them on a schedule"
+  - name: "mcp"
+    description: "Run an enabled MCP server specified by <name> (e.g"
+  - name: "acp"
+    description: "Run goose as an Agent Client Protocol (ACP) agent server over stdio"
+    options:
+      - name: "--enable-scheduler"
+        description: "Enable scheduled recipe execution"
+  - name: "serve"
+    description: "Start goose as an Agent Client Protocol (ACP) server over HTTP and WebSocket"
+    options:
+      - name: "--host"
+        description: "Host to bind to"
+        args:
+          name: "host"
+      - name: "--port"
+        description: "Port to listen on"
+        args:
+          name: "port"
+      - name: "--with-builtin"
+        description: "Enable built-in extensions by name"
+        args:
+          name: "name"
+      - name: "--dangerously-unauthenticated"
+        description: "Run without ACP authentication"
+      - name: "--enable-scheduler"
+        description: "Enable scheduled recipe execution"
+  - name: "term"
+    description: "Set up and use terminal-integrated sessions"
+    options:
+      - name: ["-n", "--name"]
+        description: "- Set the terminal session name when running init"
+        args:
+          name: "name"
+      - name: "--default"
+        description: "- Ask goose to handle unknown commands in supported shells"
+    subcommands:
+      - name: "init"
+        description: "- Print the shell integration script for bash, zsh, fish, nu, or powershell"
+      - name: "run"
+        description: "- Send a prompt to the terminal-integrated session"
+      - name: "info"
+        description: "- Print compact session information for shell prompt integration"

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.8 — 2026-11-17
+
+- Specs for AI coding agents: Codex, aider, opencode, Amp, goose and llm.
+- New specs: biome, vitest, uvx, git-lfs (also as `git lfs`), mise, jj, lazygit, yq, starship,
+  watchexec, lefthook, colima, OrbStack (orb, orbctl), skaffold, tilt, redis-cli and sentry-cli.
+- Brought up to date with the current versions: gh, docker, kubectl, firebase, bundle, npm and
+  swift (73 new subcommands), turbo (10 commands, 22 options for run). next, playwright and prisma
+  (Prisma ORM 7) are rewritten from their CLI references.
+- `zest gen` reads help that writes commands as `auth:` (gh) or `compose*` (docker), skips help
+  topics, reads npm's list of commands, and quotes y, n, on and off in the YAML it writes.
+
 ## 0.1.7 — 2026-11-17
 
 - The popup works with the mouse: scroll the list, and click a suggestion to insert it, as Tab

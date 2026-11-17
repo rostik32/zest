@@ -2,6 +2,15 @@
 name: npm
 description: Node package manager
 subcommands:
+  - name: diff
+  - name: exec
+  - name: explain
+  - name: find-dupes
+  - name: ll
+  - name: login
+  - name: query
+  - name: sbom
+  - name: undeprecate
   - name:
       - install
       - i

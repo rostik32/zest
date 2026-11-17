@@ -1,0 +1,884 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# llm. Generated with `zest gen` from docs/help.md (the --help of every command) in github.com/simonw/llm.
+name: llm
+description: Access large language models from the command line
+subcommands:
+- name: prompt
+  description: Execute a prompt
+  options:
+  - name:
+    - -s
+    - --system
+    description: System prompt to use
+    args:
+      name: TEXT
+  - name:
+    - -m
+    - --model
+    description: Model to use
+    args:
+      name: TEXT
+  - name:
+    - -d
+    - --database
+    description: Path to log database
+    args:
+      name: FILE
+  - name:
+    - -q
+    - --query
+    description: Use first model matching these strings
+    args:
+      name: TEXT
+  - name:
+    - -a
+    - --attachment
+    description: Attachment path or URL or -
+    args:
+      name: ATTACHMENT
+  - name:
+    - --at
+    - --attachment-type
+    description: Attachment with explicit mimetype, --at image.jpg image/jpeg
+    args:
+      name: TEXT TEXT
+  - name:
+    - -T
+    - --tool
+    description: Name of a tool to make available to the model
+    args:
+      name: TEXT
+  - name: --functions
+    description: Python code block or file path defining functions to register as tools
+    args:
+      name: TEXT
+  - name:
+    - --td
+    - --tools-debug
+    description: Show full details of tool executions
+  - name:
+    - --ta
+    - --tools-approve
+    description: Manually approve every tool execution
+  - name:
+    - --cl
+    - --chain-limit
+    description: How many chained tool responses to allow, default 5, set 0 for unlimited
+    args:
+      name: INTEGER
+  - name:
+    - -o
+    - --option
+    description: key/value options for the model
+    args:
+      name: TEXT TEXT
+  - name: --options
+    description: Show options for the selected model
+  - name: --schema
+    description: Schema DSL, JSON schema, filepath or ID
+    args:
+      name: TEXT
+  - name: --schema-multi
+    description: Schema for multiple results
+    args:
+      name: TEXT
+  - name:
+    - -f
+    - --fragment
+    description: Fragment (alias, URL, hash or file path) to add to the prompt
+    args:
+      name: TEXT
+  - name:
+    - --sf
+    - --system-fragment
+    description: Fragment to add to system prompt
+    args:
+      name: TEXT
+  - name:
+    - -t
+    - --template
+    description: Template to use; can be repeated to combine templates
+    args:
+      name: TEXT
+  - name:
+    - -p
+    - --param
+    description: Parameters for template
+    args:
+      name: TEXT TEXT
+  - name: --no-stream
+    description: Do not stream output
+  - name:
+    - -n
+    - --no-log
+    description: Don't log to database
+  - name: --log
+    description: Log prompt and response to the database
+  - name:
+    - -R
+    - --hide-reasoning
+    description: Hide reasoning output
+  - name:
+    - -c
+    - --continue
+    description: Continue the most recent conversation.
+  - name:
+    - --cid
+    - --conversation
+    description: Continue the conversation with the given ID.
+    args:
+      name: TEXT
+  - name: --key
+    description: API key to use
+    args:
+      name: TEXT
+  - name: --save
+    description: Save prompt with this template name
+    args:
+      name: TEXT
+  - name: --async
+    description: Run prompt asynchronously
+  - name:
+    - -u
+    - --usage
+    description: Show token usage
+  - name:
+    - -x
+    - --extract
+    description: Extract first fenced code block
+  - name:
+    - --xl
+    - --extract-last
+    description: Extract last fenced code block
+  - name: --json
+    description: Output the response as JSON, same format as llm logs --json
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: aliases
+  description: Manage model aliases
+  subcommands:
+  - name: list
+    description: List current aliases
+    options:
+    - name: --json
+      description: Output as JSON
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: path
+    description: Output the path to the aliases.json file
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: remove
+    description: Remove an alias
+  - name: set
+    description: Set an alias for a model
+    options:
+    - name:
+      - -q
+      - --query
+      description: Set alias for model matching these strings
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: chat
+  description: Hold an ongoing chat with a model.
+  options:
+  - name:
+    - -s
+    - --system
+    description: System prompt to use
+    args:
+      name: TEXT
+  - name:
+    - -m
+    - --model
+    description: Model to use
+    args:
+      name: TEXT
+  - name:
+    - -c
+    - --continue
+    description: Continue the most recent conversation.
+  - name:
+    - --cid
+    - --conversation
+    description: Continue the conversation with the given ID.
+    args:
+      name: TEXT
+  - name:
+    - -f
+    - --fragment
+    description: Fragment (alias, URL, hash or file path) to add to the prompt
+    args:
+      name: TEXT
+  - name:
+    - --sf
+    - --system-fragment
+    description: Fragment to add to system prompt
+    args:
+      name: TEXT
+  - name:
+    - -t
+    - --template
+    description: Template to use
+    args:
+      name: TEXT
+  - name:
+    - -p
+    - --param
+    description: Parameters for template
+    args:
+      name: TEXT TEXT
+  - name:
+    - -o
+    - --option
+    description: key/value options for the model
+    args:
+      name: TEXT TEXT
+  - name:
+    - -d
+    - --database
+    description: Path to log database
+    args:
+      name: FILE
+  - name: --no-stream
+    description: Do not stream output
+  - name:
+    - -R
+    - --hide-reasoning
+    description: Hide reasoning output
+  - name:
+    - -u
+    - --usage
+    description: Show token usage after each chat turn
+  - name: --key
+    description: API key to use
+    args:
+      name: TEXT
+  - name:
+    - -T
+    - --tool
+    description: Name of a tool to make available to the model
+    args:
+      name: TEXT
+  - name: --functions
+    description: Python code block or file path defining functions to register as tools
+    args:
+      name: TEXT
+  - name:
+    - --td
+    - --tools-debug
+    description: Show full details of tool executions
+  - name:
+    - --ta
+    - --tools-approve
+    description: Manually approve every tool execution
+  - name:
+    - --cl
+    - --chain-limit
+    description: How many chained tool responses to allow, default 5, set 0 for unlimited
+    args:
+      name: INTEGER
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: collections
+  description: View and manage collections of embeddings
+  subcommands:
+  - name: list
+    description: View a list of collections
+    options:
+    - name:
+      - -d
+      - --database
+      description: Path to embeddings database
+      args:
+        name: FILE
+    - name: --json
+      description: Output as JSON
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: delete
+    description: Delete the specified collection
+  - name: path
+    description: Output the path to the embeddings database
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: embed
+  description: Embed text and store or return the result
+  options:
+  - name:
+    - -i
+    - --input
+    description: File to embed
+    args:
+      name: PATH
+  - name:
+    - -m
+    - --model
+    description: Embedding model to use
+    args:
+      name: TEXT
+  - name: --key
+    description: API key to use
+    args:
+      name: TEXT
+  - name: --store
+    description: Store the text itself in the database
+  - name:
+    - -d
+    - --database
+    args:
+      name: FILE
+  - name:
+    - -c
+    - --content
+    description: Content to embed
+    args:
+      name: TEXT
+  - name: --binary
+    description: Treat input as binary data
+  - name:
+    - -a
+    - --attachment
+    description: Attachment path or URL or -
+    args:
+      name: ATTACHMENT
+  - name:
+    - --at
+    - --attachment-type
+    description: Attachment with explicit mimetype, --at image.jpg image/jpeg
+    args:
+      name: TEXT TEXT
+  - name: --metadata
+    description: JSON object metadata to store
+    args:
+      name: TEXT
+  - name:
+    - -f
+    - --format
+    description: Output format
+    args:
+      name: json|blob|base64|hex
+      isOptional: true
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: embed-models
+  description: Manage available embedding models
+  subcommands:
+  - name: list
+    description: List available embedding models
+    options:
+    - name:
+      - -q
+      - --query
+      description: Search for embedding models matching these strings
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: default
+    description: Show or set the default embedding model
+    options:
+    - name: --remove-default
+      description: Reset to specifying no default model
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: embed-multi
+  description: Store embeddings for multiple strings at once in the...
+  options:
+  - name: --format
+    description: Format of input file - defaults to auto-detect
+    args:
+      name: json|csv|tsv|nl
+      isOptional: true
+  - name: --files
+    description: Embed files in this directory - specify directory and glob pattern
+    args:
+      name: DIRECTORY TEXT
+  - name:
+    - -a
+    - --attachment
+    description: Attachment path or URL or -
+    args:
+      name: ATTACHMENT
+  - name:
+    - --at
+    - --attachment-type
+    description: Attachment with explicit mimetype, --at image.jpg image/jpeg
+    args:
+      name: TEXT TEXT
+  - name: --encoding
+    description: Encodings to try when reading --files
+    args:
+      name: TEXT
+  - name: --binary
+    description: Treat --files as binary data
+  - name: --sql
+    description: Read input using this SQL query
+    args:
+      name: TEXT
+  - name: --attach
+    description: Additional databases to attach - specify alias and file path
+    args:
+      name: TEXT FILE
+  - name: --batch-size
+    description: Batch size to use when running embeddings
+    args:
+      name: INTEGER
+  - name: --prefix
+    description: Prefix to add to the IDs
+    args:
+      name: TEXT
+  - name:
+    - -m
+    - --model
+    description: Embedding model to use
+    args:
+      name: TEXT
+  - name: --key
+    description: API key to use
+    args:
+      name: TEXT
+  - name: --prepend
+    description: Prepend this string to all content before embedding
+    args:
+      name: TEXT
+  - name: --store
+    description: Store the text itself in the database
+  - name:
+    - -d
+    - --database
+    args:
+      name: FILE
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: fragments
+  description: Manage fragments that are stored in the database
+  subcommands:
+  - name: list
+    description: List current fragments
+    options:
+    - name:
+      - -q
+      - --query
+      description: Search for fragments matching these strings
+      args:
+        name: TEXT
+    - name: --aliases
+      description: Show only fragments with aliases
+    - name: --json
+      description: Output as JSON
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: loaders
+    description: Show fragment loaders registered by plugins
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: remove
+    description: Remove a fragment alias
+  - name: set
+    description: Set an alias for a fragment
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: show
+    description: Display the fragment stored under an alias or hash
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: install
+  description: Install packages from PyPI into the same environment as LLM
+- name: keys
+  description: Manage stored API keys for different models
+  subcommands:
+  - name: list
+    description: List names of all stored keys
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: get
+    description: Return the value of a stored key
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: path
+    description: Output the path to the keys.json file
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: set
+    description: Save a key in the keys.json file
+    options:
+    - name: --value
+      description: Value to set
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: logs
+  description: Tools for exploring logged prompts and responses
+- name: models
+  description: Manage available models
+  subcommands:
+  - name: list
+    description: List available models
+    options:
+    - name: --options
+      description: Show options for each model, if available
+    - name: --async
+      description: List async models
+    - name: --schemas
+      description: List models that support schemas
+    - name: --tools
+      description: List models that support tools
+    - name: --json
+      description: Output as JSON
+    - name:
+      - -q
+      - --query
+      description: Search for models matching these strings
+      args:
+        name: TEXT
+    - name:
+      - -m
+      - --model
+      description: Specific model IDs
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: default
+    description: Show or set the default model
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: options
+    description: Manage default options for models
+    subcommands:
+    - name: list
+      description: List default options for all models
+    - name: clear
+      description: Clear default option(s) for a model
+    - name: set
+      description: Set a default option for a model
+    - name: show
+      description: List default options set for a specific model
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: openai
+  description: Commands for working with OpenAI and OpenAI-compatible APIs
+  subcommands:
+  - name: endpoint
+    description: Work with OpenAI-compatible endpoints
+    subcommands:
+    - name: prompt
+      description: Run against an OpenAI-compatible endpoint without logging.
+    - name: add
+      description: Save an OpenAI-compatible endpoint to extra-openai-models.yaml
+    - name: list
+      description: List endpoints saved in extra-openai-models.yaml
+    - name: path
+      description: Output the path to the extra-openai-models.yaml file
+    - name: remove
+      description: Remove a saved endpoint from extra-openai-models.yaml
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: models
+    description: List models available to you from the OpenAI API
+    options:
+    - name: --json
+      description: Output as JSON
+    - name: --key
+      description: OpenAI API key
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: plugins
+  description: List installed plugins
+  options:
+  - name: --all
+    description: Include built-in default plugins
+  - name: --hook
+    description: Filter for plugins that implement this hook
+    args:
+      name: TEXT
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: schemas
+  description: Manage stored schemas
+  subcommands:
+  - name: list
+    description: List stored schemas
+    options:
+    - name:
+      - -d
+      - --database
+      description: Path to log database
+      args:
+        name: FILE
+    - name:
+      - -q
+      - --query
+      description: Search for schemas matching this string
+      args:
+        name: TEXT
+    - name: --full
+      description: Output full schema contents
+    - name: --json
+      description: Output as JSON
+    - name: --nl
+      description: Output as newline-delimited JSON
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: dsl
+    description: Convert LLM's schema DSL to a JSON schema
+    options:
+    - name: --multi
+      description: Wrap in an array
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: show
+    description: Show a stored schema
+    options:
+    - name:
+      - -d
+      - --database
+      description: Path to log database
+      args:
+        name: FILE
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: similar
+  description: Return top N similar IDs from a collection using cosine...
+  options:
+  - name:
+    - -i
+    - --input
+    description: File to embed for comparison
+    args:
+      name: PATH
+  - name:
+    - -c
+    - --content
+    description: Content to embed for comparison
+    args:
+      name: TEXT
+  - name: --binary
+    description: Treat input as binary data
+  - name:
+    - -a
+    - --attachment
+    description: Attachment path or URL or -
+    args:
+      name: ATTACHMENT
+  - name:
+    - --at
+    - --attachment-type
+    description: Attachment with explicit mimetype, --at image.jpg image/jpeg
+    args:
+      name: TEXT TEXT
+  - name:
+    - -n
+    - --number
+    description: Number of results to return
+    args:
+      name: INTEGER
+  - name:
+    - -p
+    - --plain
+    description: Output in plain text format
+  - name:
+    - -d
+    - --database
+    args:
+      name: FILE
+  - name: --prefix
+    description: Just IDs with this prefix
+    args:
+      name: TEXT
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: templates
+  description: Manage stored prompt templates
+  subcommands:
+  - name: list
+    description: List available prompt templates
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: edit
+    description: Edit the specified prompt template using the default $EDITOR
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: loaders
+    description: Show template loaders registered by plugins
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: path
+    description: Output the path to the templates directory
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  - name: show
+    description: Show the specified prompt template
+    options:
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: tools
+  description: Manage tools that can be made available to LLMs
+  subcommands:
+  - name: list
+    description: List available tools, optionally including tools supported by a model
+    options:
+    - name: --json
+      description: Output as JSON
+    - name:
+      - -m
+      - --model
+      description: List tools supported by this model
+      args:
+        name: TEXT
+    - name: --functions
+      description: Python code block or file path defining functions to register as tools
+      args:
+        name: TEXT
+    - name:
+      - -h
+      - --help
+      description: Show this message and exit.
+  options:
+  - name:
+    - -h
+    - --help
+    description: Show this message and exit.
+- name: uninstall
+  description: Uninstall Python packages from the LLM environment
+options:
+- name: --version
+  description: Show the version and exit.
+- name:
+  - -h
+  - --help
+  description: Show this message and exit.

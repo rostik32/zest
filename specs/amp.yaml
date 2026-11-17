@@ -1,0 +1,234 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Amp CLI by Sourcegraph. Written from the CLI docs at ampcode.com/docs (cli, execute mode,
+# orbs, runners, clone, settings).
+name: amp
+description: Amp, the agentic coding tool
+args:
+  name: prompt
+  isOptional: true
+options:
+  - name: [-x, --execute]
+    description: Execute mode, send the prompt, print the answer and exit
+  - name: -ox
+    description: Run the prompt in an orb on Amp's servers
+  - name: --stream-json
+    description: Print the thread's events as JSON lines
+  - name: --stream-json-input
+    description: Read messages as JSON lines from stdin
+  - name: --mode
+    description: Agent mode for a new thread
+    args:
+      name: mode
+      suggestions: [claude-code]
+  - name: --model
+    description: Model for a new thread
+    args:
+      name: model
+  - name: --effort
+    description: Reasoning effort for a new thread
+    args:
+      name: effort
+  - name: --fast
+    description: Start the thread in Fast mode
+  - name: --title
+    description: Title of the new thread
+    args:
+      name: title
+  - name: --attach
+    description: Upload a file and add it to the message
+    isRepeatable: true
+    args:
+      name: path
+      template: filepaths
+  - name: --executor
+    description: Where the thread runs
+    args:
+      name: executor
+      suggestions:
+        - name: local
+          description: On this machine
+        - name: orb
+          description: In an orb on Amp's servers
+        - name: "runner:"
+          description: On one of your runners, e.g. runner:mac-mini
+  - name: --project
+    description: Project for an orb thread, e.g. my-org/my-repo
+    args:
+      name: project
+  - name: --orb-size
+    description: Size of the orb for this thread
+    args:
+      name: size
+  - name: --orb-provider
+    description: Self-hosted orb provider to use
+    args:
+      name: provider
+  - name: --profile
+    description: Browser profile for the orb's Desktop Chrome
+    args:
+      name: profile
+  - name: --mcp-config
+    description: MCP servers for this run, as JSON
+    args:
+      name: json
+  - name: --settings-file
+    description: Use a different user settings file
+    args:
+      name: path
+      template: filepaths
+  - name: --timings
+    description: Print where execute mode spends time
+  - name: --no-tui
+    description: Start a runner that waits for and runs remotely created threads
+  - name: --runner-id
+    description: Stable ID for this runner
+    args:
+      name: id
+  - name: --dir
+    description: Another directory the runner serves
+    isRepeatable: true
+    args:
+      name: path
+      template: folders
+  - name: --discover-dirs
+    description: Serve every Git checkout up to two levels below the current directory
+  - name: --discover-depth
+    description: How deep --discover-dirs looks
+    args:
+      name: depth
+  - name: --discover-exclude
+    description: Directory name --discover-dirs skips
+    isRepeatable: true
+    args:
+      name: name
+  - name: --no-serve-cwd
+    description: Don't serve the current directory
+  - name: --share
+    description: Share the runner with your workspace
+  - name: --share-network
+    description: Let threads on this runner reach your network
+  - name: --desktop
+    description: Give the runner's threads a Desktop tab
+  - name: --amp-env
+    description: Pass Amp's environment to commands the runner starts
+  - name: --remote-control-terminal
+    description: Let other clients continue this terminal's thread
+  - name: --no-remote-control-terminal
+    description: Don't let other clients continue this thread
+  - name: --remote-control-portals
+    description: Allow remote control portals
+  - name: [-h, --help]
+    description: Show help
+subcommands:
+  - name: login
+    description: Sign in to Amp
+  - name: logout
+    description: Sign out
+    options:
+      - name: --all
+        description: Sign out of every account
+  - name: account
+    description: Manage signed-in accounts
+    subcommands:
+      - name: list
+        description: List signed-in accounts
+      - name: switch
+        description: Switch to another account
+  - name: threads
+    description: Work with threads
+    subcommands:
+      - name: continue
+        description: Continue a thread
+  - name: clone
+    description: Clone an Amp-hosted project, or a plugins or skills repository
+    args:
+      name: repository
+      suggestions:
+        - name: user-skills
+          description: Your skills repository
+        - name: user-plugins
+          description: Your plugins repository
+        - name: workspace-skills
+          description: Your workspace's skills repository
+        - name: workspace-plugins
+          description: Your workspace's plugins repository
+  - name: skill
+    description: Manage skills
+    subcommands:
+      - name: add
+        description: Add a skill
+        options:
+          - name: --global
+            description: Add it for all projects
+  - name: skills
+    description: Skills
+    subcommands:
+      - name: repositories
+        description: List skills repositories
+  - name: plugins
+    description: Plugins
+    subcommands:
+      - name: repositories
+        description: List plugins repositories
+  - name: runner
+    description: Manage this machine as a runner
+    subcommands:
+      - name: dirs
+        description: Directories the runner serves
+        subcommands:
+          - name: add
+            description: Serve another directory
+            args:
+              name: path
+              template: folders
+          - name: remove
+            description: Stop serving a directory
+            args:
+              name: path
+              template: folders
+          - name: list
+            description: List served directories
+      - name: desktop
+        description: The runner's Desktop tab
+        subcommands:
+          - name: status
+            description: Show the Desktop status
+          - name: allow
+            description: Grant a macOS permission to the Desktop
+            args:
+              name: permission
+              suggestions: [screen-recording, accessibility]
+  - name: profile
+    description: Browser profiles for orbs
+    subcommands:
+      - name: list
+        description: List profiles
+  - name: config
+    description: Settings
+    subcommands:
+      - name: edit
+        description: Open the settings file in $EDITOR
+        options:
+          - name: --workspace
+            description: Edit the workspace settings instead
+  - name: sync
+    description: Sync settings
+    options:
+      - name: --apply
+        description: Apply the changes
+  - name: net
+    description: Network routes
+    subcommands:
+      - name: route
+        description: Route traffic through a runner
+        args:
+          name: runner
+  - name: completions
+    description: Print a shell completion script
+    args:
+      name: shell
+      suggestions: [bash, zsh, fish, pwsh]
+  - name: update
+    description: Update Amp
+  - name: version
+    description: Print the version

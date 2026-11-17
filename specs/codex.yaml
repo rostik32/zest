@@ -1,0 +1,297 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# OpenAI Codex CLI. Written from codex-rs/cli and codex-rs/utils/cli in github.com/openai/codex.
+name: codex
+description: OpenAI's coding agent in the terminal
+args:
+  name: prompt
+  isOptional: true
+options:
+  - &model
+    name: [-m, --model]
+    description: Model the agent should use
+    args:
+      name: model
+  - &profile
+    name: [-p, --profile]
+    description: Layer $CODEX_HOME/<name>.config.toml on top of the base config
+    args:
+      name: profile
+  - &config
+    name: [-c, --config]
+    description: Override a config.toml value, e.g. model="o3"
+    isRepeatable: true
+    args:
+      name: key=value
+  - &sandbox
+    name: [-s, --sandbox]
+    description: Sandbox policy for model-generated shell commands
+    args:
+      name: mode
+      suggestions:
+        - name: read-only
+          description: Can read files, can't write or use the network
+        - name: workspace-write
+          description: Can write in the workspace
+        - name: danger-full-access
+          description: No sandbox
+  - &approval
+    name: [-a, --ask-for-approval]
+    description: When the model needs your approval before running a command
+    args:
+      name: policy
+      suggestions:
+        - name: untrusted
+          description: Ask before anything that isn't trusted
+        - name: on-failure
+          description: Ask only when a sandboxed command fails
+        - name: on-request
+          description: The model decides when to ask
+        - name: never
+          description: Never ask
+  - &yolo
+    name: [--dangerously-bypass-approvals-and-sandbox, --yolo]
+    description: Skip all approvals and the sandbox. Extremely dangerous
+  - &approveForMe
+    name: [--approve-for-me, --not-so-yolo]
+    description: Route approval requests through automatic review in the workspace-write sandbox
+  - &cd
+    name: [-C, --cd]
+    description: Use this directory as the agent's working root
+    args:
+      name: dir
+      template: folders
+  - &addDir
+    name: --add-dir
+    description: Another directory the agent may write to
+    isRepeatable: true
+    args:
+      name: dir
+      template: folders
+  - &image
+    name: [-i, --image]
+    description: Attach images to the first message
+    isRepeatable: true
+    args:
+      name: file
+      template: filepaths
+  - &oss
+    name: --oss
+    description: Use an open-source model provider
+  - &localProvider
+    name: --local-provider
+    description: Local provider to use with --oss
+    args:
+      name: provider
+      suggestions: [lmstudio, ollama]
+  - &worktree
+    name: --worktree
+    description: Run the session in a new managed Git worktree
+  - name: --search
+    description: Enable live web search
+  - name: --no-alt-screen
+    description: Run the interface inline, keeping the terminal's scrollback
+  - &strictConfig
+    name: --strict-config
+    description: Fail when config.toml has fields this version doesn't know
+  - name: [-h, --help]
+    description: Print help
+  - name: [-V, --version]
+    description: Print version
+subcommands:
+  - name: [exec, e]
+    description: Run Codex non-interactively
+    args:
+      name: prompt
+      isOptional: true
+    options:
+      - *model
+      - *profile
+      - *config
+      - *sandbox
+      - *yolo
+      - *approveForMe
+      - *cd
+      - *addDir
+      - *image
+      - *oss
+      - *localProvider
+      - *worktree
+      - *strictConfig
+      - name: --json
+        description: Print events to stdout as JSON lines
+      - name: [-o, --output-last-message]
+        description: Write the agent's last message to this file
+        args:
+          name: file
+          template: filepaths
+      - name: --output-schema
+        description: JSON Schema file for the shape of the final response
+        args:
+          name: file
+          template: filepaths
+      - name: --skip-git-repo-check
+        description: Allow running outside a Git repository
+      - name: --ephemeral
+        description: Don't save session files
+      - name: --ignore-user-config
+        description: Don't load $CODEX_HOME/config.toml
+      - name: --color
+        description: Color output
+        args:
+          name: when
+          suggestions: [always, never, auto]
+    subcommands:
+      - name: resume
+        description: Resume a previous session non-interactively
+        options:
+          - name: --last
+            description: Resume the most recent session
+  - name: review
+    description: Run a code review non-interactively
+    options:
+      - name: --uncommitted
+        description: Review staged, unstaged and untracked changes
+      - name: --base
+        description: Review the changes against this branch
+        args:
+          name: branch
+          generators:
+            script: git branch --format='%(refname:short)'
+      - name: --commit
+        description: Review the changes introduced by a commit
+        args:
+          name: sha
+  - name: resume
+    description: Resume a previous interactive session
+    args:
+      name: session
+      description: Session id or name
+      isOptional: true
+    options:
+      - name: --last
+        description: Continue the most recent session without the picker
+      - name: --all
+        description: Show sessions from all folders
+      - name: --include-non-interactive
+        description: Include sessions from codex exec
+  - name: fork
+    description: Fork a previous interactive session
+    args:
+      name: session
+      isOptional: true
+    options:
+      - name: --last
+        description: Fork the most recent session
+      - name: --all
+        description: Show sessions from all folders
+  - name: login
+    description: Sign in
+    options:
+      - name: --with-api-key
+        description: Read an API key from stdin
+      - name: --device-auth
+        description: Sign in with a device code
+    subcommands:
+      - name: status
+        description: Show the login status
+  - name: logout
+    description: Remove stored credentials
+  - name: mcp
+    description: Manage external MCP servers
+    subcommands:
+      - name: list
+        description: List configured MCP servers
+        options:
+          - name: --json
+            description: Print as JSON
+      - name: get
+        description: Show one MCP server
+        args:
+          name: name
+      - name: add
+        description: Add an MCP server
+        args:
+          - name: name
+          - name: command
+            isVariadic: true
+            isOptional: true
+        options:
+          - name: --env
+            description: Environment variable for the server
+            isRepeatable: true
+            args:
+              name: KEY=VALUE
+          - name: --url
+            description: URL of a streamable HTTP server
+            args:
+              name: url
+      - name: remove
+        description: Remove an MCP server
+        args:
+          name: name
+      - name: login
+        description: Sign in to an MCP server with OAuth
+        args:
+          name: name
+      - name: logout
+        description: Remove an MCP server's OAuth credentials
+        args:
+          name: name
+  - name: [apply, a]
+    description: Apply the latest diff from the agent to your working tree with git apply
+    args:
+      name: task
+      isOptional: true
+  - name: [cloud, cloud-tasks]
+    description: Browse Codex Cloud tasks and apply their changes locally
+  - name: agents
+    description: Open the agent command center to browse and switch sessions
+  - name: queue
+    description: Queue a message for an existing session
+  - name: archive
+    description: Archive a saved session
+    args:
+      name: session
+  - name: unarchive
+    description: Unarchive a saved session
+    args:
+      name: session
+  - name: delete
+    description: Permanently delete a saved session
+    args:
+      name: session
+  - name: plugin
+    description: Manage Codex plugins
+  - name: features
+    description: Inspect feature flags
+    subcommands:
+      - name: list
+        description: List feature flags and whether they are on
+  - name: sandbox
+    description: Run a command inside the Codex sandbox
+    subcommands:
+      - name: [macos, seatbelt]
+        description: Run a command under the macOS Seatbelt sandbox
+        args:
+          name: command
+          isCommand: true
+      - name: [linux, landlock]
+        description: Run a command under the Linux sandbox
+        args:
+          name: command
+          isCommand: true
+  - name: doctor
+    description: Check the installation, config, login and runtime
+  - name: update
+    description: Update Codex to the latest version
+  - name: app
+    description: Open the Codex desktop app
+  - name: completion
+    description: Generate a shell completion script
+    args:
+      name: shell
+      suggestions: [bash, zsh, fish, elvish, powershell]
+  - name: app-server
+    description: "[experimental] Run the app server"
+  - name: debug
+    description: Debugging tools

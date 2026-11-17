@@ -2,6 +2,278 @@
 name: firebase
 description: ""
 subcommands:
+  - name: appdistribution:testers:add
+    description: add testers to project
+    options:
+    - name: --file
+      description: a path to a file containing a list of tester emails to be added
+      args:
+        name: file
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: emails
+      isOptional: true
+      isVariadic: true
+  - name: appdistribution:testers:remove
+    description: remove testers from a project
+    options:
+    - name: --file
+      description: a path to a file containing a list of tester emails to be removed
+      args:
+        name: file
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: emails
+      isOptional: true
+      isVariadic: true
+  - name: apps:android:sha:list
+    description: list the SHA certificate hashes for a given app id.
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: appId
+  - name: apps:list
+    description: 'list the registered apps of a Firebase project. Optionally filter apps by [platform]: IOS, ANDROID or WEB (case insensitive)'
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: platform
+      isOptional: true
+  - name: apps:sdkconfig
+    description: print the Google Services config of a Firebase app. [platform] can be IOS, ANDROID or WEB (case insensitive)
+    options:
+    - name:
+      - -o
+      - --out
+      description: (optional) write config output to a file
+      args:
+        name: file
+        isOptional: true
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+    - name: platform
+      isOptional: true
+    - name: appId
+      isOptional: true
+  - name: crashlytics:mappingfile:generateid
+    description: generate a mapping file id and write it to an Android resource file, which will be built into the app
+    options:
+    - name: --resource-file
+      description: path to the Android resource XML file that will be created or updated.
+      args:
+        name: resourceFile
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: crashlytics:mappingfile:upload
+    description: upload a ProGuard/R8-compatible mapping file to deobfuscate stack traces
+    options:
+    - name: --app
+      description: the app id of your Firebase app
+      args:
+        name: appID
+    - name: --resource-file
+      description: path to the Android resource XML file that includes the mapping file id
+      args:
+        name: resourceFile
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: mappingFile
+  - name: crashlytics:symbols:upload
+    description: upload symbols for native code, to symbolicate stack traces
+    options:
+    - name: --app
+      description: the app id of your Firebase app
+      args:
+        name: appID
+    - name: --generator
+      description: the symbol generator being used, default is breakpad
+      args:
+        name: breakpad|csym
+        isOptional: true
+    - name: --dry-run
+      description: generate symbols without uploading them
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: symbolFiles
+      isVariadic: true
+  - name: ext
+    description: display information on how to use ext commands and extensions installed to your project
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: ext:export
+    description: export all Extension instances installed on a project to a local Firebase directory
+    options:
+    - name:
+      - -f
+      - --force
+      description: automatically accept all interactive prompts
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: ext:install
+    description: install an official extension if [extensionName] or [extensionName@version] is provided; or run with `-i` to see all available extensions.
+    options:
+    - name: --local
+      description: deprecated
+    - name:
+      - -f
+      - --force
+      description: automatically accept all interactive prompts
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: extensionName
+      isOptional: true
+  - name: ext:list
+    description: list all the extensions that are installed in your Firebase project
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: functions:config:export
+    description: Export environment config as environment variables in dotenv format
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: functions:config:unset
+    description: unset environment config at the specified path(s)
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: keys
+      isOptional: true
+      isVariadic: true
+  - name: functions:delete
+    description: delete one or more Cloud Functions by name or group name.
+    options:
+    - name: --region
+      description: Specify region of the function to be deleted. If omitted, functions from all regions whose names match the filters will be deleted.
+      args:
+        name: region
+    - name:
+      - -f
+      - --force
+      description: automatically accept all interactive prompts
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: filters
+      isOptional: true
+      isVariadic: true
+  - name: functions:list
+    description: list all deployed functions in your Firebase project
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: functions:secrets:access
+    description: Access secret value given secret and its version. Defaults to accessing the latest version.
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+    - name: KEY
+    - name: '@version'
+      isOptional: true
+  - name: functions:secrets:destroy
+    description: Destroy a secret. Defaults to destroying the latest version.
+    options:
+    - name:
+      - -f
+      - --force
+      description: Destroys a secret without confirmation.
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+    - name: KEY
+    - name: '@version'
+      isOptional: true
+  - name: functions:secrets:get
+    description: Get metadata for secret and its versions
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: KEY
+  - name: functions:secrets:prune
+    description: Destroys unused secrets
+    options:
+    - name:
+      - -f
+      - --force
+      description: Destroys unused secrets without prompt
+    - name:
+      - -h
+      - --help
+      description: output usage information
+  - name: functions:secrets:set
+    description: Create or update a secret for use in Cloud Functions for Firebase.
+    options:
+    - name:
+      - -f
+      - --force
+      description: Automatically updates functions to use the new secret.
+    - name: --data-file
+      description: File path from which to read secret data. Set to "-" to read the secret data from stdin.
+      args:
+        name: dataFile
+    - name:
+      - -h
+      - --help
+      description: output usage information
+    args:
+      name: KEY
+  - name: setup:emulators:storage
+    description: downloads the storage emulator
+    options:
+    - name:
+      - -h
+      - --help
+      description: output usage information
   - name: appdistribution:distribute
     description: Upload a distribution
     options:

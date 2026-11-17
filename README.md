@@ -30,8 +30,9 @@ small native app instead of a web view with a terminal proxy in front of every s
 - **Native and light.** Written in Swift. About 20–30 MB of memory, a ~3 MB app binary, no
   Electron and no web view. zsh talks to it over a local socket; nothing sits between your
   terminal and your shell.
-- **1,500 commands out of the box.** git, docker, kubectl, npm, brew, aws, gcloud, … imported
-  from the open-source [Fig spec collection](https://github.com/withfig/autocomplete), plus files,
+- **1,500 commands out of the box.** git, docker, kubectl, npm, brew, aws, gcloud, … from the
+  open-source [Fig spec collection](https://github.com/withfig/autocomplete), kept up to date, plus
+  AI coding agents (Claude Code, Codex, Gemini CLI, Cursor, aider, opencode, Amp, goose), files,
   folders and command history.
 - **Adding a command is one YAML file.** Run `zest gen mytool` to draft it from `--help`.
 - **Looks like your editor.** 74 themes from VS Code (One Dark Pro, Dracula, Catppuccin, Tokyo

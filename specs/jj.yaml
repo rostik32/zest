@@ -1,0 +1,2144 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Jujutsu (jj). Generated from cli/tests/cli-reference@.md.snap in github.com/jj-vcs/jj.
+name: jj
+description: "Jujutsu, a Git-compatible version control system"
+options:
+  - name: ["-R", "--repository"]
+    description: "Path to repository to operate on"
+    args:
+      name: "repository"
+  - name: "--ignore-working-copy"
+    description: "Don't snapshot the working copy, and don't update it"
+  - name: "--no-integrate-operation"
+    description: "Run the command as usual but don't integrate any operations"
+  - name: "--ignore-immutable"
+    description: "Allow rewriting immutable commits"
+  - name: "--at-operation"
+    description: "Operation to load the repo at"
+    args:
+      name: "at_operation"
+  - name: "--debug"
+    description: "Enable debug logging"
+  - name: "--color"
+    description: "When to colorize output"
+    args:
+      name: "when"
+  - name: "--quiet"
+    description: "Silence non-primary command output"
+  - name: "--no-pager"
+    description: "Disable the pager"
+  - name: "--config"
+    description: "Additional configuration options (can be repeated)"
+    args:
+      name: "name=value"
+  - name: "--config-file"
+    description: "Additional configuration files (can be repeated)"
+    args:
+      name: "path"
+      template: filepaths
+subcommands:
+  - name: "abandon"
+    description: "Abandon a revision"
+    args:
+      - name: "revsets"
+        description: "The revision(s) to abandon (default: @)"
+        isOptional: true
+        isVariadic: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: "--retain-bookmarks"
+        description: "Do not delete bookmarks pointing to the revisions to abandon"
+      - name: "--restore-descendants"
+        description: "Do not modify the content of the children of the abandoned commits"
+  - name: "absorb"
+    description: "Move changes from a revision into the stack of mutable revisions"
+    args:
+      - name: "filesets"
+        description: "Move only changes to these paths (instead of all paths)"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-f", "--from"]
+        description: "Source revision to absorb from"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--into"]
+        description: "Destination revisions to absorb into"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-i", "--interactive"]
+        description: "Interactively choose which parts to absorb"
+      - name: "--tool"
+        description: "Specify diff editor to be used (implies --interactive)"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+  - name: "arrange"
+    description: "Interactively arrange the commit graph"
+    args:
+      - name: "revsets"
+        description: "The revisions to arrange"
+        isOptional: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+  - name: "bisect"
+    description: "Find a bad revision by bisection"
+    subcommands:
+      - name: "run"
+        description: "Run a given command to find the first bad revision"
+        args:
+          - name: "command"
+            description: "Command to run to determine the status of a revision"
+            isOptional: true
+          - name: "args"
+            description: "Arguments to pass to the command"
+            isOptional: true
+        options:
+          - name: ["-r", "--range"]
+            description: "Range of revisions to bisect (can be repeated)"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: "--find-good"
+            description: "Find the first good revision instead"
+          - name: "--trust-endpoints"
+            description: "Skip the pre-bisection checks"
+  - name: "bookmark"
+    description: "Manage bookmarks"
+    subcommands:
+      - name: ["advance", "a"]
+        description: "Advance the closest bookmarks to a target revision"
+        args:
+          - name: "names"
+            description: "Move bookmarks matching the given name patterns"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-t", "--to"]
+            description: "Move bookmarks to this revision"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+      - name: ["create", "c"]
+        description: "Create a new bookmark"
+        args:
+          - name: "names"
+            description: "The bookmarks to create"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-r", "--revision"]
+            description: "The bookmark's target revision"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+      - name: ["delete", "d"]
+        description: "Delete an existing bookmark and propagate the deletion to remotes on the next push"
+        args:
+          - name: "names"
+            description: "The bookmarks to delete"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["forget", "f"]
+        description: "Forget a bookmark without marking it as a deletion to be pushed"
+        args:
+          - name: "names"
+            description: "The bookmarks to forget"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: "--include-remotes"
+            description: "When forgetting a local bookmark, also forget any corresponding remote bookmarks"
+      - name: ["list", "l"]
+        description: "List bookmarks and their targets"
+        args:
+          - name: "names"
+            description: "Show bookmarks whose local name matches"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-a", "--all-remotes"]
+            description: "Show all tracked and untracked remote bookmarks including the ones whose targets are synchronized with the local bookmarks"
+          - name: "--remote"
+            description: "Show all tracked and untracked remote bookmarks belonging to this remote"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: ["-t", "--tracked"]
+            description: "Show tracked remote bookmarks only"
+          - name: ["-c", "--conflicted"]
+            description: "Show conflicted bookmarks only"
+          - name: ["-r", "--revision"]
+            description: "Show bookmarks whose local targets are in the given revisions"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-T", "--template"]
+            description: "Render each bookmark using the given template"
+            args:
+              name: "template"
+          - name: "--sort"
+            description: "Sort bookmarks based on the given key (or multiple keys)"
+            args:
+              name: "sort_key"
+      - name: ["move", "m"]
+        description: "Move existing bookmarks to target revision"
+        args:
+          - name: "names"
+            description: "Move bookmarks matching the given name patterns"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-f", "--from"]
+            description: "Move bookmarks from the given revisions"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-t", "--to"]
+            description: "Move bookmarks to this revision"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-B", "--allow-backwards"]
+            description: "Allow moving bookmarks backwards or sideways"
+      - name: ["rename", "r"]
+        description: "Rename old bookmark name to new bookmark name"
+        args:
+          - name: "old"
+            description: "The old name of the bookmark"
+            isOptional: true
+          - name: "new"
+            description: "The new name of the bookmark"
+            isOptional: true
+        options:
+          - name: "--overwrite-existing"
+            description: "Allow renaming even if the new bookmark name already exists"
+      - name: ["set", "s"]
+        description: "Create a new bookmark, or update an existing one by name"
+        args:
+          - name: "names"
+            description: "The bookmarks to update"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-r", "--revision"]
+            description: "The bookmark's target revision"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-B", "--allow-backwards"]
+            description: "Allow moving the bookmark backwards or sideways"
+      - name: ["track", "t"]
+        description: "Start tracking given remote bookmarks"
+        args:
+          - name: "bookmark[@remote]"
+            description: "Bookmark name patterns or remote bookmark symbols to track"
+            isOptional: true
+        options:
+          - name: "--remote"
+            description: "Remote names to track"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+      - name: "untrack"
+        description: "Stop tracking given remote bookmarks"
+        args:
+          - name: "bookmark[@remote]"
+            description: "Bookmark name patterns or remote bookmark symbols to untrack"
+            isOptional: true
+        options:
+          - name: "--remote"
+            description: "Remote names to untrack"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+  - name: "commit"
+    description: "Update the description and create a new change on top"
+    args:
+      - name: "filesets"
+        description: "Put these paths in the current commit"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-i", "--interactive"]
+        description: "Interactively choose which changes to include in the current commit"
+      - name: "--tool"
+        description: "Specify diff editor to be used (implies --interactive)"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["-m", "--message"]
+        description: "The change description to use (don't open editor)"
+        args:
+          name: "message"
+      - name: "--editor"
+        description: "Open an editor to edit the change description"
+  - name: "config"
+    description: "Manage config options"
+    subcommands:
+      - name: ["edit", "e"]
+        description: "Start an editor on a jj config file"
+        options:
+          - name: "--user"
+            description: "Target the user-level config"
+          - name: "--repo"
+            description: "Target the repo-level config"
+          - name: "--workspace"
+            description: "Target the workspace-level config"
+          - name: "--file"
+            description: "Target the config file specified by the given path"
+            args:
+              name: "path"
+              template: filepaths
+      - name: "gc"
+        description: "Find and optionally delete repo and workspace config directories whose paths no longer exist"
+      - name: ["get", "g"]
+        description: "Get the value of a given config option"
+        args:
+          - name: "name"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["list", "l"]
+        description: "List variables set in config files, along with their values"
+        args:
+          - name: "name"
+            description: "An optional name of a specific config option to look up"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: "--include-defaults"
+            description: "Whether to explicitly include built-in default values in the list"
+          - name: "--include-overridden"
+            description: "Allow printing overridden values"
+          - name: "--user"
+            description: "Target the user-level config"
+          - name: "--repo"
+            description: "Target the repo-level config"
+          - name: "--workspace"
+            description: "Target the workspace-level config"
+          - name: ["-T", "--template"]
+            description: "Render each variable using the given template"
+            args:
+              name: "template"
+      - name: ["path", "p"]
+        description: "Print the paths to the config files"
+        options:
+          - name: "--user"
+            description: "Target the user-level config"
+          - name: "--repo"
+            description: "Target the repo-level config"
+          - name: "--workspace"
+            description: "Target the workspace-level config"
+      - name: ["set", "s"]
+        description: "Update a config file to set the given option to a given value"
+        args:
+          - name: "name"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+          - name: "value"
+            description: "New value to set"
+            isOptional: true
+        options:
+          - name: "--user"
+            description: "Target the user-level config"
+          - name: "--repo"
+            description: "Target the repo-level config"
+          - name: "--workspace"
+            description: "Target the workspace-level config"
+          - name: "--file"
+            description: "Target the config file specified by the given path"
+            args:
+              name: "path"
+              template: filepaths
+      - name: ["unset", "u"]
+        description: "Update a config file to unset the given option"
+        args:
+          - name: "name"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: "--user"
+            description: "Target the user-level config"
+          - name: "--repo"
+            description: "Target the repo-level config"
+          - name: "--workspace"
+            description: "Target the workspace-level config"
+          - name: "--file"
+            description: "Target the config file specified by the given path"
+            args:
+              name: "path"
+              template: filepaths
+  - name: "converge"
+    description: "Converge divergent changes"
+    options:
+      - name: ["-r", "--revision"]
+        description: "The search space to look for divergent revisions"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: "--no-interactive"
+        description: "Do not prompt the user for help resolving divergence"
+  - name: "describe"
+    description: "Update the change description or other metadata"
+    args:
+      - name: "revsets"
+        description: "The revision(s) whose description to edit (default: @)"
+        isOptional: true
+        isVariadic: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: ["-m", "--message"]
+        description: "The change description to use (don't open editor)"
+        args:
+          name: "message"
+      - name: "--stdin"
+        description: "Read the change description from stdin"
+      - name: "--editor"
+        description: "Open an editor to edit the change description"
+  - name: "diff"
+    description: "Compare file contents between two revisions"
+    args:
+      - name: "filesets"
+        description: "Restrict the diff to these paths"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-r", "--revisions"]
+        description: "Show changes in these revisions"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-f", "--from"]
+        description: "Show changes from this revision"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--to"]
+        description: "Show changes to this revision"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-T", "--template"]
+        description: "Render each file diff entry using the given template"
+        args:
+          name: "template"
+      - name: ["-s", "--summary"]
+        description: "For each path, show only whether it was modified, added, or deleted"
+      - name: "--stat"
+        description: "Show a histogram of the changes"
+      - name: "--types"
+        description: "For each path, show only its type before and after"
+      - name: "--name-only"
+        description: "For each path, show only its path"
+      - name: "--git"
+        description: "Show a Git-format diff"
+      - name: "--color-words"
+        description: "Show a word-level diff with changes indicated only by color"
+      - name: "--tool"
+        description: "Generate diff by external command"
+        args:
+          name: "tool"
+      - name: "--context"
+        description: "Number of lines of context to show"
+        args:
+          name: "context"
+      - name: ["-w", "--ignore-all-space"]
+        description: "Ignore whitespace when comparing lines"
+      - name: ["-b", "--ignore-space-change"]
+        description: "Ignore changes in amount of whitespace when comparing lines"
+  - name: "diffedit"
+    description: "Touch up the content changes in a revision with a diff editor"
+    args:
+      - name: "filesets"
+        description: "Edit only these paths (unmatched paths will remain unchanged)"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-r", "--revision"]
+        description: "The revision to touch up"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-f", "--from"]
+        description: "Show changes from this revision"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--to"]
+        description: "Edit changes in this revision"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: "--tool"
+        description: "Specify diff editor to be used"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: "--restore-descendants"
+        description: "Preserve the content (not the diff) when rebasing descendants"
+  - name: "duplicate"
+    description: "Create new changes with the same content as existing ones"
+    args:
+      - name: "revsets"
+        description: "The revision(s) to duplicate (default: @)"
+        isOptional: true
+        isVariadic: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: ["-o", "--onto"]
+        description: "The revision(s) to duplicate onto (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-A", "--insert-after"]
+        description: "The revision(s) to insert after (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "The revision(s) to insert before (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+  - name: "edit"
+    description: "Sets the specified revision as the working-copy revision"
+    args:
+      - name: "revset"
+        description: "The commit to edit"
+        isOptional: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+  - name: ["evolog", "evolution-log"]
+    description: "Show how a change has evolved over time"
+    options:
+      - name: ["-r", "--revisions"]
+        description: "Follow changes from these revisions"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-n", "--limit"]
+        description: "Limit number of revisions to show"
+        args:
+          name: "limit"
+      - name: "--reversed"
+        description: "Show revisions in the opposite order (older revisions first)"
+      - name: ["-G", "--no-graph"]
+        description: "Show a flat list of revisions instead of a graph"
+      - name: ["-T", "--template"]
+        description: "Render each revision using the given template"
+        args:
+          name: "template"
+      - name: ["-p", "--patch"]
+        description: "Show patch compared to the previous version of this change"
+      - name: ["-s", "--summary"]
+        description: "For each path, show only whether it was modified, added, or deleted"
+      - name: "--stat"
+        description: "Show a histogram of the changes"
+      - name: "--types"
+        description: "For each path, show only its type before and after"
+      - name: "--name-only"
+        description: "For each path, show only its path"
+      - name: "--git"
+        description: "Show a Git-format diff"
+      - name: "--color-words"
+        description: "Show a word-level diff with changes indicated only by color"
+      - name: "--tool"
+        description: "Generate diff by external command"
+        args:
+          name: "tool"
+      - name: "--context"
+        description: "Number of lines of context to show"
+        args:
+          name: "context"
+      - name: "--ignore-all-space"
+        description: "Ignore whitespace when comparing lines"
+      - name: "--ignore-space-change"
+        description: "Ignore changes in amount of whitespace when comparing lines"
+  - name: "file"
+    description: "File operations"
+    subcommands:
+      - name: "annotate"
+        description: "Show the source change for each line of the target file"
+        args:
+          - name: "path"
+            description: "the file to annotate"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "an optional revision to start at"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-T", "--template"]
+            description: "Render each line using the given template"
+            args:
+              name: "template"
+      - name: "chmod"
+        description: "Sets or removes the executable bit for paths in the repo"
+        args:
+          - name: "mode"
+            isOptional: true
+          - name: "filesets"
+            description: "Paths to change the executable bit for"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to update"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+      - name: "delete"
+        description: "Delete files from the given revision"
+        args:
+          - name: "filesets"
+            description: "Files or directories to delete (filesets are accepted)"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to delete the files in"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: "--restore-descendants"
+            description: "Preserve the content (not the diff) when rebasing descendants"
+      - name: "edit"
+        description: "Edit the contents of a file in a revision"
+        args:
+          - name: "file"
+            description: "The file to edit"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to edit the file in"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: "--restore-descendants"
+            description: "Preserve the content (not the diff) when rebasing descendants"
+      - name: "list"
+        description: "List files in a revision"
+        args:
+          - name: "filesets"
+            description: "Only list files matching these prefixes (instead of all files)"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to list files in"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-T", "--template"]
+            description: "Render each file entry using the given template"
+            args:
+              name: "template"
+      - name: "search"
+        description: "Search for content in files"
+        args:
+          - name: "filesets"
+            description: "Only search files matching these prefixes (instead of all files)"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to search files in"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-p", "--pattern"]
+            description: "The pattern to search for in a single line"
+            args:
+              name: "pattern"
+          - name: "--name-only"
+            description: "Print only the paths of files that contain a match, not the matched lines"
+          - name: ["-n", "--line-number"]
+            description: "Prefix each matched line with its 1-based line number within the file"
+          - name: "--binary-as-text"
+            description: "Treat binary files as text, matching and printing raw bytes even if they contain null bytes"
+          - name: "--skip-binary"
+            description: "Skip binary files entirely"
+      - name: "show"
+        description: "Print contents of files in a revision"
+        args:
+          - name: "filesets"
+            description: "Paths to print"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revision to get the file contents from"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-T", "--template"]
+            description: "Render each file metadata using the given template"
+            args:
+              name: "template"
+      - name: "track"
+        description: "Start tracking specified paths in the working copy"
+        args:
+          - name: "filesets"
+            description: "Paths to track"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: "--include-ignored"
+            description: "Track paths even if they're ignored or too large"
+      - name: "untrack"
+        description: "Stop tracking specified paths in the working copy"
+        args:
+          - name: "filesets"
+            description: "Paths to untrack"
+            isOptional: true
+            template: filepaths
+  - name: "fix"
+    description: "Update files with formatting fixes or other changes"
+    args:
+      - name: "filesets"
+        description: "Fix only these paths"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-s", "--source"]
+        description: "Fix files in the specified revision(s) and their descendants"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: "--include-unchanged-files"
+        description: "Fix unchanged files in addition to changed ones"
+      - name: ["-a", "--all-lines"]
+        description: "Format all lines instead of only modified lines"
+  - name: "gerrit"
+    description: "Interact with Gerrit Code Review"
+    subcommands:
+      - name: "upload"
+        description: "Upload changes to Gerrit for code review, or update existing changes"
+        options:
+          - name: ["-r", "--revision"]
+            description: "The revisions to upload to Gerrit"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-b", "--remote-branch"]
+            description: "The location where your changes are intended to land"
+            args:
+              name: "remote_branch"
+          - name: "--remote"
+            description: "The Gerrit remote to push to"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: ["-n", "--dry-run"]
+            description: "Only display what will change on the remote; do not push changes to Gerrit"
+          - name: "--reviewer"
+            description: "Add these emails as a reviewer (can be repeated)"
+            args:
+              name: "reviewer"
+          - name: "--cc"
+            description: "CC these emails on the change (can be repeated)"
+            args:
+              name: "cc"
+          - name: ["-l", "--label"]
+            description: "Add the following labels configured by Gerrit (can be repeated)"
+            args:
+              name: "label"
+          - name: "--topic"
+            description: "Apply a topic to the change"
+            args:
+              name: "topic"
+          - name: "--hashtag"
+            description: "Apply a hashtag to the change (can be repeated)"
+            args:
+              name: "hashtag"
+          - name: ["-m", "--message"]
+            description: "The description for the patch set"
+            args:
+              name: "message"
+          - name: "--edit"
+            description: "Push the change as a change edit"
+          - name: "--wip"
+            description: "Mark the change as WIP (work in progress)"
+          - name: "--ready"
+            description: "Mark the change as ready (no longer work in progress)"
+          - name: "--private"
+            description: "Mark the change as private"
+          - name: "--remove-private"
+            description: "Unmark the change as private"
+          - name: "--publish-comments"
+            description: "Publish draft comments for the given change"
+          - name: "--no-publish-comments"
+            description: "Do not publish draft comments for the given change"
+          - name: "--notify"
+            description: "Who to email notifications to (defaults to all)"
+            args:
+              name: "notify"
+          - name: "--submit"
+            description: "Directly submit the changes, bypassing code review"
+          - name: "--skip-validation"
+            description: "When --submit is provided, skip performing validations"
+          - name: "--merged"
+            description: "Create a new change, even if the change has already been merged"
+          - name: "--ignore-attention-set"
+            description: "Do not modify the attention set upon uploading"
+          - name: "--deadline"
+            description: "The deadline after which the push should be aborted"
+            args:
+              name: "deadline"
+          - name: "--custom"
+            description: "Send the following custom keyed values to Gerrit (can be repeated)"
+            args:
+              name: "custom"
+          - name: ["-o", "--option"]
+            description: "Send a git push -o option (can be repeated)"
+            args:
+              name: "option"
+          - name: "--trace"
+            description: "For debugging Gerrit"
+            args:
+              name: "trace"
+  - name: "git"
+    description: "Commands for working with Git remotes and the underlying Git repo"
+    subcommands:
+      - name: "clone"
+        description: "Create a new repo backed by a clone of a Git repo"
+        args:
+          - name: "source"
+            description: "URL or path of the Git repo to clone"
+            isOptional: true
+          - name: "destination"
+            description: "Specifies the target directory for the Jujutsu repository clone"
+            isOptional: true
+        options:
+          - name: "--remote"
+            description: "Name of the newly created remote"
+            args:
+              name: "remote_name"
+          - name: "--colocate"
+            description: "Colocate the Jujutsu repo with the git repo"
+          - name: "--no-colocate"
+            description: "Disable colocation of the Jujutsu repo with the git repo"
+          - name: "--depth"
+            description: "Create a shallow clone of the given depth"
+            args:
+              name: "depth"
+          - name: ["-b", "--branch"]
+            description: "Name of the branch to fetch and use as the parent of the working-copy change (can be repeated)"
+            args:
+              name: "branch"
+          - name: ["-t", "--tag"]
+            description: "Fetch only some of the tags (can be repeated)"
+            args:
+              name: "tag"
+          - name: "--object-hash"
+            description: "Object hash algorithm for the local Git repository"
+            args:
+              name: "object_hash"
+      - name: "colocation"
+        description: "Manage Jujutsu repository colocation with Git"
+        subcommands:
+          - name: "disable"
+            description: "Convert into a non-colocated Jujutsu/Git repository"
+          - name: "enable"
+            description: "Convert into a colocated Jujutsu/Git repository"
+          - name: "status"
+            description: "Show the current colocation status"
+      - name: "export"
+        description: "Update the underlying Git repo with changes made in the repo"
+      - name: "fetch"
+        description: "Fetch from a Git remote"
+        options:
+          - name: ["-b", "--branch"]
+            description: "Name of the branch to fetch (can be repeated)"
+            args:
+              name: "branch"
+          - name: ["-t", "--tag"]
+            description: "Fetch only some of the tags (can be repeated)"
+            args:
+              name: "tag"
+          - name: "--tracked"
+            description: "Fetch only tracked bookmarks and tags"
+          - name: "--remote"
+            description: "The remote to fetch from (only named remotes are supported, can be repeated)"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: "--all-remotes"
+            description: "Fetch from all remotes"
+      - name: "import"
+        description: "Update repo with changes made in the underlying Git repo"
+      - name: "init"
+        description: "Create a new Git backed repo"
+        args:
+          - name: "destination"
+            description: "The destination directory where the jj repo will be created"
+            isOptional: true
+        options:
+          - name: "--colocate"
+            description: "Colocate the workspace of the Jujutsu repo with the Git repo"
+          - name: "--no-colocate"
+            description: "Disable colocation for the workspace of the Jujutsu repo with the Git repo"
+          - name: "--object-hash"
+            description: "Object hash algorithm for the newly created Git repository"
+            args:
+              name: "object_hash"
+          - name: "--git-repo"
+            description: "Specifies a path to an **existing** git repository to be used as the backing git repo for the newly created jj repo"
+            args:
+              name: "git_repo"
+      - name: "push"
+        description: "Push to a Git remote"
+        options:
+          - name: "--remote"
+            description: "The remote(s) to push to (can be repeated)"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: ["-b", "--bookmark"]
+            description: "Push only this bookmark, or bookmarks matching a pattern (can be repeated)"
+            args:
+              name: "bookmark"
+              generators:
+                script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+          - name: ["-t", "--tag"]
+            description: "Push only this tag, or tags matching a pattern (can be repeated)"
+            args:
+              name: "tag"
+          - name: "--all"
+            description: "Push all bookmarks and tags (including new ones)"
+          - name: "--tracked"
+            description: "Push all tracked bookmarks and tags"
+          - name: "--deleted"
+            description: "Push all deleted bookmarks and tags"
+          - name: "--allow-empty-description"
+            description: "Allow pushing commits with empty descriptions"
+          - name: "--allow-private"
+            description: "Allow pushing commits that are private"
+          - name: "--allow-conflicts"
+            description: "Allow pushing commits that contain conflicts"
+          - name: ["-r", "--revision"]
+            description: "Push bookmarks and tags pointing to these commits (can be repeated)"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-c", "--change"]
+            description: "Push this commit by creating a bookmark (can be repeated)"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: "--named"
+            description: "Specify a new bookmark name and a revision to push under that name, e.g"
+            args:
+              name: "name=revision"
+          - name: "--dry-run"
+            description: "Only display what will change on the remote"
+          - name: ["-o", "--option"]
+            description: "Git push options"
+            args:
+              name: "option"
+      - name: "remote"
+        description: "Manage Git remotes"
+        subcommands:
+          - name: "add"
+            description: "Add a Git remote"
+            args:
+              - name: "remote"
+                description: "The remote's name"
+                isOptional: true
+                generators:
+                  script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+              - name: "url"
+                description: "The remote's URL or path"
+                isOptional: true
+            options:
+              - name: "--push-url"
+                description: "The URL used for push"
+                args:
+                  name: "push_url"
+          - name: "list"
+            description: "List Git remotes"
+          - name: "remove"
+            description: "Remove a Git remote and forget its bookmarks"
+            args:
+              - name: "remote"
+                description: "The remote's name"
+                isOptional: true
+                generators:
+                  script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: "rename"
+            description: "Rename a Git remote"
+            args:
+              - name: "old"
+                description: "The name of an existing remote"
+                isOptional: true
+              - name: "new"
+                description: "The desired name for old"
+                isOptional: true
+          - name: "set-url"
+            description: "Set the URL of a Git remote"
+            args:
+              - name: "remote"
+                description: "The remote's name"
+                isOptional: true
+                generators:
+                  script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+              - name: "url"
+                description: "The URL or path to fetch from"
+                isOptional: true
+            options:
+              - name: "--push"
+                description: "The URL or path to push to"
+                args:
+                  name: "push"
+              - name: "--fetch"
+                description: "The URL or path to fetch from"
+                args:
+                  name: "fetch"
+      - name: "root"
+        description: "Show the underlying Git directory of a repository using the Git backend"
+  - name: "help"
+    description: "Print this message or the help of the given subcommand(s)"
+    args:
+      - name: "command"
+        description: "Print help for the subcommand(s)"
+        isOptional: true
+    options:
+      - name: ["-k", "--keyword"]
+        description: "Show help for keywords instead of commands"
+        args:
+          name: "keyword"
+  - name: "interdiff"
+    description: "Show differences between the diffs of two revsets"
+    args:
+      - name: "filesets"
+        description: "Restrict the diff to these paths"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-f", "--from"]
+        description: "The first revision(s) to compare (default: @)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--to"]
+        description: "The second revision(s) to compare (default: @)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-s", "--summary"]
+        description: "For each path, show only whether it was modified, added, or deleted"
+      - name: "--stat"
+        description: "Show a histogram of the changes"
+      - name: "--types"
+        description: "For each path, show only its type before and after"
+      - name: "--name-only"
+        description: "For each path, show only its path"
+      - name: "--git"
+        description: "Show a Git-format diff"
+      - name: "--color-words"
+        description: "Show a word-level diff with changes indicated only by color"
+      - name: "--tool"
+        description: "Generate diff by external command"
+        args:
+          name: "tool"
+      - name: "--context"
+        description: "Number of lines of context to show"
+        args:
+          name: "context"
+      - name: ["-w", "--ignore-all-space"]
+        description: "Ignore whitespace when comparing lines"
+      - name: ["-b", "--ignore-space-change"]
+        description: "Ignore changes in amount of whitespace when comparing lines"
+  - name: "log"
+    description: "Show revision history"
+    args:
+      - name: "filesets"
+        description: "Show revisions modifying the given paths"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-r", "--revision"]
+        description: "Which revisions to show"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-n", "--limit"]
+        description: "Limit number of revisions to show"
+        args:
+          name: "limit"
+      - name: "--reversed"
+        description: "Show revisions in the opposite order (older revisions first)"
+      - name: ["-G", "--no-graph"]
+        description: "Show a flat list of revisions instead of a graph"
+      - name: ["-T", "--template"]
+        description: "Render each revision using the given template"
+        args:
+          name: "template"
+      - name: ["-p", "--patch"]
+        description: "Show patch"
+      - name: "--count"
+        description: "Print the number of commits instead of showing them"
+      - name: ["-s", "--summary"]
+        description: "For each path, show only whether it was modified, added, or deleted"
+      - name: "--stat"
+        description: "Show a histogram of the changes"
+      - name: "--types"
+        description: "For each path, show only its type before and after"
+      - name: "--name-only"
+        description: "For each path, show only its path"
+      - name: "--git"
+        description: "Show a Git-format diff"
+      - name: "--color-words"
+        description: "Show a word-level diff with changes indicated only by color"
+      - name: "--tool"
+        description: "Generate diff by external command"
+        args:
+          name: "tool"
+      - name: "--context"
+        description: "Number of lines of context to show"
+        args:
+          name: "context"
+      - name: "--ignore-all-space"
+        description: "Ignore whitespace when comparing lines"
+      - name: "--ignore-space-change"
+        description: "Ignore changes in amount of whitespace when comparing lines"
+  - name: "metaedit"
+    description: "Modify the metadata of a revision without changing its content"
+    args:
+      - name: "revsets"
+        description: "The revision(s) to modify (default: @)"
+        isOptional: true
+        isVariadic: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: "--update-change-id"
+        description: "Generate a new change-id"
+      - name: ["-m", "--message"]
+        description: "Update the change description"
+        args:
+          name: "message"
+      - name: "--update-author-timestamp"
+        description: "Update the author timestamp"
+      - name: "--update-author"
+        description: "Update the author to the configured user"
+      - name: "--author"
+        description: "Set author to the provided string"
+        args:
+          name: "author"
+      - name: "--author-timestamp"
+        description: "Set the author date to the given date"
+        args:
+          name: "author_timestamp"
+      - name: "--force-rewrite"
+        description: "Rewrite the commit, even if no other metadata changed"
+  - name: "new"
+    description: "Create a new, empty change and (by default) edit it in the working copy"
+    args:
+      - name: "revsets"
+        description: "Parent(s) of the new change"
+        isOptional: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: ["-m", "--message"]
+        description: "The change description to use"
+        args:
+          name: "message"
+      - name: "--no-edit"
+        description: "Do not edit the newly created change"
+      - name: ["-A", "--insert-after"]
+        description: "Insert the new change after the given commit(s)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "Insert the new change before the given commit(s)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+  - name: "next"
+    description: "Move the working-copy commit to the child revision"
+    args:
+      - name: "offset"
+        description: "How many revisions to move forward"
+        isOptional: true
+    options:
+      - name: ["-e", "--edit"]
+        description: "Instead of creating a new working-copy commit on top of the target commit (like jj new), edit the target commit directly (like jj edit)"
+      - name: ["-n", "--no-edit"]
+        description: "The inverse of --edit"
+      - name: "--conflict"
+        description: "Jump to the next conflicted descendant"
+  - name: ["operation", "op"]
+    description: "Commands for working with the operation log"
+    subcommands:
+      - name: "abandon"
+        description: "Abandon operation history"
+        args:
+          - name: "operation"
+            description: "The operation or operation range to abandon"
+            isOptional: true
+      - name: "diff"
+        description: "Compare changes to the repository between two operations"
+        options:
+          - name: "--operation"
+            description: "Show repository changes in this operation, compared to its parent"
+            args:
+              name: "operation"
+          - name: ["-f", "--from"]
+            description: "Show repository changes from this operation"
+            args:
+              name: "from"
+          - name: ["-t", "--to"]
+            description: "Show repository changes to this operation"
+            args:
+              name: "to"
+          - name: ["-G", "--no-graph"]
+            description: "Show a flat list of modified changes instead of a graph"
+          - name: ["-p", "--patch"]
+            description: "Show patch of modifications to changes"
+          - name: ["-s", "--summary"]
+            description: "For each path, show only whether it was modified, added, or deleted"
+          - name: "--stat"
+            description: "Show a histogram of the changes"
+          - name: "--types"
+            description: "For each path, show only its type before and after"
+          - name: "--name-only"
+            description: "For each path, show only its path"
+          - name: "--git"
+            description: "Show a Git-format diff"
+          - name: "--color-words"
+            description: "Show a word-level diff with changes indicated only by color"
+          - name: "--tool"
+            description: "Generate diff by external command"
+            args:
+              name: "tool"
+          - name: "--context"
+            description: "Number of lines of context to show"
+            args:
+              name: "context"
+          - name: "--ignore-all-space"
+            description: "Ignore whitespace when comparing lines"
+          - name: "--ignore-space-change"
+            description: "Ignore changes in amount of whitespace when comparing lines"
+          - name: "--show-changes-in"
+            description: "Show only changed revisions matching the given revset expression"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+      - name: "integrate"
+        description: "Make an operation part of the operation log"
+        args:
+          - name: "operation"
+            description: "The operation to integrate"
+            isOptional: true
+      - name: "log"
+        description: "Show the operation log"
+        options:
+          - name: ["-n", "--limit"]
+            description: "Limit number of operations to show"
+            args:
+              name: "limit"
+          - name: "--reversed"
+            description: "Show operations in the opposite order (older operations first)"
+          - name: ["-G", "--no-graph"]
+            description: "Show a flat list of operations instead of a graph"
+          - name: ["-T", "--template"]
+            description: "Render each operation using the given template"
+            args:
+              name: "template"
+          - name: ["-d", "--op-diff"]
+            description: "Show changes to the repository at each operation"
+          - name: ["-p", "--patch"]
+            description: "Show patch of modifications to changes (implies --op-diff)"
+          - name: ["-s", "--summary"]
+            description: "For each path, show only whether it was modified, added, or deleted"
+          - name: "--stat"
+            description: "Show a histogram of the changes"
+          - name: "--types"
+            description: "For each path, show only its type before and after"
+          - name: "--name-only"
+            description: "For each path, show only its path"
+          - name: "--git"
+            description: "Show a Git-format diff"
+          - name: "--color-words"
+            description: "Show a word-level diff with changes indicated only by color"
+          - name: "--tool"
+            description: "Generate diff by external command"
+            args:
+              name: "tool"
+          - name: "--context"
+            description: "Number of lines of context to show"
+            args:
+              name: "context"
+          - name: "--ignore-all-space"
+            description: "Ignore whitespace when comparing lines"
+          - name: "--ignore-space-change"
+            description: "Ignore changes in amount of whitespace when comparing lines"
+          - name: "--show-changes-in"
+            description: "Show only changed revisions matching the given revset expression"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+      - name: "restore"
+        description: "Create a new operation that restores the repo to an earlier state"
+        args:
+          - name: "operation"
+            description: "The operation to restore to"
+            isOptional: true
+        options:
+          - name: "--what"
+            description: "What portions of the local state to restore (can be repeated)"
+            args:
+              name: "what"
+      - name: "revert"
+        description: "Create a new operation that reverts an earlier operation"
+        args:
+          - name: "operation"
+            description: "The operation to revert"
+            isOptional: true
+        options:
+          - name: "--what"
+            description: "What portions of the local state to restore (can be repeated)"
+            args:
+              name: "what"
+      - name: "show"
+        description: "Show changes to the repository in an operation"
+        args:
+          - name: "operation"
+            description: "Show repository changes in this operation, compared to its parent(s)"
+            isOptional: true
+        options:
+          - name: ["-G", "--no-graph"]
+            description: "Show a flat list of modified changes instead of a graph"
+          - name: ["-T", "--template"]
+            description: "Render the operation using the given template"
+            args:
+              name: "template"
+          - name: ["-p", "--patch"]
+            description: "Show patch of modifications to changes"
+          - name: "--no-op-diff"
+            description: "Do not show operation diff"
+          - name: ["-s", "--summary"]
+            description: "For each path, show only whether it was modified, added, or deleted"
+          - name: "--stat"
+            description: "Show a histogram of the changes"
+          - name: "--types"
+            description: "For each path, show only its type before and after"
+          - name: "--name-only"
+            description: "For each path, show only its path"
+          - name: "--git"
+            description: "Show a Git-format diff"
+          - name: "--color-words"
+            description: "Show a word-level diff with changes indicated only by color"
+          - name: "--tool"
+            description: "Generate diff by external command"
+            args:
+              name: "tool"
+          - name: "--context"
+            description: "Number of lines of context to show"
+            args:
+              name: "context"
+          - name: "--ignore-all-space"
+            description: "Ignore whitespace when comparing lines"
+          - name: "--ignore-space-change"
+            description: "Ignore changes in amount of whitespace when comparing lines"
+          - name: "--show-changes-in"
+            description: "Show only changed revisions matching the given revset expression"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+  - name: "parallelize"
+    description: "Parallelize revisions by making them siblings"
+    args:
+      - name: "revsets"
+        description: "The revisions to parallelize"
+        isOptional: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+  - name: "prev"
+    description: "Change the working copy revision relative to the parent revision"
+    args:
+      - name: "offset"
+        description: "How many revisions to move backward"
+        isOptional: true
+    options:
+      - name: ["-e", "--edit"]
+        description: "Edit the parent directly, instead of moving the working-copy commit"
+      - name: ["-n", "--no-edit"]
+        description: "The inverse of --edit"
+      - name: "--conflict"
+        description: "Jump to the previous conflicted ancestor"
+  - name: "rebase"
+    description: "Move revisions to different parent(s)"
+    options:
+      - name: ["-b", "--branch"]
+        description: "Rebase the whole branch relative to destination's ancestors (can be repeated)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-s", "--source"]
+        description: "Rebase specified revision(s) together with their trees of descendants (can be repeated)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-r", "--revision"]
+        description: "Rebase the given revisions, rebasing descendants onto this revision's parent(s)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-o", "--onto"]
+        description: "The revision(s) to rebase onto (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-A", "--insert-after"]
+        description: "The revision(s) to insert after (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "The revision(s) to insert before (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: "--skip-emptied"
+        description: "If true, when rebasing would produce an empty commit, the commit is abandoned"
+      - name: "--keep-divergent"
+        description: "Keep divergent commits while rebasing"
+      - name: "--simplify-parents"
+        description: "Simplify parents of rebased commits, like jj simplify-parents, while rebasing them"
+  - name: "redo"
+    description: "Redo the most recently undone operation"
+    options:
+      - name: "--allow-cross-workspace"
+        description: "Allow redoing an undo-operation that was performed in another workspace"
+  - name: "resolve"
+    description: "Resolve conflicted files with an external merge tool"
+    args:
+      - name: "filesets"
+        description: "Only resolve conflicts in these paths"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-r", "--revision"]
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-l", "--list"]
+        description: "Instead of resolving conflicts, list all the conflicts"
+      - name: "--tool"
+        description: "Specify 3-way merge tool to be used"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+  - name: "restore"
+    description: "Restore paths from another revision"
+    args:
+      - name: "filesets"
+        description: "Restore only these paths (instead of all paths)"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-f", "--from"]
+        description: "Revision to restore from (source)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--into"]
+        description: "Revision to restore into (destination)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-c", "--changes-in"]
+        description: "Undo the changes in a revision as compared to the merge of its parents"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-i", "--interactive"]
+        description: "Interactively choose which parts to restore"
+      - name: "--tool"
+        description: "Specify diff editor to be used (implies --interactive)"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: "--restore-descendants"
+        description: "Preserve the content (not the diff) when rebasing descendants"
+  - name: "revert"
+    description: "Apply the reverse of the given revision(s)"
+    options:
+      - name: ["-r", "--revision"]
+        description: "The revision(s) to apply the reverse of"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-o", "--onto"]
+        description: "The revision(s) to apply the reverse changes on top of"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-A", "--insert-after"]
+        description: "The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+  - name: "root"
+    description: "Show the current workspace root directory (shortcut for jj workspace root)"
+  - name: "run"
+    description: "Run a command across a set of revisions"
+    args:
+      - name: "command"
+        description: "Command to run across all selected revisions"
+        isOptional: true
+      - name: "args"
+        description: "Arguments to pass to the command"
+        isOptional: true
+    options:
+      - name: ["-r", "--revision"]
+        description: "The revisions to change"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-j", "--jobs"]
+        description: "How many processes should run in parallel"
+        args:
+          name: "jobs"
+      - name: "--root"
+        description: "Run the command from the working-copy root in each commit instead of from the subdirectory jj run was invoked from"
+      - name: "--clean"
+        description: "Delete each working copy before running the command"
+      - name: "--restore-descendants"
+        description: "Preserve the content (not the diff) when rebasing descendants"
+      - name: "--passthrough"
+        description: "Pass through stdout and stderr directly to the terminal"
+      - name: "--ignore-changes"
+        description: "Run the command without rewriting any commits"
+      - name: "--ignore-errors"
+        description: "Continue with remaining revisions when a command's exit code indicates failure"
+      - name: "--sparse-patterns"
+        description: "How to handle sparse patterns when running the command"
+        args:
+          name: "sparse_patterns"
+  - name: "show"
+    description: "Show revision metadata and diff"
+    args:
+      - name: "revsets"
+        description: "Show changes in these revisions, compared to their parent(s)"
+        isOptional: true
+        generators:
+          script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+          descriptionSeparator: "	"
+    options:
+      - name: "--reversed"
+        description: "Show revisions in the opposite order (older revisions first)"
+      - name: ["-T", "--template"]
+        description: "Render each revision using the given template"
+        args:
+          name: "template"
+      - name: ["-s", "--summary"]
+        description: "For each path, show only whether it was modified, added, or deleted"
+      - name: "--stat"
+        description: "Show a histogram of the changes"
+      - name: "--types"
+        description: "For each path, show only its type before and after"
+      - name: "--name-only"
+        description: "For each path, show only its path"
+      - name: "--git"
+        description: "Show a Git-format diff"
+      - name: "--color-words"
+        description: "Show a word-level diff with changes indicated only by color"
+      - name: "--tool"
+        description: "Generate diff by external command"
+        args:
+          name: "tool"
+      - name: "--context"
+        description: "Number of lines of context to show"
+        args:
+          name: "context"
+      - name: "--no-patch"
+        description: "Do not show the patch"
+      - name: ["-w", "--ignore-all-space"]
+        description: "Ignore whitespace when comparing lines"
+      - name: ["-b", "--ignore-space-change"]
+        description: "Ignore changes in amount of whitespace when comparing lines"
+  - name: "sign"
+    description: "Cryptographically sign a revision"
+    options:
+      - name: ["-r", "--revision"]
+        description: "What revision(s) to sign"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: "--key"
+        description: "The key used for signing"
+        args:
+          name: "key"
+  - name: "simplify-parents"
+    description: "Simplify parent edges for the specified revision(s)"
+    options:
+      - name: ["-s", "--source"]
+        description: "Simplify specified revision(s) together with their trees of descendants (can be repeated)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-r", "--revision"]
+        description: "Simplify specified revision(s) (can be repeated)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+  - name: "sparse"
+    description: "Manage which paths from the working-copy commit are present in the working copy"
+    subcommands:
+      - name: "edit"
+        description: "Start an editor to update the patterns that are present in the working copy"
+      - name: "list"
+        description: "List the patterns that are currently present in the working copy"
+      - name: "reset"
+        description: "Reset the patterns to include all files in the working copy"
+      - name: "set"
+        description: "Update the patterns that are present in the working copy"
+        options:
+          - name: "--add"
+            description: "Patterns to add to the working copy"
+            args:
+              name: "add"
+          - name: "--remove"
+            description: "Patterns to remove from the working copy"
+            args:
+              name: "remove"
+          - name: "--clear"
+            description: "Include no files in the working copy (combine with --add)"
+  - name: "split"
+    description: "Split a revision in two"
+    args:
+      - name: "filesets"
+        description: "Files matching any of these filesets are put in the selected changes"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-i", "--interactive"]
+        description: "Interactively choose which parts to split"
+      - name: "--tool"
+        description: "Specify diff editor to be used (implies --interactive)"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["-r", "--revision"]
+        description: "The revision to split"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-o", "--onto"]
+        description: "The revision(s) to rebase the selected changes onto (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-A", "--insert-after"]
+        description: "The revision(s) to insert after (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "The revision(s) to insert before (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-m", "--message"]
+        description: "The change description to use for the selected changes (don't open editor)"
+        args:
+          name: "message"
+      - name: "--editor"
+        description: "Open an editor to edit the change description(s)"
+      - name: ["-p", "--parallel"]
+        description: "Split the revision into two parallel revisions instead of a parent and child"
+  - name: "squash"
+    description: "Move changes from a revision into another revision"
+    args:
+      - name: "filesets"
+        description: "Move only changes to these paths (instead of all paths)"
+        isOptional: true
+        template: filepaths
+    options:
+      - name: ["-r", "--revision"]
+        description: "Revision to squash into its parent (default: @)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-f", "--from"]
+        description: "Revision(s) to squash from (default: @ if -r isn't given)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-t", "--into"]
+        description: "Revision to squash into (default: @ if -r isn't given)"
+        args:
+          name: "revset"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-o", "--onto"]
+        description: "(Experimental) The revision(s) to use as parent for the new commit (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-A", "--insert-after"]
+        description: "(Experimental) The revision(s) to insert the new commit after (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-B", "--insert-before"]
+        description: "(Experimental) The revision(s) to insert the new commit before (can be repeated to create a merge commit)"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+      - name: ["-m", "--message"]
+        description: "The description to use for the squashed revision (don't open editor)"
+        args:
+          name: "message"
+      - name: ["-u", "--use-destination-message"]
+        description: "Use the description of the destination revision and discard the description(s) of the source revision(s)"
+      - name: "--editor"
+        description: "Open an editor to edit the description of the squashed revision"
+      - name: ["-i", "--interactive"]
+        description: "Interactively choose which parts to squash"
+      - name: "--tool"
+        description: "The diff editor to use (implies --interactive)"
+        args:
+          name: "name"
+          generators:
+            script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["-k", "--keep-emptied"]
+        description: "Do not abandon source revisions that become empty"
+  - name: "status"
+    description: "Show high-level repo status"
+    args:
+      - name: "filesets"
+        description: "Restrict the status display to these paths"
+        isOptional: true
+        template: filepaths
+  - name: "tag"
+    description: "Manage tags"
+    subcommands:
+      - name: ["delete", "d"]
+        description: "Delete existing tags"
+        args:
+          - name: "names"
+            description: "Tag names to delete"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: ["list", "l"]
+        description: "List tags and their targets"
+        args:
+          - name: "names"
+            description: "Show tags whose local name matches"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-a", "--all-remotes"]
+            description: "Show all tracked and untracked remote tags including the ones whose targets are synchronized with the local tags"
+          - name: "--remote"
+            description: "Show all tracked and untracked remote tags belonging to this remote"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+          - name: ["-t", "--tracked"]
+            description: "Show tracked remote tags only"
+          - name: ["-c", "--conflicted"]
+            description: "Show conflicted tags only"
+          - name: ["-r", "--revision"]
+            description: "Show tags whose local targets are in the given revisions"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-T", "--template"]
+            description: "Render each tag using the given template"
+            args:
+              name: "template"
+          - name: "--sort"
+            description: "Sort tags based on the given key (or multiple keys)"
+            args:
+              name: "sort_key"
+      - name: ["set", "s"]
+        description: "Create or update tags"
+        args:
+          - name: "names"
+            description: "Tag names to create or update"
+            isOptional: true
+            generators:
+              script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+        options:
+          - name: ["-r", "--revision"]
+            description: "Target revision to point to"
+            args:
+              name: "revset"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: "--allow-move"
+            description: "Allow moving existing tags"
+      - name: "track"
+        description: "Start tracking given remote tags"
+        args:
+          - name: "tag[@remote]"
+            description: "Tag name patterns or remote tag symbols to track"
+            isOptional: true
+        options:
+          - name: "--remote"
+            description: "Remote names to track"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+      - name: "untrack"
+        description: "Stop tracking given remote tags"
+        args:
+          - name: "tag[@remote]"
+            description: "Tag name patterns or remote tag symbols to untrack"
+            isOptional: true
+        options:
+          - name: "--remote"
+            description: "Remote names to untrack"
+            args:
+              name: "remote"
+              generators:
+                script: "jj git remote list 2>/dev/null | awk '{print $1}'"
+  - name: "undo"
+    description: "Undo the last operation"
+    options:
+      - name: "--allow-cross-workspace"
+        description: "Allow undoing an operation that was performed in another workspace"
+  - name: "unsign"
+    description: "Drop a cryptographic signature"
+    options:
+      - name: ["-r", "--revision"]
+        description: "What revision(s) to unsign"
+        args:
+          name: "revsets"
+          generators:
+            script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+            descriptionSeparator: "	"
+  - name: "util"
+    description: "Infrequently used commands such as for generating shell completions"
+    subcommands:
+      - name: "backend"
+        description: "Commands relating to the backend used in the current repo"
+        subcommands:
+          - name: "name"
+            description: "Print the name of the backend used in the current repo"
+      - name: "completion"
+        description: "Print a command-line-completion script"
+        args:
+          - name: "shell"
+            isOptional: true
+      - name: "config-schema"
+        description: "Print the JSON schema for the jj TOML config format"
+      - name: "diff"
+        description: "Compare two files on disk"
+        args:
+          - name: "path1"
+            description: "First path to compare"
+            isOptional: true
+            template: filepaths
+          - name: "path2"
+            description: "Second path to compare"
+            isOptional: true
+            template: filepaths
+        options:
+          - name: "--git"
+            description: "Show a Git-format diff"
+          - name: "--color-words"
+            description: "Show a word-level diff with changes indicated only by color"
+          - name: "--tool"
+            description: "Generate diff by external command"
+            args:
+              name: "tool"
+          - name: "--context"
+            description: "Number of lines of context to show"
+            args:
+              name: "context"
+          - name: ["-w", "--ignore-all-space"]
+            description: "Ignore whitespace when comparing lines"
+          - name: ["-b", "--ignore-space-change"]
+            description: "Ignore changes in amount of whitespace when comparing lines"
+      - name: "exec"
+        description: "Execute an external command via jj"
+        args:
+          - name: "command"
+            description: "External command to execute"
+            isOptional: true
+          - name: "args"
+            description: "Arguments to pass to the external command"
+            isOptional: true
+      - name: "gc"
+        description: "Run backend-dependent garbage collection"
+        options:
+          - name: "--expire"
+            description: "Time threshold"
+            args:
+              name: "expire"
+      - name: "install-man-pages"
+        description: "Install Jujutsu's manpages to the provided path"
+        args:
+          - name: "path"
+            description: "The path where manpages will installed"
+            isOptional: true
+            template: filepaths
+      - name: "markdown-help"
+        description: "Print the CLI help for all subcommands in Markdown"
+      - name: "snapshot"
+        description: "Snapshot the working copy if needed"
+  - name: "version"
+    description: "Display version information"
+  - name: "workspace"
+    description: "Commands for working with workspaces"
+    subcommands:
+      - name: "add"
+        description: "Add a workspace"
+        args:
+          - name: "destination"
+            description: "Where to create the new workspace"
+            isOptional: true
+        options:
+          - name: "--name"
+            description: "A name for the workspace"
+            args:
+              name: "name"
+              generators:
+                script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+          - name: ["-r", "--revision"]
+            description: "A list of parent revisions for the working-copy commit of the newly created workspace"
+            args:
+              name: "revsets"
+              generators:
+                script: "jj log --no-graph --quiet -r 'ancestors(@, 20) | bookmarks()' -T 'change_id.shortest(8) ++ \"\\t\" ++ coalesce(description.first_line(), \"(no description)\") ++ \"\\n\"' 2>/dev/null"
+                descriptionSeparator: "	"
+          - name: ["-m", "--message"]
+            description: "The change description to use"
+            args:
+              name: "message"
+          - name: "--colocate"
+            description: "Create a corresponding Git worktree for this workspace"
+          - name: "--no-colocate"
+            description: "Do not create a Git worktree for this workspace"
+          - name: "--sparse-patterns"
+            description: "How to handle sparse patterns when creating a new workspace"
+            args:
+              name: "sparse_patterns"
+      - name: "forget"
+        description: "Stop tracking a workspace's working-copy commit in the repo"
+        args:
+          - name: "workspaces"
+            description: "Names of the workspaces to forget"
+            isOptional: true
+      - name: "list"
+        description: "List workspaces"
+        options:
+          - name: ["-T", "--template"]
+            description: "Render each workspace using the given template"
+            args:
+              name: "template"
+      - name: "remove"
+        description: "Remove a workspace and its working-copy files from disk"
+        args:
+          - name: "workspaces"
+            description: "Names of the workspaces to remove"
+            isOptional: true
+      - name: "rename"
+        description: "Renames the current workspace"
+        args:
+          - name: "new_workspace_name"
+            description: "The name of the workspace to update to"
+            isOptional: true
+      - name: "root"
+        description: "Show the workspace root directory"
+        options:
+          - name: "--name"
+            description: "Name of the workspace (defaults to current)"
+            args:
+              name: "name"
+              generators:
+                script: "jj bookmark list --quiet -T 'name ++ \"\\n\"' 2>/dev/null"
+      - name: "update-stale"
+        description: "Update a workspace that has become stale"

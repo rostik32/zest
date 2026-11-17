@@ -2,6 +2,9 @@
 name: git
 description: Distributed version control system
 subcommands:
+  - name: lfs
+    description: Git LFS, versioning for large files
+    loadSpec: git-lfs
   - name: archive
     description: Create an archive of files from a named tree
     options:

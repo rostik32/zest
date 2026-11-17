@@ -2,6 +2,69 @@
 name: kubectl
 description: ""
 subcommands:
+  - name: debug
+    description: Create debugging sessions for troubleshooting workloads and nodes
+    options:
+    - name: --arguments-only
+    - name: --attach
+    - name:
+      - -c
+      - --container
+    - name: --copy-to
+    - name: --custom
+    - name: --env
+    - name:
+      - -f
+      - --filename
+    - name: --image
+    - name: --image-pull-policy
+    - name: --keep-annotations
+    - name: --keep-init-containers
+    - name: --keep-labels
+    - name: --keep-liveness
+    - name: --keep-readiness
+    - name: --keep-startup
+    - name: --profile
+    - name:
+      - -q
+      - --quiet
+    - name: --replace
+    - name: --same-node
+    - name: --set-image
+    - name: --share-processes
+    - name:
+      - -i
+      - --stdin
+    - name: --target
+    - name:
+      - -t
+      - --tty
+  - name: events
+    description: List events
+    options:
+    - name:
+      - -A
+      - --all-namespaces
+    - name: --allow-missing-template-keys
+    - name: --chunk-size
+    - name: --for
+    - name: --no-headers
+    - name:
+      - -o
+      - --output
+    - name: --show-managed-fields
+    - name: --template
+    - name: --types
+    - name:
+      - -w
+      - --watch
+  - name: kuberc
+    description: Manage kuberc configuration files
+    subcommands:
+    - name: set
+      description: Set values in the kuberc configuration
+    - name: view
+      description: Display the current kuberc configuration
   - name: alpha
     description: These commands correspond to alpha features that are not enabled in Kubernetes clusters by default
     subcommands:

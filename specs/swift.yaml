@@ -2,6 +2,552 @@
 name: swift
 description: Swift compiler
 subcommands:
+  - name: repl
+    description: Experiment with Swift code interactively
+    subcommands:
+    - name: build
+      description: Build Swift packages
+    - name: package
+      description: Create and work on packages
+    - name: run
+      description: Run a program from a package
+    - name: test
+      description: Run package tests
+    - name: repl
+      description: Experiment with Swift code interactively
+    options:
+    - name: -access-notes-path
+      description: Specify YAML file to override attributes on Swift declarations in this module
+      args:
+        name: value
+    - name: -allow-availability-platforms
+      description: Restrict availability metadata to the given platforms, e.g. 'macOS,Swift'
+      args:
+        name: platforms
+    - name: -allow-non-resilient-access
+      description: Ensures all contents are generated besides exportable decls in the binary module, so non-resilient access can be allowed
+    - name: -allowable-client
+      description: Module names that are allowed to import this module
+      args:
+        name: vers
+    - name: -assert-config
+      description: Specify the assert_configuration replacement. Possible values are Debug, Release, Unchecked, DisableReplacement.
+      args:
+        name: value
+    - name: -block-availability-platforms
+      description: Remove the given platforms from symbol graph availability metadata, e.g. 'macOS,Swift'
+      args:
+        name: platforms
+    - name: -build-id
+      description: Specify the build ID argument passed to the linker
+      args:
+        name: build-id
+    - name: -cache-compile-job
+      description: Enable compiler caching
+    - name: -cache-disable-replay
+      description: Skip loading the compilation result from cache
+    - name: -cas-path
+      description: Path to CAS
+      args:
+        name: path
+    - name: -cas-plugin-option
+      description: Option pass to CAS Plugin
+      args:
+      - name: name
+      - name: option
+    - name: -cas-plugin-path
+      args:
+        name: path
+    - name: -clang-build-session-file
+      description: Use the last modification time of <file> as the underlying Clang build session timestamp
+      args:
+        name: value
+    - name: -clang-scanner-module-cache-path
+      description: Specifies the Clang dependency scanner module cache path
+      args:
+        name: value
+    - name: -clang-target-variant
+      description: Separately set the target we should use for internal Clang instance for the 'zippered' code for macCatalyst
+      args:
+        name: value
+    - name: -clang-target
+      description: Separately set the target we should use for internal Clang instance
+      args:
+        name: value
+    - name: -color-diagnostics
+      description: Print diagnostics in color
+    - name: -compiler-assertions
+      description: Enable internal self-checks while compiling
+    - name: -continue-building-after-errors
+      description: Continue building, even after errors are encountered
+    - name: -coverage-prefix-map
+      description: Remap source paths in coverage info
+      args:
+        name: prefix=replacement
+    - name: -cxx-interoperability-mode
+      description: Enables C++ interoperability; pass 'default' to enable or 'off' to disable
+      args:
+        name: value
+    - name: -debug-info-format
+      description: Specify the debug info format type to either 'dwarf' or 'codeview'
+      args:
+        name: value
+    - name: -debug-info-store-invocation
+      description: Emit the compiler invocation in the debug info.
+    - name: -debug-prefix-map
+      description: Remap source paths in debug info
+      args:
+        name: prefix=replacement
+    - name: -default-isolation
+      description: 'Specify the default actor isolation: MainActor or nonisolated. Defaults to nonisolated.'
+    - name: -diagnostic-style
+      description: The formatting style used when printing diagnostics ('swift' or 'llvm')
+      args:
+        name: style
+    - name: -disable-actor-data-race-checks
+      description: Disable runtime checks for actor data races
+    - name: -disable-autolinking-runtime-compatibility-concurrency
+      description: Do not use autolinking for the concurrency runtime compatibility library
+    - name: -disable-autolinking-runtime-compatibility-dynamic-replacements
+      description: Do not use autolinking for the dynamic replacement runtime compatibility library
+    - name: -disable-autolinking-runtime-compatibility
+      description: Do not use autolinking for runtime compatibility libraries
+    - name: -disable-clang-target
+      description: Disable a separately specified target triple for Clang instance to use
+    - name: -disable-dynamic-actor-isolation
+      description: Disable dynamic actor isolation checks
+    - name: -disable-experimental-feature
+      description: Disable an experimental feature
+      args:
+        name: value
+    - name: -disable-incremental-imports
+      description: Disable cross-module incremental build metadata and driver scheduling for Swift modules
+    - name: -disable-only-one-dependency-file
+      description: Disables incremental build optimization that only produces one dependencies file
+    - name: -disable-sandbox
+      description: Disable using the sandbox when executing subprocesses
+    - name: -disable-upcoming-feature
+      description: Disable a feature that will be introduced in an upcoming language version
+      args:
+        name: value
+    - name: -disallow-use-new-driver
+      description: Disable using new swift-driver
+    - name: -dwarf-version
+      description: DWARF debug info version to produce if requested
+      args:
+        name: version
+    - name: -D
+      description: Marks a conditional compilation flag as true
+      args:
+        name: value
+    - name: -embed-tbd-for-module
+      description: Embed symbols from the module in the emitted tbd file
+      args:
+        name: value
+    - name: -emit-module-dependencies-path
+      description: Emit a discovered dependencies file for the emit-module task to <path>
+      args:
+        name: path
+    - name: -emit-module-serialize-diagnostics-path
+      description: Emit a serialized diagnostics file for the emit-module task to <path>
+      args:
+        name: path
+    - name: -enable-actor-data-race-checks
+      description: Emit runtime checks for actor data races
+    - name: -enable-autolinking-runtime-compatibility-bytecode-layouts
+      description: Enable autolinking for the bytecode layouts runtime compatibility library
+    - name: -enable-bare-slash-regex
+      description: Enable the use of forward slash regular-expression literal syntax
+    - name: -enable-builtin-module
+      description: Enables the explicit import of the Builtin module
+    - name: -enable-deterministic-check
+      description: Check compiler output determinism by running it twice
+    - name: -enable-experimental-additive-arithmetic-derivation
+      description: Enable experimental 'AdditiveArithmetic' derived conformances
+    - name: -enable-experimental-concise-pound-file
+      description: Enable experimental concise '#file' identifier
+    - name: -enable-experimental-feature
+      description: Enable an experimental feature
+      args:
+        name: value
+    - name: -enable-experimental-forward-mode-differentiation
+      description: Enable experimental forward mode differentiation
+    - name: -enable-incremental-imports
+      description: Enable cross-module incremental build metadata and driver scheduling for Swift modules
+    - name: -enable-library-evolution
+      description: Build the module to allow binary-compatible library evolution
+    - name: -enable-only-one-dependency-file
+      description: Enables incremental build optimization that only produces one dependencies file
+    - name: -enable-upcoming-feature
+      description: Enable a feature that will be introduced in an upcoming language version
+      args:
+        name: value
+    - name: -enforce-exclusivity
+      description: Enforce law of exclusivity
+      args:
+        name: enforcement
+    - name: -experimental-allow-non-resilient-access
+      description: Deprecated; use -allow-non-resilient-access instead
+    - name: -experimental-package-bypass-resilience
+      description: Deprecated; has no effect
+    - name: -experimental-package-cmo-abort-on-deserialization-fail
+      description: Abort if a deserialization error is found while package optimization is enabled
+    - name: -experimental-package-cmo
+      description: Deprecated; use -package-cmo instead
+    - name: -explain-module-dependency-detailed
+      description: Emit remarks describing every possible dependency path that explains why compilation may depend on a module with a given name.
+      args:
+        name: value
+    - name: -explain-module-dependency
+      description: Emit remark describing why compilation may depend on a module with a given name.
+      args:
+        name: value
+    - name: -explicit-auto-linking
+      description: Instead of linker-load directives, have the driver specify all link dependencies on the linker invocation. Requires '-explicit-module-build'.
+    - name: -export-as
+      description: Module name to use when referenced in clients module interfaces
+      args:
+        name: value
+    - name: -external-plugin-path
+      description: Add directory to the plugin search path with a plugin server executable
+      args:
+      - name: path
+      - name: plugin-server-path
+    - name: -e
+      description: Executes a line of code provided on the command line
+      args:
+        name: value
+    - name: -file-compilation-dir
+      description: The compilation directory to embed in the debug info. Coverage mapping is not supported yet.
+      args:
+        name: path
+    - name: -file-prefix-map
+      description: Remap source paths in debug, coverage, and index info
+      args:
+        name: prefix=replacement
+    - name: -framework
+      description: Specifies a framework which should be linked against
+      args:
+        name: value
+    - name: -Fsystem
+      description: Add directory to system framework search path
+      args:
+        name: value
+    - name: -F
+      description: Add directory to framework search path
+      args:
+        name: value
+    - name: -gdwarf-types
+      description: Emit full DWARF type info.
+    - name: -gline-tables-only
+      description: Emit minimal debug info for backtraces only
+    - name: -gnone
+      description: Don't emit debug info
+    - name: -g
+      description: Emit debug info. This is the preferred setting for debugging with LLDB.
+    - name: -help
+      description: Display available options
+    - name: -in-process-plugin-server-path
+      description: Path to dynamic library plugin server
+      args:
+        name: value
+    - name: -index-ignore-clang-modules
+      description: Avoid indexing clang modules (pcms)
+    - name: -index-include-locals
+      description: Include local definitions/references in the produced index data.
+    - name: -index-store-path
+      description: Store indexing data to <path>
+      args:
+        name: path
+    - name: -index-unit-output-path
+      description: Use <path> as the output path in the produced index data.
+      args:
+        name: path
+    - name: -Isystem
+      description: Add directory to the system import search path
+      args:
+        name: value
+    - name: -I
+      description: Add directory to the import search path
+      args:
+        name: value
+    - name: -j
+      description: Number of commands to execute in parallel
+      args:
+        name: 'n'
+    - name: -libc
+      description: libc runtime library to use
+      args:
+        name: value
+    - name: -link-objc-runtime
+      description: Deprecated
+    - name: -load-pass-plugin
+      description: Load LLVM pass plugin from a dynamic shared object file.
+      args:
+        name: path
+    - name: -load-plugin-executable
+      description: Path to a compiler plugin executable and a comma-separated list of module names where the macro types are declared
+      args:
+      - name: path
+      - name: module-names
+    - name: -load-plugin-library
+      description: Path to a dynamic library containing compiler plugins such as macros
+      args:
+        name: path
+    - name: -load-resolved-plugin
+      description: Path to resolved plugin configuration and a comma-separated list of module names where the macro types are declared. Library path and exectuable path can be empty if not used
+      args:
+      - name: library-path
+      - name: executable-path
+      - name: module-names
+    - name: -locale
+      description: Choose a language for diagnostic messages
+      args:
+        name: locale-code
+    - name: -localization-path
+      description: Path to localized diagnostic messages directory
+      args:
+        name: path
+    - name: -L
+      description: Add directory to library link search path
+      args:
+        name: value
+    - name: -l
+      description: Specifies a library which should be linked against
+      args:
+        name: value
+    - name: -module-abi-name
+      description: ABI name to use for the contents of this module
+      args:
+        name: value
+    - name: -module-alias
+      description: If a source file imports or references module <alias_name>, the <real_name> is used for the contents of the file
+      args:
+        name: alias_name=real_name
+    - name: -module-cache-path
+      description: Specifies the module cache path
+      args:
+        name: value
+    - name: -module-link-name
+      description: Library to link against when using this module
+      args:
+        name: value
+    - name: -module-name
+      description: Name of the module to build
+      args:
+        name: value
+    - name: -no-color-diagnostics
+      description: Do not print diagnostics in color
+    - name: -no-warnings-as-errors
+      description: Treat warnings as warnings
+    - name: -nostdimport
+      description: Don't search the standard library or toolchain import paths for modules
+    - name: -nostdlibimport
+      description: Don't search the standard library import path for modules
+    - name: -num-threads
+      description: Enable multi-threading and specify number of threads
+      args:
+        name: 'n'
+    - name: -Onone
+      description: Compile without any optimization
+    - name: -Osize
+      description: Compile with optimizations and target small code size
+    - name: -Ounchecked
+      description: Compile with optimizations and remove runtime safety checks
+    - name: -O
+      description: Compile with optimizations
+    - name: -package-cmo
+      description: Enable optimization to perform defalut CMO within a package boundary
+    - name: -package-name
+      description: Name of the package the module belongs to
+      args:
+        name: value
+    - name: -plugin-path
+      description: Add directory to the plugin search path
+      args:
+        name: value
+    - name: -prefix-serialized-debugging-options
+      description: Apply debug prefix mappings to serialized debug info in Swiftmodule files
+    - name: -pretty-print
+      description: Pretty-print the output JSON
+    - name: -print-educational-notes
+      description: Include educational notes in printed diagnostic output, if available
+    - name: -print-supported-features
+      description: Print information about features supported by the compiler
+    - name: -print-target-info
+      description: Print target information for the given target <triple>, such as x86_64-apple-macos10.9
+    - name: -project-name
+      description: Name of the project this module to build belongs to
+      args:
+        name: value
+    - name: -public-module-name
+      description: Public facing module name to use in diagnostics and documentation
+      args:
+        name: value
+    - name: -Rcache-compile-job
+      description: Show remarks for compiler caching
+    - name: -Rcross-import
+      description: Emit a remark if a cross-import of a module is triggered.
+    - name: -remove-runtime-asserts
+    - name: -Rindexing-system-module
+      description: Emit a remark when indexing a system module
+    - name: -Rmacro-loading
+      description: Emit remarks about loaded macro implementations
+    - name: -Rmodule-api-import
+      description: Emit remarks about the import bridging in each element composing the API
+    - name: -Rmodule-loading
+      description: Emit remarks about loaded module
+    - name: -Rmodule-recovery
+      description: Emit remarks about contextual inconsistencies in loaded modules
+    - name: -Rmodule-serialization
+      description: Emit remarks about module serialization
+    - name: -Rpass-missed
+      description: Report missed transformations by optimization passes whose name matches the given POSIX regular expression
+      args:
+        name: value
+    - name: -Rpass
+      description: Report performed transformations by optimization passes whose name matches the given POSIX regular expression
+      args:
+        name: value
+    - name: -Rskip-explicit-interface-build
+      description: Emit a remark if an explicit module interface invocation has an early exit because the expected output is up-to-date
+    - name: -runtime-compatibility-version
+      description: Link compatibility library for Swift runtime version, or 'none'
+      args:
+        name: value
+    - name: -save-optimization-record-passes
+      description: Only include passes which match a specified regular expression in the generated optimization record (by default, include all passes)
+      args:
+        name: regex
+    - name: -save-optimization-record-path
+      description: Specify the file name of any generated optimization record
+      args:
+        name: value
+    - name: -save-optimization-record
+      description: 'Generate an optimization record file in a specific format (default: YAML)'
+      args:
+        name: format
+    - name: -save-optimization-record
+      description: Generate a YAML optimization record file
+    - name: -scanner-prefix-map-sdk
+      description: Remap paths within SDK reported by dependency scanner
+      args:
+        name: path
+    - name: -scanner-prefix-map-toolchain
+      description: Remap paths within toolchain directory reported by dependency scanner
+      args:
+        name: path
+    - name: -scanner-prefix-map
+      description: Remap paths reported by dependency scanner
+      args:
+        name: prefix=replacement
+    - name: -sdk-module-cache-path
+      description: Specifies the module cache path for explicitly-built SDK modules
+      args:
+        name: value
+    - name: -sdk
+      description: Compile against <sdk>
+      args:
+        name: sdk
+    - name: -serialize-diagnostics-path
+      description: Emit a serialized diagnostics file to <path>
+      args:
+        name: path
+    - name: -static-executable
+      description: Statically link the executable
+    - name: -static-stdlib
+      description: Statically link the Swift standard library
+    - name: -strict-concurrency
+      description: Specify the how strict concurrency checking will be. The value may be 'minimal' (most 'Sendable' checking is disabled), 'targeted' ('Sendable' checking is enabled in code that uses the concurrency model, or 'complete' ('Sendable' and other checking is enabled for all code in the module)
+      args:
+        name: value
+    - name: -strict-memory-safety
+      description: Enable migration to strict memory safety checking
+    - name: -strict-memory-safety
+      description: Enable strict memory safety checking
+    - name: -suppress-remarks
+      description: Suppress all remarks
+    - name: -suppress-warnings
+      description: Suppress all warnings
+    - name: -swift-ptrauth-mode
+      description: Mode for staging pointer authentication. Supported modes are LegacyAndStrip, NewAndStrip and NewAndAuth.
+      args:
+        name: mode
+    - name: -swift-version
+      description: Interpret input according to a specific Swift language version number
+      args:
+        name: vers
+    - name: -sysroot
+      description: Native Platform sysroot
+      args:
+        name: sysroot
+    - name: -target-cpu
+      description: Generate code for a particular CPU variant
+      args:
+        name: value
+    - name: -target-min-inlining-version
+      description: Require inlinable code with no '@available' attribute to back-deploy to this version of the '-target' OS
+      args:
+        name: value
+    - name: -target-variant
+      args:
+        name: value
+    - name: -target
+      description: Generate code for the given target <triple>, such as x86_64-apple-macos10.9
+      args:
+        name: triple
+    - name: -use-ld
+      description: Specifies the flavor of the linker to be used
+      args:
+        name: value
+    - name: -user-module-version
+      description: Module version specified from Swift module authors
+      args:
+        name: vers
+    - name: -validate-clang-modules-once
+      description: Don't verify input files for Clang modules if the module has been successfully validated or loaded during this build session
+    - name: -version
+      description: Print version information and exit
+    - name: -vfsoverlay
+      description: Add directory to VFS overlay file
+      args:
+        name: value
+    - name: -visualc-tools-root
+      description: VisualC++ Tools Root
+      args:
+        name: root
+    - name: -visualc-tools-version
+      description: VisualC++ ToolSet Version
+      args:
+        name: version
+    - name: -v
+      description: Show commands to run and use verbose output
+    - name: -warn-concurrency
+      description: Warn about code that is unsafe according to the Swift Concurrency model and will become ill-formed in a future language version
+    - name: -warn-implicit-overrides
+      description: Warn about implicit overrides of protocol members
+    - name: -warnings-as-errors
+      description: Treat warnings as errors
+    - name: -windows-sdk-root
+      description: Windows SDK Root
+      args:
+        name: root
+    - name: -windows-sdk-version
+      description: Windows SDK Version
+      args:
+        name: version
+    - name: -working-directory
+      description: Resolve file paths relative to the specified directory
+      args:
+        name: path
+    - name: -Xcc
+      description: Pass <arg> to the C/C++/Objective-C compiler
+      args:
+        name: arg
+    - name: -Xlinker
+      description: Specifies an option which should be passed to the linker
+      args:
+        name: value
   - name: build
     description: Build sources into binary products
     options:

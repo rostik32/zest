@@ -1,0 +1,1236 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# redis-cli. Options from usage() in src/redis-cli.c, commands from src/commands.def, in github.com/redis/redis.
+name: redis-cli
+description: The Redis command line interface
+options:
+- name: --tls
+  description: 'Establish a secure TLS connection. The server certificate must chain to the trusted CA and carry the expected identity: the name given to --sni, or else the host that was dialed (as an IP or DNS SAN).'
+- name: --sni
+  description: Server name indication for TLS. Also the identity the server certificate is verified against.
+  args:
+    name: host
+- name: --cacert
+  description: CA Certificate file to verify with.
+  args:
+    name: file
+- name: --cacertdir
+  description: Directory where trusted CA certificates are stored. If neither cacert nor cacertdir are specified, the default system-wide trusted root certs configuration will apply.
+  args:
+    name: dir
+- name: --insecure
+  description: Allow insecure TLS connection by skipping cert validation.
+- name: --no-verify-hostname
+  description: Verify only that the server certificate chains to the trusted CA, not that it carries the expected identity.
+- name: --tls-expected-peer-name
+  description: 'Verify the server certificate against these identities instead of the dialed host or SNI: a space-separated list of DNS names (any match succeeds) or a single IP address.'
+  args:
+    name: names
+- name: --cert
+  description: Client certificate to authenticate with.
+  args:
+    name: file
+- name: --key
+  description: Private key file to authenticate with.
+  args:
+    name: file
+- name: --tls-ciphers
+  description: in order of preference from highest to lowest separated by colon (":"). See the ciphers(1ssl) manpage for more information about the syntax of this string.
+  args:
+    name: list
+- name: --tls-ciphersuites
+  description: in order of preference from highest to lowest separated by colon (":"). See the ciphers(1ssl) manpage for more information about the syntax of this string, and specifically for TLSv1.3 ciphersuites.
+  args:
+    name: list
+- name: --tls-groups
+  description: in order of preference from highest to lowest separated by colon (":").
+  args:
+    name: list
+- name: -h
+  description: 'Server hostname (default: 127.0.0.1).'
+  args:
+    name: hostname
+- name: -p
+  description: 'Server port (default: 6379).'
+  args:
+    name: port
+- name: -t
+  description: Server connection timeout in seconds (decimals allowed). Default timeout is 0, meaning no limit, depending on the OS.
+  args:
+    name: timeout
+- name: -s
+  description: Server socket (overrides hostname and port).
+  args:
+    name: socket
+- name: -a
+  description: Password to use when connecting to the server. You can also use the  environment variable to pass this password more safely (if both are used, this argument takes precedence).
+  args:
+    name: password
+- name: --user
+  description: Used to send ACL style 'AUTH username pass'. Needs -a.
+  args:
+    name: username
+- name: --pass
+  description: Alias of -a for consistency with the new --user option.
+  args:
+    name: password
+- name: --askpass
+  description: Force user to input password with mask from STDIN. If this argument is used, '-a' and environment variable will be ignored.
+- name: -u
+  description: Server URI on format redis://user:password@host:port/dbnum User, password and dbnum are optional. For authentication without a username, use username 'default'. For TLS, use the scheme 'rediss'.
+  args:
+    name: uri
+- name: -r
+  description: Execute specified command N times.
+  args:
+    name: repeat
+- name: -i
+  description: When -r is used, waits <interval> seconds per command. It is possible to specify sub-second times like -i 0.1. This interval is also used in --scan and --stat per cycle. and in --bigkeys, --memkeys, --keystats, and --hotkeys per 100 cycles.
+  args:
+    name: interval
+- name: -n
+  description: Database number.
+  args:
+    name: db
+- name: --name
+  description: Set the client name.
+  args:
+    name: name
+- name: '-2'
+  description: Start session in RESP2 protocol mode.
+- name: '-3'
+  description: Start session in RESP3 protocol mode.
+- name: -x
+  description: Read last argument from STDIN (see example below).
+- name: -X
+  description: Read <tag> argument from STDIN (see example below).
+- name: -d
+  description: 'Delimiter between response bulks for raw formatting (default: \'
+  args:
+    name: delimiter
+- name: -D
+  description: 'Delimiter between responses for raw formatting (default: \'
+  args:
+    name: delimiter
+- name: -c
+  description: Enable cluster mode (follow -ASK and -MOVED redirections).
+- name: -e
+  description: Return exit error code when command execution fails.
+- name: '-4'
+  description: Prefer IPv4 over IPv6 on DNS lookup.
+- name: '-6'
+  description: Prefer IPv6 over IPv4 on DNS lookup.
+- name: --raw
+  description: Use raw formatting for replies (default when STDOUT is not a tty).
+- name: --no-raw
+  description: Force formatted output even when STDOUT is not a tty.
+- name: --quoted-input
+  description: Force input to be handled as quoted strings.
+- name: --csv
+  description: Output in CSV format.
+- name: --json
+  description: Output in JSON format (default RESP3, use -2 if you want to use with RESP2).
+- name: --quoted-json
+  description: Same as --json, but produce ASCII-safe quoted strings, not Unicode.
+- name: --show-pushes
+  description: Enabled by default when STDOUT is a tty but can be overridden with --show-pushes no.
+  args:
+    name: yn
+- name: --stat
+  description: 'Print rolling stats about server: mem, clients, ...'
+- name: --latency
+  description: Enter a special mode continuously sampling latency. Stats (min/max/avg) are reported in milliseconds with sub-millisecond precision. If you use this mode in an interactive session it runs forever displaying real-time
+- name: --latency-history
+  description: Like --latency but tracking latency changes over time. Default time interval is 15 sec. Change it using -i.
+- name: --latency-percentiles
+  description: 'Also report the given latency percentiles in milliseconds (e.g. 50,99,99.9) in --latency and --latency-history modes. Resolution is limited by the sample count: a percentile finer than 100/samples resolves to the maximum, so use a'
+  args:
+    name: p1,p2,
+    isVariadic: true
+- name: --latency-dist
+  description: Shows latency as a spectrum, requires xterm 256 colors. Default time interval is 1 sec. Change it using -i.
+- name: --vset-recall
+  description: (that must be a vector set). Random vectors are created mixing components from other elements. A VSIM is then executed and checked against ground truth.
+  args:
+    name: key
+- name: --vset-recall-count
+  args:
+    name: count
+- name: --vset-recall-ef
+  args:
+    name: ef
+- name: --vset-recall-ele
+  description: Default 1.
+  args:
+    name: count
+- name: --lru-test
+  description: Simulate a cache workload with an 80-20 distribution.
+  args:
+    name: keys
+- name: --replica
+  description: Simulate a replica showing commands received from the master.
+- name: --rdb
+  description: Transfer an RDB dump from remote server to local file. Use filename of "-" to write to stdout.
+  args:
+    name: filename
+- name: --functions-rdb
+  description: when getting the RDB dump file.
+  args:
+    name: filename
+- name: --pipe
+  description: Transfer raw Redis protocol from stdin to server.
+- name: --pipe-timeout
+  description: 'no reply is received within <n> seconds. Default timeout: . Use 0 to wait forever.'
+  args:
+    name: 'n'
+- name: --bigkeys
+  description: Sample Redis keys looking for keys with many elements (complexity).
+- name: --memkeys
+  description: Sample Redis keys looking for keys consuming a lot of memory.
+- name: --memkeys-samples
+  description: And define number of key elements to sample
+  args:
+    name: 'n'
+- name: --keystats
+  description: Sample Redis keys looking for keys memory size and length (combine bigkeys and memkeys).
+- name: --keystats-samples
+  description: And define number of key elements to sample (only for memory usage).
+  args:
+    name: 'n'
+- name: --cursor
+  description: Start the scan at the cursor <n> (usually after a Ctrl-C). Optionally used with --keystats and --keystats-samples.
+  args:
+    name: 'n'
+- name: --top
+  description: 'To display <n> top key sizes (default: 10). Optionally used with --keystats and --keystats-samples.'
+  args:
+    name: 'n'
+- name: --hotkeys
+  description: Sample Redis keys looking for hot keys. only works when maxmemory-policy is *lfu.
+- name: --scan
+  description: List all keys using the SCAN command.
+- name: --pattern
+  description: 'Keys pattern when using the --scan, --bigkeys, --memkeys, --keystats or --hotkeys options (default: *).'
+  args:
+    name: pat
+- name: --count
+  description: 'Count option when using the --scan, --bigkeys, --memkeys, --keystats or --hotkeys (default: 10).'
+  args:
+    name: count
+- name: --quoted-pattern
+  description: quoted, in order to pass an otherwise non binary-safe string.
+  args:
+    name: pat
+- name: --intrinsic-latency
+  description: The test will run for the specified amount of seconds.
+  args:
+    name: sec
+- name: --eval
+  description: Send an EVAL command using the Lua script at <file>.
+  args:
+    name: file
+- name: --ldb
+  description: Used with --eval enable the Redis Lua debugger.
+- name: --ldb-sync-mode
+  description: Like --ldb but uses the synchronous Lua debugger, in this mode the server is blocked and script changes are not rolled back from the server memory.
+- name: --cluster
+  description: Cluster Manager command and arguments (see below).
+  args:
+  - name: command
+  - name: args
+    isOptional: true
+    isVariadic: true
+  - name: opts
+    isOptional: true
+    isVariadic: true
+- name: --verbose
+  description: Verbose mode.
+- name: --no-auth-warning
+  description: Don't show warning message when using password on command line interface.
+- name: --help
+  description: Output this help and exit.
+- name: --version
+  description: Output version and exit.
+args:
+  name: args
+  isOptional: true
+  isVariadic: true
+  template: filepaths
+subcommands:
+  - name: "ARCOUNT"
+    description: "Returns the number of non-empty elements in an array"
+  - name: "ARDEL"
+    description: "Deletes elements at the specified indices in an array"
+  - name: "ARDELRANGE"
+    description: "Deletes elements in one or more ranges"
+  - name: "ARGET"
+    description: "Gets the value at an index in an array"
+  - name: "ARGETRANGE"
+    description: "Gets values in a range of indices"
+  - name: "ARGREP"
+    description: "Searches array elements in a range using textual predicates"
+  - name: "ARINFO"
+    description: "Returns metadata about an array"
+  - name: "ARINSERT"
+    description: "Inserts one or more values at consecutive indices"
+  - name: "ARLASTITEMS"
+    description: "Returns the most recently inserted elements"
+  - name: "ARLEN"
+    description: "Returns the length of an array (max index + 1)"
+  - name: "ARMGET"
+    description: "Gets values at multiple indices in an array"
+  - name: "ARMSET"
+    description: "Sets multiple index-value pairs in an array"
+  - name: "ARNEXT"
+    description: "Returns the next index ARINSERT would use"
+  - name: "AROP"
+    description: "Performs aggregate operations on array elements in a range"
+  - name: "ARRING"
+    description: "Inserts values into a ring buffer of specified size, wrapping and truncating as needed"
+  - name: "ARSCAN"
+    description: "Iterates existing elements in a range, returning index-value pairs"
+  - name: "ARSEEK"
+    description: "Sets the ARINSERT / ARRING cursor to a specific index"
+  - name: "ARSET"
+    description: "Sets one or more contiguous values starting at an index in an array"
+  - name: "BITCONVERT"
+    description: "Converts a string bitmap to the native bitmap representation"
+  - name: "BITCOUNT"
+    description: "Counts the number of set bits (population counting) in a string"
+  - name: "BITFIELD"
+    description: "Performs arbitrary bitfield integer operations on strings"
+  - name: "BITFIELD_RO"
+    description: "Performs arbitrary read-only bitfield integer operations on strings"
+  - name: "BITOP"
+    description: "Performs bitwise operations on multiple strings, and stores the result"
+  - name: "BITPOS"
+    description: "Finds the first set (1) or clear (0) bit in a string"
+  - name: "BITRANGEINTARRAY"
+    description: "Returns the offsets of the set or clear bits in a range of a bitmap"
+  - name: "BITROAROP"
+    description: "Performs a bitwise operation and stores a native bitmap result for replication and AOF replay"
+  - name: "GETBIT"
+    description: "Returns a bit value by offset"
+  - name: "SETBIT"
+    description: "Sets or clears the bit at offset of the string value. Creates the key if it doesn't exist"
+  - name: "ASKING"
+    description: "Signals that a cluster client is following an -ASK redirect"
+  - name: "CLUSTER"
+    description: "A container for Redis Cluster commands"
+    subcommands:
+      - name: "ADDSLOTS"
+        description: "Assigns new hash slots to a node"
+      - name: "ADDSLOTSRANGE"
+        description: "Assigns new hash slot ranges to a node"
+      - name: "BUMPEPOCH"
+        description: "Advances the cluster config epoch"
+      - name: "COUNT-FAILURE-REPORTS"
+        description: "Returns the number of active failure reports active for a node"
+      - name: "COUNTKEYSINSLOT"
+        description: "Returns the number of keys in a hash slot"
+      - name: "DELSLOTS"
+        description: "Sets hash slots as unbound for a node"
+      - name: "DELSLOTSRANGE"
+        description: "Sets hash slot ranges as unbound for a node"
+      - name: "FAILOVER"
+        description: "Forces a replica to perform a manual failover of its master"
+      - name: "FLUSHSLOTS"
+        description: "Deletes all slots information from a node"
+      - name: "FORGET"
+        description: "Removes a node from the nodes table"
+      - name: "GETKEYSINSLOT"
+        description: "Returns the key names in a hash slot"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "INFO"
+        description: "Returns information about the state of a node"
+      - name: "KEYSLOT"
+        description: "Returns the hash slot for a key"
+      - name: "LINKS"
+        description: "Returns a list of all TCP links to and from peer nodes"
+      - name: "MEET"
+        description: "Forces a node to handshake with another node"
+      - name: "MIGRATION"
+        description: "Start, monitor and cancel slot migration"
+      - name: "MYID"
+        description: "Returns the ID of a node"
+      - name: "MYSHARDID"
+        description: "Returns the shard ID of a node"
+      - name: "NODES"
+        description: "Returns the cluster configuration for a node"
+      - name: "REPLICAS"
+        description: "Lists the replica nodes of a master node"
+      - name: "REPLICATE"
+        description: "Configure a node as replica of a master node"
+      - name: "RESET"
+        description: "Resets a node"
+      - name: "SAVECONFIG"
+        description: "Forces a node to save the cluster configuration to disk"
+      - name: "SET-CONFIG-EPOCH"
+        description: "Sets the configuration epoch for a new node"
+      - name: "SETSLOT"
+        description: "Binds a hash slot to a node"
+      - name: "SHARDS"
+        description: "Returns the mapping of cluster slots to shards"
+      - name: "SLAVES"
+        description: "Lists the replica nodes of a master node"
+      - name: "SLOT-STATS"
+        description: "Return an array of slot usage statistics for slots assigned to the current node"
+      - name: "SLOTS"
+        description: "Returns the mapping of cluster slots to nodes"
+      - name: "SYNCSLOTS"
+        description: "Internal command for atomic slot migration protocol between cluster nodes"
+  - name: "READONLY"
+    description: "Enables read-only queries for a connection to a Redis Cluster replica node"
+  - name: "READWRITE"
+    description: "Enables read-write queries for a connection to a Redis Cluster replica node"
+  - name: "AUTH"
+    description: "Authenticates the connection"
+  - name: "CLIENT"
+    description: "A container for client connection commands"
+    subcommands:
+      - name: "CACHING"
+        description: "Instructs the server whether to track the keys in the next request"
+      - name: "GETNAME"
+        description: "Returns the name of the connection"
+      - name: "GETREDIR"
+        description: "Returns the client ID to which the connection's tracking notifications are redirected"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "ID"
+        description: "Returns the unique client ID of the connection"
+      - name: "INFO"
+        description: "Returns information about the connection"
+      - name: "KILL"
+        description: "Terminates open connections"
+      - name: "LIST"
+        description: "Lists open connections"
+      - name: "NO-EVICT"
+        description: "Sets the client eviction mode of the connection"
+      - name: "NO-TOUCH"
+        description: "Controls whether commands sent by the client affect the LRU/LFU of accessed keys"
+      - name: "PAUSE"
+        description: "Suspends commands processing"
+      - name: "REPLY"
+        description: "Instructs the server whether to reply to commands"
+      - name: "SETINFO"
+        description: "Sets information specific to the client or connection"
+      - name: "SETNAME"
+        description: "Sets the connection name"
+      - name: "TRACKING"
+        description: "Controls server-assisted client-side caching for the connection"
+      - name: "TRACKINGINFO"
+        description: "Returns information about server-assisted client-side caching for the connection"
+      - name: "UNBLOCK"
+        description: "Unblocks a client blocked by a blocking command from a different connection"
+      - name: "UNPAUSE"
+        description: "Resumes processing commands from paused clients"
+  - name: "ECHO"
+    description: "Returns the given string"
+  - name: "HELLO"
+    description: "Handshakes with the Redis server"
+  - name: "PING"
+    description: "Returns the server's liveliness response"
+  - name: "QUIT"
+    description: "Closes the connection"
+  - name: "RESET"
+    description: "Resets the connection"
+  - name: "SELECT"
+    description: "Changes the selected database"
+  - name: "BLESS"
+    description: "A container for key-blessing commands"
+    subcommands:
+      - name: "CLEAR"
+        description: "Removes protection flags from a key"
+      - name: "GET"
+        description: "Returns the active protection flags of a key"
+      - name: "SCAN"
+        description: "Incrementally iterates the blessed keys of the current database that carry the given flag"
+      - name: "SET"
+        description: "Adds protection flags to a key against memory pressure"
+  - name: "COPY"
+    description: "Copies the value of a key to a new key"
+  - name: "DEL"
+    description: "Deletes one or more keys"
+  - name: "DUMP"
+    description: "Returns a serialized representation of the value stored at a key"
+  - name: "EXISTS"
+    description: "Determines whether one or more keys exist"
+  - name: "EXPIRE"
+    description: "Sets the expiration time of a key in seconds"
+  - name: "EXPIREAT"
+    description: "Sets the expiration time of a key to a Unix timestamp"
+  - name: "EXPIRETIME"
+    description: "Returns the expiration time of a key as a Unix timestamp"
+  - name: "KEYS"
+    description: "Returns all key names that match a pattern"
+  - name: "MIGRATE"
+    description: "Atomically transfers a key from one Redis instance to another"
+  - name: "MOVE"
+    description: "Moves a key to another database"
+  - name: "OBJECT"
+    description: "A container for object introspection commands"
+    subcommands:
+      - name: "ENCODING"
+        description: "Returns the internal encoding of a Redis object"
+      - name: "FREQ"
+        description: "Returns the logarithmic access frequency counter of a Redis object"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "IDLETIME"
+        description: "Returns the time since the last access to a Redis object"
+      - name: "REFCOUNT"
+        description: "Returns the reference count of a value of a key"
+  - name: "PERSIST"
+    description: "Removes the expiration time of a key"
+  - name: "PEXPIRE"
+    description: "Sets the expiration time of a key in milliseconds"
+  - name: "PEXPIREAT"
+    description: "Sets the expiration time of a key to a Unix milliseconds timestamp"
+  - name: "PEXPIRETIME"
+    description: "Returns the expiration time of a key as a Unix milliseconds timestamp"
+  - name: "PTTL"
+    description: "Returns the expiration time in milliseconds of a key"
+  - name: "RANDOMKEY"
+    description: "Returns a random key name from the database"
+  - name: "RENAME"
+    description: "Renames a key and overwrites the destination"
+  - name: "RENAMENX"
+    description: "Renames a key only when the target key name doesn't exist"
+  - name: "RESTORE"
+    description: "Creates a key from the serialized representation of a value"
+  - name: "SCAN"
+    description: "Iterates over the key names in the database"
+  - name: "SORT"
+    description: "Sorts the elements in a list, a set, or a sorted set, optionally storing the result"
+  - name: "SORT_RO"
+    description: "Returns the sorted elements of a list, a set, or a sorted set"
+  - name: "TOUCH"
+    description: "Returns the number of existing keys out of those specified after updating the time they were last accessed"
+  - name: "TTL"
+    description: "Returns the expiration time in seconds of a key"
+  - name: "TYPE"
+    description: "Determines the type of value stored at a key"
+  - name: "UNLINK"
+    description: "Asynchronously deletes one or more keys"
+  - name: "WAIT"
+    description: "Blocks until the asynchronous replication of all preceding write commands sent by the connection is completed"
+  - name: "WAITAOF"
+    description: "Blocks until all of the preceding write commands sent by the connection are written to the append-only file of the master and/or replicas"
+  - name: "GEOADD"
+    description: "Adds one or more members to a geospatial index. The key is created if it doesn't exist"
+  - name: "GEODIST"
+    description: "Returns the distance between two members of a geospatial index"
+  - name: "GEOHASH"
+    description: "Returns members from a geospatial index as geohash strings"
+  - name: "GEOPOS"
+    description: "Returns the longitude and latitude of members from a geospatial index"
+  - name: "GEORADIUS"
+    description: "Queries a geospatial index for members within a distance from a coordinate, optionally stores the result"
+  - name: "GEORADIUSBYMEMBER"
+    description: "Queries a geospatial index for members within a distance from a member, optionally stores the result"
+  - name: "GEORADIUSBYMEMBER_RO"
+    description: "Returns members from a geospatial index that are within a distance from a member"
+  - name: "GEORADIUS_RO"
+    description: "Returns members from a geospatial index that are within a distance from a coordinate"
+  - name: "GEOSEARCH"
+    description: "Queries a geospatial index for members inside an area of a box or a circle"
+  - name: "GEOSEARCHSTORE"
+    description: "Queries a geospatial index for members inside an area of a box or a circle, optionally stores the result"
+  - name: "HDEL"
+    description: "Deletes one or more fields and their values from a hash. Deletes the hash if no fields remain"
+  - name: "HEXISTS"
+    description: "Determines whether a field exists in a hash"
+  - name: "HEXPIRE"
+    description: "Set expiry for hash field using relative time to expire (seconds)"
+  - name: "HEXPIREAT"
+    description: "Set expiry for hash field using an absolute Unix timestamp (seconds)"
+  - name: "HEXPIRETIME"
+    description: "Returns the expiration time of a hash field as a Unix timestamp, in seconds"
+  - name: "HGET"
+    description: "Returns the value of a field in a hash"
+  - name: "HGETALL"
+    description: "Returns all fields and values in a hash"
+  - name: "HGETDEL"
+    description: "Returns the value of a field and deletes it from the hash"
+  - name: "HGETEX"
+    description: "Get the value of one or more fields of a given hash key, and optionally set their expiration"
+  - name: "HIMPORT"
+    description: "A container for session-based hash import commands using fieldsets"
+    subcommands:
+      - name: "DISCARD"
+        description: "Removes a single session-local fieldset by name"
+      - name: "DISCARDALL"
+        description: "Removes all session-local fieldsets for the connection"
+      - name: "PREPARE"
+        description: "Defines a session-local fieldset that maps a name to a sorted set of field names"
+      - name: "SET"
+        description: "Creates a fieldset-based hash from values supplied in the order matching a previously prepared fieldset"
+  - name: "HINCRBY"
+    description: "Increments the integer value of a field in a hash by a number. Uses 0 as initial value if the field doesn't exist"
+  - name: "HINCRBYFLOAT"
+    description: "Increments the floating point value of a field by a number. Uses 0 as initial value if the field doesn't exist"
+  - name: "HKEYS"
+    description: "Returns all fields in a hash"
+  - name: "HLEN"
+    description: "Returns the number of fields in a hash"
+  - name: "HMGET"
+    description: "Returns the values of all fields in a hash"
+  - name: "HMSET"
+    description: "Sets the values of multiple fields"
+  - name: "HPERSIST"
+    description: "Removes the expiration time for each specified field"
+  - name: "HPEXPIRE"
+    description: "Set expiry for hash field using relative time to expire (milliseconds)"
+  - name: "HPEXPIREAT"
+    description: "Set expiry for hash field using an absolute Unix timestamp (milliseconds)"
+  - name: "HPEXPIRETIME"
+    description: "Returns the expiration time of a hash field as a Unix timestamp, in msec"
+  - name: "HPTTL"
+    description: "Returns the TTL in milliseconds of a hash field"
+  - name: "HRANDFIELD"
+    description: "Returns one or more random fields from a hash"
+  - name: "HSCAN"
+    description: "Iterates over fields and values of a hash"
+  - name: "HSET"
+    description: "Creates or modifies the value of a field in a hash"
+  - name: "HSETEX"
+    description: "Set the value of one or more fields of a given hash key, and optionally set their expiration"
+  - name: "HSETNX"
+    description: "Sets the value of a field in a hash only when the field doesn't exist"
+  - name: "HSTRLEN"
+    description: "Returns the length of the value of a field"
+  - name: "HTTL"
+    description: "Returns the TTL in seconds of a hash field"
+  - name: "HVALS"
+    description: "Returns all values in a hash"
+  - name: "PFADD"
+    description: "Adds elements to a HyperLogLog key. Creates the key if it doesn't exist"
+  - name: "PFCOUNT"
+    description: "Returns the approximated cardinality of the set(s) observed by the HyperLogLog key(s)"
+  - name: "PFDEBUG"
+    description: "Internal commands for debugging HyperLogLog values"
+  - name: "PFMERGE"
+    description: "Merges one or more HyperLogLog values into a single key"
+  - name: "PFSELFTEST"
+    description: "An internal command for testing HyperLogLog values"
+  - name: "BLMOVE"
+    description: "Pops an element from a list, pushes it to another list and returns it. Blocks until an element is available otherwise. Deletes the list if the last element was moved"
+  - name: "BLMOVEM"
+    description: "Moves up to (or exactly) a number of elements from one list to another and returns them. Blocks until the elements are available otherwise. Deletes the source list if it becomes empty"
+  - name: "BLMPOP"
+    description: "Pops the first element from one of multiple lists. Blocks until an element is available otherwise. Deletes the list if the last element was popped"
+  - name: "BLPOP"
+    description: "Removes and returns the first element in a list. Blocks until an element is available otherwise. Deletes the list if the last element was popped"
+  - name: "BRPOP"
+    description: "Removes and returns the last element in a list. Blocks until an element is available otherwise. Deletes the list if the last element was popped"
+  - name: "BRPOPLPUSH"
+    description: "Pops an element from a list, pushes it to another list and returns it. Block until an element is available otherwise. Deletes the list if the last element was popped"
+  - name: "LINDEX"
+    description: "Returns an element from a list by its index"
+  - name: "LINSERT"
+    description: "Inserts an element before or after another element in a list"
+  - name: "LLEN"
+    description: "Returns the length of a list"
+  - name: "LMOVE"
+    description: "Returns an element after popping it from one list and pushing it to another. Deletes the list if the last element was moved"
+  - name: "LMOVEM"
+    description: "Moves up to (or exactly) a number of elements from one list to another and returns them. Deletes the source list if it becomes empty"
+  - name: "LMPOP"
+    description: "Returns multiple elements from a list after removing them. Deletes the list if the last element was popped"
+  - name: "LPOP"
+    description: "Returns the first elements in a list after removing it. Deletes the list if the last element was popped"
+  - name: "LPOS"
+    description: "Returns the index of matching elements in a list"
+  - name: "LPUSH"
+    description: "Prepends one or more elements to a list. Creates the key if it doesn't exist"
+  - name: "LPUSHX"
+    description: "Prepends one or more elements to a list only when the list exists"
+  - name: "LRANGE"
+    description: "Returns a range of elements from a list"
+  - name: "LREM"
+    description: "Removes elements from a list. Deletes the list if the last element was removed"
+  - name: "LSET"
+    description: "Sets the value of an element in a list by its index"
+  - name: "LTRIM"
+    description: "Removes elements from both ends a list. Deletes the list if all elements were trimmed"
+  - name: "RPOP"
+    description: "Returns and removes the last elements of a list. Deletes the list if the last element was popped"
+  - name: "RPOPLPUSH"
+    description: "Returns the last element of a list after removing and pushing it to another list. Deletes the list if the last element was popped"
+  - name: "RPUSH"
+    description: "Appends one or more elements to a list. Creates the key if it doesn't exist"
+  - name: "RPUSHX"
+    description: "Appends an element to a list only when the list exists"
+  - name: "PSUBSCRIBE"
+    description: "Listens for messages published to channels that match one or more patterns"
+  - name: "PUBLISH"
+    description: "Posts a message to a channel"
+  - name: "PUBSUB"
+    description: "A container for Pub/Sub commands"
+    subcommands:
+      - name: "CHANNELS"
+        description: "Returns the active channels"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "NUMPAT"
+        description: "Returns a count of unique pattern subscriptions"
+      - name: "NUMSUB"
+        description: "Returns a count of subscribers to channels"
+      - name: "SHARDCHANNELS"
+        description: "Returns the active shard channels"
+      - name: "SHARDNUMSUB"
+        description: "Returns the count of subscribers of shard channels"
+  - name: "PUNSUBSCRIBE"
+    description: "Stops listening to messages published to channels that match one or more patterns"
+  - name: "SPUBLISH"
+    description: "Post a message to a shard channel"
+  - name: "SSUBSCRIBE"
+    description: "Listens for messages published to shard channels"
+  - name: "SUBSCRIBE"
+    description: "Listens for messages published to channels"
+  - name: "SUNSUBSCRIBE"
+    description: "Stops listening to messages posted to shard channels"
+  - name: "UNSUBSCRIBE"
+    description: "Stops listening to messages posted to channels"
+  - name: "EVAL"
+    description: "Executes a server-side Lua script"
+  - name: "EVALSHA"
+    description: "Executes a server-side Lua script by SHA1 digest"
+  - name: "EVALSHA_RO"
+    description: "Executes a read-only server-side Lua script by SHA1 digest"
+  - name: "EVAL_RO"
+    description: "Executes a read-only server-side Lua script"
+  - name: "FCALL"
+    description: "Invokes a function"
+  - name: "FCALL_RO"
+    description: "Invokes a read-only function"
+  - name: "FUNCTION"
+    description: "A container for function commands"
+    subcommands:
+      - name: "DELETE"
+        description: "Deletes a library and its functions"
+      - name: "DUMP"
+        description: "Dumps all libraries into a serialized binary payload"
+      - name: "FLUSH"
+        description: "Deletes all libraries and functions"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "KILL"
+        description: "Terminates a function during execution"
+      - name: "LIST"
+        description: "Returns information about all libraries"
+      - name: "LOAD"
+        description: "Creates a library"
+      - name: "RESTORE"
+        description: "Restores all libraries from a payload"
+      - name: "STATS"
+        description: "Returns information about a function during execution"
+  - name: "SCRIPT"
+    description: "A container for Lua scripts management commands"
+    subcommands:
+      - name: "DEBUG"
+        description: "Sets the debug mode of server-side Lua scripts"
+      - name: "EXISTS"
+        description: "Determines whether server-side Lua scripts exist in the script cache"
+      - name: "FLUSH"
+        description: "Removes all server-side Lua scripts from the script cache"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "KILL"
+        description: "Terminates a server-side Lua script during execution"
+      - name: "LOAD"
+        description: "Loads a server-side Lua script to the script cache"
+  - name: "SENTINEL"
+    description: "A container for Redis Sentinel commands"
+    subcommands:
+      - name: "CKQUORUM"
+        description: "Checks for a Redis Sentinel quorum"
+      - name: "CONFIG"
+        description: "Configures Redis Sentinel"
+      - name: "DEBUG"
+        description: "Lists or updates the current configurable parameters of Redis Sentinel"
+      - name: "FAILOVER"
+        description: "Forces a Redis Sentinel failover"
+      - name: "FLUSHCONFIG"
+        description: "Rewrites the Redis Sentinel configuration file"
+      - name: "GET-MASTER-ADDR-BY-NAME"
+        description: "Returns the port and address of a master Redis instance"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "INFO-CACHE"
+        description: "Returns the cached `INFO` replies from the deployment's instances"
+      - name: "IS-MASTER-DOWN-BY-ADDR"
+        description: "Determines whether a master Redis instance is down"
+      - name: "MASTER"
+        description: "Returns the state of a master Redis instance"
+      - name: "MASTERS"
+        description: "Returns a list of monitored Redis masters"
+      - name: "MONITOR"
+        description: "Starts monitoring"
+      - name: "MYID"
+        description: "Returns the Redis Sentinel instance ID"
+      - name: "PENDING-SCRIPTS"
+        description: "Returns information about pending scripts for Redis Sentinel"
+      - name: "REMOVE"
+        description: "Stops monitoring"
+      - name: "REPLICAS"
+        description: "Returns a list of the monitored Redis replicas"
+      - name: "RESET"
+        description: "Resets Redis masters by name matching a pattern"
+      - name: "SENTINELS"
+        description: "Returns a list of Sentinel instances"
+      - name: "SET"
+        description: "Changes the configuration of a monitored Redis master"
+      - name: "SIMULATE-FAILURE"
+        description: "Simulates failover scenarios"
+      - name: "SLAVES"
+        description: "Returns a list of the monitored replicas"
+  - name: "ACL"
+    description: "A container for Access List Control commands"
+    subcommands:
+      - name: "CAT"
+        description: "Lists the ACL categories, or the commands inside a category"
+      - name: "DELUSER"
+        description: "Deletes ACL users, and terminates their connections"
+      - name: "DRYRUN"
+        description: "Simulates the execution of a command by a user, without executing the command"
+      - name: "GENPASS"
+        description: "Generates a pseudorandom, secure password that can be used to identify ACL users"
+      - name: "GETUSER"
+        description: "Lists the ACL rules of a user"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "LIST"
+        description: "Dumps the effective rules in ACL file format"
+      - name: "LOAD"
+        description: "Reloads the rules from the configured ACL file"
+      - name: "LOG"
+        description: "Lists recent security events generated due to ACL rules"
+      - name: "SAVE"
+        description: "Saves the effective ACL rules in the configured ACL file"
+      - name: "SETUSER"
+        description: "Creates and modifies an ACL user and its rules"
+      - name: "USERS"
+        description: "Lists all ACL users"
+      - name: "WHOAMI"
+        description: "Returns the authenticated username of the current connection"
+  - name: "BACKUP"
+    description: "A container for backup management commands"
+    subcommands:
+      - name: "ABORT"
+        description: "Cancel a backup that has not been sealed yet"
+      - name: "CLEANUP"
+        description: "Remove a sealed backup's files and return to idle"
+      - name: "HELP"
+        description: "Return helpful text about BACKUP command parameters"
+      - name: "LIST"
+        description: "List the immutable backup file paths pinned so far"
+      - name: "SEAL"
+        description: "Freeze the current backup (BASE + INCR + manifest)"
+      - name: "START"
+        description: "Start a new backup into the configured 'backupdirname'"
+      - name: "STATUS"
+        description: "Report the current backup state"
+  - name: "BGREWRITEAOF"
+    description: "Asynchronously rewrites the append-only file to disk"
+  - name: "BGSAVE"
+    description: "Asynchronously saves the database(s) to disk"
+  - name: "COMMAND"
+    description: "Returns detailed information about all commands"
+    subcommands:
+      - name: "COUNT"
+        description: "Returns a count of commands"
+      - name: "DOCS"
+        description: "Returns documentary information about one, multiple or all commands"
+      - name: "GETKEYS"
+        description: "Extracts the key names from an arbitrary command"
+      - name: "GETKEYSANDFLAGS"
+        description: "Extracts the key names and access flags for an arbitrary command"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "INFO"
+        description: "Returns information about one, multiple or all commands"
+      - name: "LIST"
+        description: "Returns a list of command names"
+  - name: "CONFIG"
+    description: "A container for server configuration commands"
+    subcommands:
+      - name: "GET"
+        description: "Returns the effective values of configuration parameters"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "RESETSTAT"
+        description: "Resets the server's statistics"
+      - name: "REWRITE"
+        description: "Persists the effective configuration to file"
+      - name: "SET"
+        description: "Sets configuration parameters in-flight"
+  - name: "DBSIZE"
+    description: "Returns the number of keys in the database"
+  - name: "DEBUG"
+    description: "A container for debugging commands"
+  - name: "FAILOVER"
+    description: "Starts a coordinated failover from a server to one of its replicas"
+  - name: "FLUSHALL"
+    description: "Removes all keys from all databases"
+  - name: "FLUSHDB"
+    description: "Remove all keys from the current database"
+  - name: "HOTKEYS"
+    description: "A container for hotkeys tracking commands"
+    subcommands:
+      - name: "GET"
+        description: "Returns lists of top K hotkeys depending on metrics chosen in HOTKEYS START command"
+      - name: "HELP"
+        description: "Return helpful text about HOTKEYS command parameters"
+      - name: "RESET"
+        description: "Release the resources used for hotkey tracking"
+      - name: "START"
+        description: "Starts hotkeys tracking"
+      - name: "STOP"
+        description: "Stops hotkeys tracking"
+  - name: "INFO"
+    description: "Returns information and statistics about the server"
+  - name: "LASTSAVE"
+    description: "Returns the Unix timestamp of the last successful save to disk"
+  - name: "LATENCY"
+    description: "A container for latency diagnostics commands"
+    subcommands:
+      - name: "DOCTOR"
+        description: "Returns a human-readable latency analysis report"
+      - name: "GRAPH"
+        description: "Returns a latency graph for an event"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "HISTOGRAM"
+        description: "Returns the cumulative distribution of latencies of a subset or all commands"
+      - name: "HISTORY"
+        description: "Returns timestamp-latency samples for an event"
+      - name: "LATEST"
+        description: "Returns the latest latency samples for all events"
+      - name: "RESET"
+        description: "Resets the latency data for one or more events"
+  - name: "LOLWUT"
+    description: "Displays computer art and the Redis version"
+  - name: "MEMORY"
+    description: "A container for memory diagnostics commands"
+    subcommands:
+      - name: "DOCTOR"
+        description: "Outputs a memory problems report"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "MALLOC-STATS"
+        description: "Returns the allocator statistics"
+      - name: "PURGE"
+        description: "Asks the allocator to release memory"
+      - name: "STATS"
+        description: "Returns details about memory usage"
+      - name: "USAGE"
+        description: "Estimates the memory usage of a key"
+  - name: "MODULE"
+    description: "A container for module commands"
+    subcommands:
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "LIST"
+        description: "Returns all loaded modules"
+      - name: "LOAD"
+        description: "Loads a module"
+      - name: "LOADEX"
+        description: "Loads a module using extended parameters"
+      - name: "UNLOAD"
+        description: "Unloads a module"
+  - name: "MONITOR"
+    description: "Listens for all requests received by the server in real-time"
+  - name: "PSYNC"
+    description: "An internal command used in replication"
+  - name: "REPLCONF"
+    description: "An internal command for configuring the replication stream"
+  - name: "REPLICAOF"
+    description: "Configures a server as replica of another, or promotes it to a master"
+  - name: "RESTORE-ASKING"
+    description: "An internal command for migrating keys in a cluster"
+  - name: "ROLE"
+    description: "Returns the replication role"
+  - name: "SAVE"
+    description: "Synchronously saves the database(s) to disk"
+  - name: "SHUTDOWN"
+    description: "Synchronously saves the database(s) to disk and shuts down the Redis server"
+  - name: "SLAVEOF"
+    description: "Sets a Redis server as a replica of another, or promotes it to being a master"
+  - name: "SLOWLOG"
+    description: "A container for slow log commands"
+    subcommands:
+      - name: "GET"
+        description: "Returns the slow log's entries"
+      - name: "HELP"
+        description: "Show helpful text about the different subcommands"
+      - name: "LEN"
+        description: "Returns the number of entries in the slow log"
+      - name: "RESET"
+        description: "Clears all entries from the slow log"
+  - name: "SWAPDB"
+    description: "Swaps two Redis databases"
+  - name: "SYNC"
+    description: "An internal command used in replication"
+  - name: "TIME"
+    description: "Returns the server time"
+  - name: "TRIMSLOTS"
+    description: "Trim the keys that belong to specified slots"
+  - name: "SADD"
+    description: "Adds one or more members to a set. Creates the key if it doesn't exist"
+  - name: "SADDEX"
+    description: "Add one or more members to a given set key, and optionally set their expiration"
+  - name: "SCARD"
+    description: "Returns the number of members in a set"
+  - name: "SDIFF"
+    description: "Returns the difference of multiple sets"
+  - name: "SDIFFCARD"
+    description: "Returns the number of members of the difference between the first set and all successive sets"
+  - name: "SDIFFSTORE"
+    description: "Stores the difference of multiple sets in a key"
+  - name: "SEXPIRE"
+    description: "Set expiry for set member using relative time to expire (seconds)"
+  - name: "SEXPIREAT"
+    description: "Set expiry for set member using an absolute Unix timestamp (seconds)"
+  - name: "SEXPIRETIME"
+    description: "Returns the expiration time of a set member as a Unix timestamp, in seconds"
+  - name: "SINTER"
+    description: "Returns the intersect of multiple sets"
+  - name: "SINTERCARD"
+    description: "Returns the number of members of the intersect of multiple sets"
+  - name: "SINTERSTORE"
+    description: "Stores the intersect of multiple sets in a key"
+  - name: "SISMEMBER"
+    description: "Determines whether a member belongs to a set"
+  - name: "SMEMBERS"
+    description: "Returns all members of a set"
+  - name: "SMISMEMBER"
+    description: "Determines whether multiple members belong to a set"
+  - name: "SMOVE"
+    description: "Moves a member from one set to another"
+  - name: "SPERSIST"
+    description: "Removes the expiration time for each specified member"
+  - name: "SPEXPIRE"
+    description: "Set expiry for set member using relative time to expire (milliseconds)"
+  - name: "SPEXPIREAT"
+    description: "Set expiry for set member using an absolute Unix timestamp (milliseconds)"
+  - name: "SPEXPIRETIME"
+    description: "Returns the expiration time of a set member as a Unix timestamp, in msec"
+  - name: "SPOP"
+    description: "Returns one or more random members from a set after removing them. Deletes the set if the last member was popped"
+  - name: "SPTTL"
+    description: "Returns the TTL in milliseconds of a set member"
+  - name: "SRANDMEMBER"
+    description: "Get one or multiple random members from a set"
+  - name: "SREM"
+    description: "Removes one or more members from a set. Deletes the set if the last member was removed"
+  - name: "SSCAN"
+    description: "Iterates over members of a set"
+  - name: "STTL"
+    description: "Returns the TTL in seconds of a set member"
+  - name: "SUNION"
+    description: "Returns the union of multiple sets"
+  - name: "SUNIONCARD"
+    description: "Returns the number of members of the union of multiple sets"
+  - name: "SUNIONSTORE"
+    description: "Stores the union of multiple sets in a key"
+  - name: "BZMOVE"
+    description: "Moves highest- or lowest-scoring members from one sorted set to another, preserving scores. Blocks until a member is available otherwise. Deletes the source sorted set if the last member was moved"
+  - name: "BZMPOP"
+    description: "Removes and returns a member by score from one or more sorted sets. Blocks until a member is available otherwise. Deletes the sorted set if the last element was popped"
+  - name: "BZPOPMAX"
+    description: "Removes and returns the member with the highest score from one or more sorted sets. Blocks until a member available otherwise.  Deletes the sorted set if the last element was popped"
+  - name: "BZPOPMIN"
+    description: "Removes and returns the member with the lowest score from one or more sorted sets. Blocks until a member is available otherwise. Deletes the sorted set if the last element was popped"
+  - name: "ZADD"
+    description: "Adds one or more members to a sorted set, or updates their scores. Creates the key if it doesn't exist"
+  - name: "ZCARD"
+    description: "Returns the number of members in a sorted set"
+  - name: "ZCOUNT"
+    description: "Returns the count of members in a sorted set that have scores within a range"
+  - name: "ZDIFF"
+    description: "Returns the difference between multiple sorted sets"
+  - name: "ZDIFFSTORE"
+    description: "Stores the difference of multiple sorted sets in a key"
+  - name: "ZINCRBY"
+    description: "Increments the score of a member in a sorted set"
+  - name: "ZINTER"
+    description: "Returns the intersect of multiple sorted sets"
+  - name: "ZINTERCARD"
+    description: "Returns the number of members of the intersect of multiple sorted sets"
+  - name: "ZINTERSTORE"
+    description: "Stores the intersect of multiple sorted sets in a key"
+  - name: "ZLEXCOUNT"
+    description: "Returns the number of members in a sorted set within a lexicographical range"
+  - name: "ZMOVE"
+    description: "Moves highest- or lowest-scoring members, or a score range of members, from one sorted set to another, preserving scores. Deletes the source sorted set if the last member was moved"
+  - name: "ZMOVEMEMBER"
+    description: "Moves specified members from one sorted set to another, preserving scores. Can restrict moves to members absent from or present in the destination. Deletes the source sorted set if the last member was moved"
+  - name: "ZMPOP"
+    description: "Returns the highest- or lowest-scoring members from one or more sorted sets after removing them. Deletes the sorted set if the last member was popped"
+  - name: "ZMSCORE"
+    description: "Returns the score of one or more members in a sorted set"
+  - name: "ZPOPMAX"
+    description: "Returns the highest-scoring members from a sorted set after removing them. Deletes the sorted set if the last member was popped"
+  - name: "ZPOPMIN"
+    description: "Returns the lowest-scoring members from a sorted set after removing them. Deletes the sorted set if the last member was popped"
+  - name: "ZRANDMEMBER"
+    description: "Returns one or more random members from a sorted set"
+  - name: "ZRANGE"
+    description: "Returns members in a sorted set within a range of indexes"
+  - name: "ZRANGEBYLEX"
+    description: "Returns members in a sorted set within a lexicographical range"
+  - name: "ZRANGEBYSCORE"
+    description: "Returns members in a sorted set within a range of scores"
+  - name: "ZRANGESTORE"
+    description: "Stores a range of members from sorted set in a key"
+  - name: "ZRANK"
+    description: "Returns the index of a member in a sorted set ordered by ascending scores"
+  - name: "ZREM"
+    description: "Removes one or more members from a sorted set. Deletes the sorted set if all members were removed"
+  - name: "ZREMRANGEBYLEX"
+    description: "Removes members in a sorted set within a lexicographical range. Deletes the sorted set if all members were removed"
+  - name: "ZREMRANGEBYRANK"
+    description: "Removes members in a sorted set within a range of indexes. Deletes the sorted set if all members were removed"
+  - name: "ZREMRANGEBYSCORE"
+    description: "Removes members in a sorted set within a range of scores. Deletes the sorted set if all members were removed"
+  - name: "ZREVRANGE"
+    description: "Returns members in a sorted set within a range of indexes in reverse order"
+  - name: "ZREVRANGEBYLEX"
+    description: "Returns members in a sorted set within a lexicographical range in reverse order"
+  - name: "ZREVRANGEBYSCORE"
+    description: "Returns members in a sorted set within a range of scores in reverse order"
+  - name: "ZREVRANK"
+    description: "Returns the index of a member in a sorted set ordered by descending scores"
+  - name: "ZSCAN"
+    description: "Iterates over members and scores of a sorted set"
+  - name: "ZSCORE"
+    description: "Returns the score of a member in a sorted set"
+  - name: "ZUNION"
+    description: "Returns the union of multiple sorted sets"
+  - name: "ZUNIONSTORE"
+    description: "Stores the union of multiple sorted sets in a key"
+  - name: "XACK"
+    description: "Returns the number of messages that were successfully acknowledged by the consumer group member of a stream"
+  - name: "XACKDEL"
+    description: "Acknowledges and deletes one or multiple messages for a stream consumer group"
+  - name: "XADD"
+    description: "Appends a new message to a stream. Creates the key if it doesn't exist"
+  - name: "XAUTOCLAIM"
+    description: "Changes, or acquires, ownership of messages in a consumer group, as if the messages were delivered to as consumer group member"
+  - name: "XCFGSET"
+    description: "Sets the IDMP configuration parameters for a stream"
+  - name: "XCLAIM"
+    description: "Changes, or acquires, ownership of a message in a consumer group, as if the message was delivered a consumer group member"
+  - name: "XDEL"
+    description: "Returns the number of messages after removing them from a stream"
+  - name: "XDELEX"
+    description: "Deletes one or multiple entries from the stream"
+  - name: "XGROUP"
+    description: "A container for consumer groups commands"
+    subcommands:
+      - name: "CREATE"
+        description: "Creates a consumer group"
+      - name: "CREATECONSUMER"
+        description: "Creates a consumer in a consumer group"
+      - name: "DELCONSUMER"
+        description: "Deletes a consumer from a consumer group"
+      - name: "DESTROY"
+        description: "Destroys a consumer group"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "SETID"
+        description: "Sets the last-delivered ID of a consumer group"
+  - name: "XIDMPRECORD"
+    description: "An internal command for setting IDMP metadata on an existing stream message"
+  - name: "XINFO"
+    description: "A container for stream introspection commands"
+    subcommands:
+      - name: "CONSUMERS"
+        description: "Returns a list of the consumers in a consumer group"
+      - name: "GROUPS"
+        description: "Returns a list of the consumer groups of a stream"
+      - name: "HELP"
+        description: "Returns helpful text about the different subcommands"
+      - name: "STREAM"
+        description: "Returns information about a stream"
+  - name: "XLEN"
+    description: "Return the number of messages in a stream"
+  - name: "XNACK"
+    description: "Releases claimed messages back to the group's PEL without acknowledging them, making them available for re-delivery"
+  - name: "XPENDING"
+    description: "Returns the information and entries from a stream consumer group's pending entries list"
+  - name: "XRANGE"
+    description: "Returns the messages from a stream within a range of IDs"
+  - name: "XREAD"
+    description: "Returns messages from multiple streams with IDs greater than the ones requested. Blocks until a message is available otherwise"
+  - name: "XREADGROUP"
+    description: "Returns new or historical messages from a stream for a consumer in a group. Blocks until a message is available otherwise"
+  - name: "XREVRANGE"
+    description: "Returns the messages from a stream within a range of IDs in reverse order"
+  - name: "XSETID"
+    description: "An internal command for replicating stream values"
+  - name: "XTRIM"
+    description: "Deletes messages from the beginning of a stream"
+  - name: "APPEND"
+    description: "Appends a string to the value of a key. Creates the key if it doesn't exist"
+  - name: "DECR"
+    description: "Decrements the integer value of a key by one. Uses 0 as initial value if the key doesn't exist"
+  - name: "DECRBY"
+    description: "Decrements a number from the integer value of a key. Uses 0 as initial value if the key doesn't exist"
+  - name: "DELEX"
+    description: "Conditionally removes the specified key based on value or digest comparison"
+  - name: "DIGEST"
+    description: "Returns the XXH3 hash of a string value"
+  - name: "GET"
+    description: "Returns the string value of a key"
+  - name: "GETDEL"
+    description: "Returns the string value of a key after deleting the key"
+  - name: "GETEX"
+    description: "Returns the string value of a key after setting its expiration time"
+  - name: "GETRANGE"
+    description: "Returns a substring of the string stored at a key"
+  - name: "GETSET"
+    description: "Returns the previous string value of a key after setting it to a new value"
+  - name: "INCR"
+    description: "Increments the integer value of a key by one. Uses 0 as initial value if the key doesn't exist"
+  - name: "INCRBY"
+    description: "Increments the integer value of a key by a number. Uses 0 as initial value if the key doesn't exist"
+  - name: "INCRBYFLOAT"
+    description: "Increment the floating point value of a key by a number. Uses 0 as initial value if the key doesn't exist"
+  - name: "INCREX"
+    description: "Increments the numeric value of a key by a number and sets its expiration time. Uses 0 as initial value if the key doesn't exist"
+  - name: "LCS"
+    description: "Finds the longest common substring"
+  - name: "MGET"
+    description: "Atomically returns the string values of one or more keys"
+  - name: "MSET"
+    description: "Atomically creates or modifies the string values of one or more keys"
+  - name: "MSETEX"
+    description: "Atomically sets multiple string keys with a shared expiration in a single operation. Supports flexible argument parsing where condition and expiration flags can appear in any order"
+  - name: "MSETNX"
+    description: "Atomically modifies the string values of one or more keys only when all keys don't exist"
+  - name: "PSETEX"
+    description: "Sets both string value and expiration time in milliseconds of a key. The key is created if it doesn't exist"
+  - name: "SET"
+    description: "Sets the string value of a key, ignoring its type. The key is created if it doesn't exist"
+  - name: "SETEX"
+    description: "Sets the string value and expiration time of a key. Creates the key if it doesn't exist"
+  - name: "SETNX"
+    description: "Set the string value of a key only when the key doesn't exist"
+  - name: "SETRANGE"
+    description: "Overwrites a part of a string value with another by an offset. Creates the key if it doesn't exist"
+  - name: "STRLEN"
+    description: "Returns the length of a string value"
+  - name: "SUBSTR"
+    description: "Returns a substring from a string value"
+  - name: "DISCARD"
+    description: "Discards a transaction"
+  - name: "EXEC"
+    description: "Executes all commands in a transaction"
+  - name: "MULTI"
+    description: "Starts a transaction"
+  - name: "UNWATCH"
+    description: "Forgets about watched keys of a transaction"
+  - name: "WATCH"
+    description: "Monitors changes to keys to determine the execution of a transaction"

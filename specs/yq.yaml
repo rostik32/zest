@@ -1,0 +1,225 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# yq (mikefarah). Generated from cmd/*.go and pkg/yqlib/format.go in github.com/mikefarah/yq.
+name: yq
+description: Process YAML, JSON, XML, CSV, TOML and properties files
+args:
+  - name: expression
+    isOptional: true
+  - name: file
+    isOptional: true
+    isVariadic: true
+    template: filepaths
+options:
+  - name: [-o, --output-format]
+    description: "Output format (default: auto)"
+    isPersistent: true
+    args:
+      name: format
+      suggestions: [auto, yaml, kyaml, json, props, csv, tsv, xml, base64, base64url, uri, toml, hcl, shell, lua, ini]
+  - name: [-p, --input-format]
+    description: "Input format (default: auto)"
+    isPersistent: true
+    args:
+      name: format
+      suggestions: [auto, yaml, json, props, csv, tsv, xml, base64, base64url, uri, toml, hcl, lua, ini]
+  - name: ["-v", "--verbose"]
+    description: "Verbose mode"
+    isPersistent: true
+  - name: "--debug-node-info"
+    description: "Debug node info"
+    isPersistent: true
+  - name: ["-j", "--tojson"]
+    description: "(deprecated) output as json"
+    isPersistent: true
+  - name: "--xml-attribute-prefix"
+    description: "Prefix for xml attributes"
+    isPersistent: true
+    args:
+      name: "prefix"
+  - name: "--xml-content-name"
+    description: "Name for xml content (if no attribute name is present)"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--xml-strict-mode"
+    description: "Enables strict parsing of XML"
+    isPersistent: true
+  - name: "--xml-keep-namespace"
+    description: "Enables keeping namespace after parsing attributes"
+    isPersistent: true
+  - name: "--xml-raw-token"
+    description: "Enables using RawToken method instead Token"
+    isPersistent: true
+  - name: "--xml-proc-inst-prefix"
+    description: "Prefix for xml processing instructions (e.g"
+    isPersistent: true
+    args:
+      name: "prefix"
+  - name: "--xml-directive-name"
+    description: "Name for xml directives (e.g"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--xml-skip-proc-inst"
+    description: "Skip over process instructions (e.g"
+    isPersistent: true
+  - name: "--xml-skip-directives"
+    description: "Skip over directives (e.g"
+    isPersistent: true
+  - name: "--csv-auto-parse"
+    description: "Parse CSV YAML/JSON values"
+    isPersistent: true
+  - name: "--tsv-auto-parse"
+    description: "Parse TSV YAML/JSON values"
+    isPersistent: true
+  - name: "--lua-prefix"
+    description: "Prefix"
+    isPersistent: true
+    args:
+      name: "prefix"
+  - name: "--lua-suffix"
+    description: "Suffix"
+    isPersistent: true
+    args:
+      name: "suffix"
+  - name: "--lua-unquoted"
+    description: "Output unquoted string keys (e.g"
+    isPersistent: true
+  - name: "--lua-globals"
+    description: "Output keys as top-level global variables"
+    isPersistent: true
+  - name: "--ini-preserve-quotes"
+    description: "Preserve surrounding quotes on INI values during round-trip"
+    isPersistent: true
+  - name: "--ini-key-value-delimiters"
+    description: "Sequence of delimiters used to separate keys and values when parsing INI"
+    isPersistent: true
+    args:
+      name: "delimiters"
+  - name: "--properties-separator"
+    description: "Separator to use between keys and values"
+    isPersistent: true
+    args:
+      name: "separator"
+  - name: "--properties-array-brackets"
+    description: "Use [x] in array paths (e.g"
+    isPersistent: true
+  - name: "--shell-key-separator"
+    description: "Separator for shell variable key paths"
+    isPersistent: true
+    args:
+      name: "separator"
+  - name: "--security-force-never-escape-shell-output"
+    description: "UNSAFE: with -o=shell -r, never quote or escape values (may allow command injection when eval'd)"
+    isPersistent: true
+  - name: "--string-interpolation"
+    description: "Toggles strings interpolation of \\\\(exp)"
+    isPersistent: true
+  - name: ["-n", "--null-input"]
+    description: "Don't read input, simply evaluate the expression given"
+    isPersistent: true
+  - name: ["-N", "--no-doc"]
+    description: "Don't print document separators (---)"
+    isPersistent: true
+  - name: ["-I", "--indent"]
+    description: "Sets indent level for output"
+    isPersistent: true
+    args:
+      name: "indent"
+  - name: ["-V", "--version"]
+    description: "Print version information and quit"
+    isPersistent: true
+  - name: ["-i", "--inplace"]
+    description: "Update the file in place of first file given"
+    isPersistent: true
+  - name: "--unwrapScalar"
+    description: "Unwrap scalar, print the value with no quotes, colours or comments"
+    isPersistent: true
+    args:
+      name: "unwrapScalar"
+  - name: ["-0", "--nul-output"]
+    description: "Use NUL char to separate values"
+    isPersistent: true
+  - name: ["-P", "--prettyPrint"]
+    description: "Pretty print, shorthand for '"
+    isPersistent: true
+  - name: ["-e", "--exit-status"]
+    description: "Set exit status if there are no matches or null or false is returned"
+    isPersistent: true
+  - name: ["-C", "--colors"]
+    description: "Force print with colors"
+    isPersistent: true
+  - name: ["-M", "--no-colors"]
+    description: "Force print with no colors"
+    isPersistent: true
+  - name: ["-f", "--front-matter"]
+    description: "(extract|process) first input as yaml front-matter"
+    isPersistent: true
+    args:
+      name: "matter"
+      suggestions: [extract, process]
+  - name: "--expression"
+    description: "Forcibly set the expression argument"
+    isPersistent: true
+    args:
+      name: "expression"
+  - name: "--header-preprocess"
+    description: "Slurp any header comments and separators before processing expression"
+    isPersistent: true
+  - name: "--yaml-fix-merge-anchor-to-spec"
+    description: "Fix merge anchor to match YAML spec"
+    isPersistent: true
+  - name: ["-c", "--yaml-compact-seq-indent"]
+    description: "Use compact sequence indentation where '- ' is considered part of the indentation"
+    isPersistent: true
+  - name: ["-s", "--split-exp"]
+    description: "Print each result (or doc) into a file named (exp)"
+    isPersistent: true
+    args:
+      name: "exp"
+  - name: "--split-exp-file"
+    description: "Use a file to specify the split-exp expression"
+    isPersistent: true
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--from-file"
+    description: "Load expression from specified file"
+    isPersistent: true
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--security-disable-env-ops"
+    description: "Disable env related operations"
+    isPersistent: true
+  - name: "--security-disable-file-ops"
+    description: "Disable file related operations (e.g"
+    isPersistent: true
+  - name: "--security-enable-system-operator"
+    description: "Enable system operator to allow execution of external commands"
+    isPersistent: true
+  - name: "--security-allow-write-any-path"
+    description: "Allow split-exp to write to paths outside the current directory"
+    isPersistent: true
+subcommands:
+  - name: [eval, e]
+    description: Apply the expression to each document in each file (the default)
+    args:
+      - name: expression
+      - name: file
+        isOptional: true
+        isVariadic: true
+        template: filepaths
+  - name: [eval-all, ea]
+    description: Load all documents of all files and run the expression once
+    args:
+      - name: expression
+      - name: file
+        isOptional: true
+        isVariadic: true
+        template: filepaths
+  - name: [completion, shell-completion]
+    description: Print the completion script for a shell
+    args:
+      name: shell
+      suggestions: [bash, zsh, fish, powershell]

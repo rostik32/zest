@@ -2,6 +2,230 @@
 name: gh
 description: GitHub's CLI tool
 subcommands:
+  - name: agent-task
+    description: Work with agent tasks (preview)
+    subcommands:
+    - name: create
+      description: Create an agent task (preview)
+    - name: list
+      description: List agent tasks (preview)
+    - name: view
+      description: View an agent task session (preview)
+    options:
+    - name: --help
+      description: Show help for command
+  - name: attestation
+    description: Work with artifact attestations
+    subcommands:
+    - name: download
+      description: Download an artifact's attestations for offline use
+    - name: trusted-root
+      description: Output trusted_root.jsonl contents, likely for offline verification
+    - name: verify
+      description: Verify an artifact's integrity using attestations
+    options:
+    - name: --help
+      description: Show help for command
+  - name: cache
+    description: Manage GitHub Actions caches
+    subcommands:
+    - name: delete
+      description: Delete GitHub Actions caches
+    - name: list
+      description: List GitHub Actions caches
+    options:
+    - name:
+      - -R
+      - --repo
+      description: Select another repository using the [HOST/]OWNER/REPO format
+      args:
+        name: HOST/
+        isOptional: true
+    - name: --help
+      description: Show help for command
+  - name: copilot
+    description: Run the GitHub Copilot CLI (preview)
+    options:
+    - name: --remove
+      description: Remove the downloaded Copilot CLI
+    - name: --help
+      description: Show help for command
+  - name: discussion
+    description: Work with GitHub Discussions (preview)
+    subcommands:
+    - name: create
+      description: Create a new discussion (preview)
+    - name: list
+      description: List discussions in a repository (preview)
+    - name: comment
+      description: Add, edit, or delete a comment or a reply on a discussion (preview)
+    - name: edit
+      description: Edit a discussion (preview)
+    - name: view
+      description: View a discussion (preview)
+    options:
+    - name:
+      - -R
+      - --repo
+      description: Select another repository using the [HOST/]OWNER/REPO format
+      args:
+        name: HOST/
+        isOptional: true
+    - name: --help
+      description: Show help for command
+  - name: extension
+    description: Manage gh extensions
+    subcommands:
+    - name: browse
+      description: Enter a UI for browsing, adding, and removing extensions
+    - name: create
+      description: Create a new extension
+    - name: exec
+      description: Execute an installed extension
+    - name: install
+      description: Install a gh extension from a repository
+    - name: list
+      description: List installed extension commands
+    - name: remove
+      description: Remove an installed extension
+    - name: search
+      description: Search extensions to the GitHub CLI
+    - name: upgrade
+      description: Upgrade installed extensions
+    options:
+    - name: --help
+      description: Show help for command
+  - name: label
+    description: Manage labels
+    subcommands:
+    - name: clone
+      description: Clones labels from one repository to another
+    - name: create
+      description: Create a new label
+    - name: delete
+      description: Delete a label from a repository
+    - name: edit
+      description: Edit a label
+    - name: list
+      description: List labels in a repository
+    options:
+    - name:
+      - -R
+      - --repo
+      description: Select another repository using the [HOST/]OWNER/REPO format
+      args:
+        name: HOST/
+        isOptional: true
+    - name: --help
+      description: Show help for command
+  - name: licenses
+    description: View third-party license information
+    options:
+    - name: --help
+      description: Show help for command
+  - name: org
+    description: Manage organizations
+    subcommands:
+    - name: list
+      description: List organizations for the authenticated user.
+    options:
+    - name: --help
+      description: Show help for command
+  - name: preview
+    description: Execute previews for gh features
+    subcommands:
+    - name: prompter
+      description: Execute a test program to preview the prompter
+    options:
+    - name: --help
+      description: Show help for command
+  - name: ruleset
+    description: View info about repo rulesets
+    subcommands:
+    - name: check
+      description: View rules that would apply to a given branch
+    - name: list
+      description: List rulesets for a repository or organization
+    - name: view
+      description: View information about a ruleset
+    options:
+    - name:
+      - -R
+      - --repo
+      description: Select another repository using the [HOST/]OWNER/REPO format
+      args:
+        name: HOST/
+        isOptional: true
+    - name: --help
+      description: Show help for command
+  - name: search
+    description: Search for repositories, issues, and pull requests
+    subcommands:
+    - name: code
+      description: Search within code
+    - name: commits
+      description: Search for commits
+    - name: issues
+      description: Search for issues
+    - name: prs
+      description: Search for pull requests
+    - name: repos
+      description: Search for repositories
+    options:
+    - name: --help
+      description: Show help for command
+  - name: skill
+    description: Install and manage agent skills (preview)
+    subcommands:
+    - name: install
+      description: Install agent skills from a GitHub repository (preview)
+    - name: list
+      description: List installed skills (preview)
+    - name: preview
+      description: Preview a skill from a GitHub repository (preview)
+    - name: publish
+      description: Validate and publish skills to a GitHub repository (preview)
+    - name: search
+      description: Search for skills across GitHub (preview)
+    - name: update
+      description: Update installed skills to their latest versions (preview)
+    options:
+    - name: --help
+      description: Show help for command
+  - name: status
+    description: Print information about relevant issues, pull requests, and notifications across repositories
+    options:
+    - name:
+      - -e
+      - --exclude
+      description: Comma separated list of repos to exclude in owner/name format
+    - name:
+      - -o
+      - --org
+      description: Report status within an organization
+    - name: --help
+      description: Show help for command
+  - name: variable
+    description: Manage GitHub Actions variables
+    subcommands:
+    - name: delete
+      description: Delete variables
+    - name: get
+      description: Get variables
+    - name: list
+      description: List variables
+    - name: set
+      description: Create or update variables
+    options:
+    - name:
+      - -R
+      - --repo
+      description: Select another repository using the [HOST/]OWNER/REPO format
+      args:
+        name: HOST/
+        isOptional: true
+    - name: --help
+      description: Show help for command
   - name: alias
     description: Create command shortcuts
     subcommands:

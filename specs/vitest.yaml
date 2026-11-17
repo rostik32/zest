@@ -1,0 +1,718 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Vitest. Generated from docs/guide/cli.md and cli-generated.md in github.com/vitest-dev/vitest.
+name: vitest
+description: Next generation testing framework powered by Vite
+args:
+  name: filter
+  description: Only run test files whose path contains this
+  isOptional: true
+  isVariadic: true
+  template: filepaths
+options:
+  - name: ["-r", "--root"]
+    description: "Root path"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: ["-c", "--config"]
+    description: "Path to config file"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: ["-u", "--update"]
+    description: "Update snapshot (accepts boolean, \"new\", \"all\" or \"none\")"
+    isPersistent: true
+    args:
+      name: "type"
+      isOptional: true
+  - name: ["-w", "--watch"]
+    description: "Enable watch mode"
+    isPersistent: true
+  - name: ["-t", "--testNamePattern"]
+    description: "Run tests with full names matching the specified regexp pattern"
+    isPersistent: true
+    args:
+      name: "pattern"
+  - name: "--dir"
+    description: "Base directory to scan for the test files"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--ui"
+    description: "Enable UI"
+    isPersistent: true
+  - name: "--open"
+    description: "Open UI automatically (default: !process.env.CI)"
+    isPersistent: true
+  - name: "--api.port"
+    description: "Specify server port"
+    isPersistent: true
+    args:
+      name: "port"
+      isOptional: true
+  - name: "--api.host"
+    description: "Specify which IP addresses the server should listen on"
+    isPersistent: true
+    args:
+      name: "host"
+      isOptional: true
+  - name: "--api.strictPort"
+    description: "Set to true to exit if port is already in use, instead of automatically trying the next available port"
+    isPersistent: true
+  - name: "--api.allowExec"
+    description: "Allow API to execute code"
+    isPersistent: true
+  - name: "--api.allowWrite"
+    description: "Allow API to edit files"
+    isPersistent: true
+  - name: "--silent"
+    description: "Silent console output from tests"
+    isPersistent: true
+    args:
+      name: "value"
+      isOptional: true
+  - name: "--hideSkippedTests"
+    description: "Hide logs for skipped tests"
+    isPersistent: true
+  - name: "--reporter"
+    description: "Specify reporters (default, agent, minimal, blob, verbose, dot, json, tap, tap-flat, junit, tree, hanging-process, github-actions)"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--outputFile"
+    description: "Write test results to a file when supporter reporter is also specified, use cac's dot notation for individual outputs of multiple reporters (example: --outputFile.tap=./tap.txt)"
+    isPersistent: true
+    args:
+      name: "filename/-s"
+  - name: "--coverage.provider"
+    description: "Select the tool for coverage collection, available values are: \"v8\", \"istanbul\" and \"custom\""
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--coverage.enabled"
+    description: "Enables coverage collection"
+    isPersistent: true
+  - name: "--coverage.include"
+    description: "Files included in coverage as glob patterns"
+    isPersistent: true
+    args:
+      name: "pattern"
+  - name: "--coverage.exclude"
+    description: "Files to be excluded in coverage"
+    isPersistent: true
+    args:
+      name: "pattern"
+  - name: "--coverage.clean"
+    description: "Clean coverage results before running tests (default: true)"
+    isPersistent: true
+  - name: "--coverage.cleanOnRerun"
+    description: "Clean coverage report on watch rerun (default: true)"
+    isPersistent: true
+  - name: "--coverage.reportsDirectory"
+    description: "Directory to write coverage report to (default: ./coverage)"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--coverage.reporter"
+    description: "Coverage reporters to use"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--coverage.reportOnFailure"
+    description: "Generate coverage report even when tests fail (default: false)"
+    isPersistent: true
+  - name: "--coverage.allowExternal"
+    description: "Collect coverage of files outside the project root (default: false)"
+    isPersistent: true
+  - name: "--coverage.skipFull"
+    description: "Do not show files with 100% statement, branch, and function coverage (default: false)"
+    isPersistent: true
+  - name: "--coverage.thresholds.100"
+    description: "Shortcut to set all coverage thresholds to 100 (default: false)"
+    isPersistent: true
+  - name: "--coverage.thresholds.perFile"
+    description: "Check thresholds per file"
+    isPersistent: true
+    args:
+      name: "boolean"
+  - name: "--coverage.thresholds.autoUpdate"
+    description: "Update threshold values: \"lines\", \"functions\", \"branches\" and \"statements\" to configuration file when current coverage is above the configured thresholds (default: false)"
+    isPersistent: true
+    args:
+      name: "boolean|function"
+  - name: "--coverage.thresholds.lines"
+    description: "Threshold for lines"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--coverage.thresholds.functions"
+    description: "Threshold for functions"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--coverage.thresholds.branches"
+    description: "Threshold for branches"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--coverage.thresholds.statements"
+    description: "Threshold for statements"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--coverage.ignoreClassMethods"
+    description: "Array of class method names to ignore for coverage"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--coverage.processingConcurrency"
+    description: "Concurrency limit used when processing the coverage results"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--coverage.customProviderModule"
+    description: "Specifies the module name or path for the custom coverage provider module"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--coverage.watermarks.statements"
+    description: "High and low watermarks for statements in the format of <high>,<low>"
+    isPersistent: true
+    args:
+      name: "watermarks"
+  - name: "--coverage.watermarks.lines"
+    description: "High and low watermarks for lines in the format of <high>,<low>"
+    isPersistent: true
+    args:
+      name: "watermarks"
+  - name: "--coverage.watermarks.branches"
+    description: "High and low watermarks for branches in the format of <high>,<low>"
+    isPersistent: true
+    args:
+      name: "watermarks"
+  - name: "--coverage.watermarks.functions"
+    description: "High and low watermarks for functions in the format of <high>,<low>"
+    isPersistent: true
+    args:
+      name: "watermarks"
+  - name: "--coverage.changed"
+    description: "Collect coverage only for files changed since a specified commit or branch (e.g., origin/main or HEAD~1)"
+    isPersistent: true
+    args:
+      name: "commit/branch"
+  - name: "--coverage.excludeAfterRemap"
+    description: "Apply exclusions again after coverage has been remapped to original sources"
+    isPersistent: true
+  - name: "--coverage.htmlDir"
+    description: "Directory of HTML coverage output to be served in UI mode and HTML reporter"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--coverage.autoAttachSubprocess"
+    description: "Track coverage of the node:child_process and node:worker_threads spawned during test run"
+    isPersistent: true
+  - name: "--mode"
+    description: "Override Vite mode (default: test)"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--isolate"
+    description: "Run every test file in isolation"
+    isPersistent: true
+  - name: "--globals"
+    description: "Inject apis globally"
+    isPersistent: true
+  - name: "--injectCjsGlobals"
+    description: "Inject CommonJS variables (module, exports, require, __filename, __dirname) into every test module"
+    isPersistent: true
+  - name: "--dom"
+    description: "Mock browser API with happy-dom"
+    isPersistent: true
+  - name: "--browser.enabled"
+    description: "Run tests in the browser"
+    isPersistent: true
+  - name: "--browser.name"
+    description: "Run all tests in a specific browser"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--browser.headless"
+    description: "Run the browser in headless mode (i.e"
+    isPersistent: true
+  - name: "--browser.ui"
+    description: "Show Vitest UI when running tests (default: !process.env.CI)"
+    isPersistent: true
+  - name: "--browser.detailsPanelPosition"
+    description: "Default position for the details panel in browser mode"
+    isPersistent: true
+    args:
+      name: "position"
+  - name: "--browser.connectTimeout"
+    description: "If connection to the browser takes longer, the test suite will fail (default: 60_000)"
+    isPersistent: true
+    args:
+      name: "timeout"
+  - name: "--browser.dependencySourcemaps"
+    description: "Serve sourcemaps of dependencies to the browser in headless runs, used by devtools when debugging into node_modules"
+    isPersistent: true
+  - name: "--browser.trackUnhandledErrors"
+    description: "Control if Vitest catches uncaught exceptions so they can be reported (default: true)"
+    isPersistent: true
+  - name: "--browser.importMapMocks"
+    description: "Serve module mocks through an import map instead of request interception"
+    isPersistent: true
+  - name: "--browser.trace"
+    description: "Enable trace view mode"
+    isPersistent: true
+    args:
+      name: "mode"
+  - name: "--browser.traceView.enabled"
+    description: "Deprecated, use --browser.traceView.mode instead"
+    isPersistent: true
+  - name: "--browser.traceView.mode"
+    description: "How trace view records tests"
+    isPersistent: true
+    args:
+      name: "mode"
+  - name: "--browser.traceView.recordCanvas"
+    description: "Capture canvas pixels in trace-view snapshots (default: false)"
+    isPersistent: true
+  - name: "--browser.traceView.inlineImages"
+    description: "Inline loaded image pixels in trace-view snapshots (default: false)"
+    isPersistent: true
+  - name: "--browser.traceView.ariaSnapshot"
+    description: "Capture the accessibility tree in trace-view snapshots (default: true)"
+    isPersistent: true
+  - name: "--browser.locators.exact"
+    description: "Should locators match the text exactly by default (default: true)"
+    isPersistent: true
+  - name: "--pool"
+    description: "Specify pool, if not running in the browser (default: forks)"
+    isPersistent: true
+    args:
+      name: "pool"
+  - name: "--execArgv"
+    description: "Pass additional arguments to node process when spawning worker_threads or child_process"
+    isPersistent: true
+    args:
+      name: "option"
+  - name: "--vmMemoryLimit"
+    description: "Memory limit for VM pools"
+    isPersistent: true
+    args:
+      name: "limit"
+  - name: "--fileParallelism"
+    description: "Should all test files run in parallel"
+    isPersistent: true
+  - name: "--maxWorkers"
+    description: "Maximum number or percentage of workers to run tests in"
+    isPersistent: true
+    args:
+      name: "workers"
+  - name: "--environment"
+    description: "Specify runner environment, if not running in the browser (default: node)"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--passWithNoTests"
+    description: "Pass when no tests are found"
+    isPersistent: true
+  - name: "--logHeapUsage"
+    description: "Show the size of heap for each test when running in node"
+    isPersistent: true
+  - name: "--detectAsyncLeaks"
+    description: "Detect asynchronous resources leaking from the test file (default: false)"
+    isPersistent: true
+  - name: "--allowOnly"
+    description: "Allow tests and suites that are marked as only (default: !process.env.CI)"
+    isPersistent: true
+  - name: "--dangerouslyIgnoreUnhandledErrors"
+    description: "Ignore any unhandled errors that occur"
+    isPersistent: true
+  - name: "--changed"
+    description: "Run tests that are affected by the changed files (default: false)"
+    isPersistent: true
+    args:
+      name: "since"
+      isOptional: true
+  - name: "--lastFailed"
+    description: "Run only the tests that failed in the last run (default: false)"
+    isPersistent: true
+  - name: "--sequence.shuffle.files"
+    description: "Run files in a random order"
+    isPersistent: true
+  - name: "--sequence.shuffle.tests"
+    description: "Run tests in a random order (default: false)"
+    isPersistent: true
+  - name: "--sequence.concurrent"
+    description: "Make tests run in parallel (default: false)"
+    isPersistent: true
+  - name: "--sequence.seed"
+    description: "Set the randomization seed"
+    isPersistent: true
+    args:
+      name: "seed"
+  - name: "--sequence.hooks"
+    description: "Changes the order in which hooks are executed"
+    isPersistent: true
+    args:
+      name: "order"
+  - name: "--sequence.setupFiles"
+    description: "Changes the order in which setup files are executed"
+    isPersistent: true
+    args:
+      name: "order"
+  - name: "--inspect"
+    description: "Enable Node.js inspector (default: 127.0.0.1:9229)"
+    isPersistent: true
+    args:
+      name: "[host:"
+      isOptional: true
+  - name: "--inspectBrk"
+    description: "Enable Node.js inspector and break before the test starts"
+    isPersistent: true
+    args:
+      name: "[host:"
+      isOptional: true
+  - name: "--testTimeout"
+    description: "Default timeout of a test in milliseconds (default: 5000)"
+    isPersistent: true
+    args:
+      name: "timeout"
+  - name: "--hookTimeout"
+    description: "Default hook timeout in milliseconds (default: 10000)"
+    isPersistent: true
+    args:
+      name: "timeout"
+  - name: "--bail"
+    description: "Stop test execution when given number of tests have failed (default: 0)"
+    isPersistent: true
+    args:
+      name: "number"
+      isOptional: true
+  - name: "--retry.count"
+    description: "Number of times to retry a test if it fails (default: 0)"
+    isPersistent: true
+    args:
+      name: "times"
+  - name: "--retry.delay"
+    description: "Delay in milliseconds between retry attempts (default: 0)"
+    isPersistent: true
+    args:
+      name: "ms"
+  - name: "--retry.condition"
+    description: "Regex pattern to match error messages that should trigger a retry"
+    isPersistent: true
+    args:
+      name: "pattern"
+  - name: "--repeats"
+    description: "Repeat every test a specific number of times regardless of the result (default: 0)"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--diff.aAnnotation"
+    description: "Annotation for expected lines (default: Expected)"
+    isPersistent: true
+    args:
+      name: "annotation"
+  - name: "--diff.aIndicator"
+    description: "Indicator for expected lines (default: -)"
+    isPersistent: true
+    args:
+      name: "indicator"
+  - name: "--diff.bAnnotation"
+    description: "Annotation for received lines (default: Received)"
+    isPersistent: true
+    args:
+      name: "annotation"
+  - name: "--diff.bIndicator"
+    description: "Indicator for received lines (default: +)"
+    isPersistent: true
+    args:
+      name: "indicator"
+  - name: "--diff.commonIndicator"
+    description: "Indicator for common lines (default:  )"
+    isPersistent: true
+    args:
+      name: "indicator"
+  - name: "--diff.contextLines"
+    description: "Number of lines of context to show around each change (default: 5)"
+    isPersistent: true
+    args:
+      name: "lines"
+  - name: "--diff.emptyFirstOrLastLinePlaceholder"
+    description: "Placeholder for an empty first or last line (default: \"\")"
+    isPersistent: true
+    args:
+      name: "placeholder"
+  - name: "--diff.expand"
+    description: "Expand all common lines (default: false)"
+    isPersistent: true
+  - name: "--diff.includeChangeCounts"
+    description: "Include comparison counts in diff output (default: false)"
+    isPersistent: true
+  - name: "--diff.omitAnnotationLines"
+    description: "Omit annotation lines from the output (default: false)"
+    isPersistent: true
+  - name: "--diff.printBasicPrototype"
+    description: "Print basic prototype Object and Array (default: false)"
+    isPersistent: true
+  - name: "--diff.maxDepth"
+    description: "Limit the depth to recurse when printing nested objects (default: 20)"
+    isPersistent: true
+    args:
+      name: "maxDepth"
+  - name: "--diff.truncateThreshold"
+    description: "Number of lines to show before and after each change (default: 0)"
+    isPersistent: true
+    args:
+      name: "threshold"
+  - name: "--diff.truncateAnnotation"
+    description: "Annotation for truncated lines (default: "
+    isPersistent: true
+    args:
+      name: "annotation"
+  - name: "--exclude"
+    description: "Additional file globs to be excluded from test"
+    isPersistent: true
+    args:
+      name: "glob"
+  - name: "--expandSnapshotDiff"
+    description: "Show full diff when snapshot fails"
+    isPersistent: true
+  - name: "--disableConsoleIntercept"
+    description: "Disable automatic interception of console logging (default: false)"
+    isPersistent: true
+  - name: "--typecheck.enabled"
+    description: "Enable typechecking alongside tests (default: false)"
+    isPersistent: true
+  - name: "--typecheck.only"
+    description: "Run only typecheck tests"
+    isPersistent: true
+  - name: "--typecheck.checker"
+    description: "Specify the typechecker to use"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--typecheck.allowJs"
+    description: "Allow JavaScript files to be typechecked"
+    isPersistent: true
+  - name: "--typecheck.ignoreSourceErrors"
+    description: "Ignore type errors from source files"
+    isPersistent: true
+  - name: "--typecheck.build"
+    description: "Use TypeScript build mode"
+    isPersistent: true
+  - name: "--typecheck.tsconfig"
+    description: "Path to a custom tsconfig file"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--typecheck.spawnTimeout"
+    description: "Minimum time in milliseconds it takes to spawn the typechecker"
+    isPersistent: true
+    args:
+      name: "time"
+  - name: ["-p", "--project"]
+    description: "The name of the project to run if you are using Vitest workspace feature"
+    isPersistent: true
+    args:
+      name: "name"
+  - name: "--slowTestThreshold"
+    description: "Threshold in milliseconds for a test or suite to be considered slow (default: 300)"
+    isPersistent: true
+    args:
+      name: "threshold"
+  - name: "--teardownTimeout"
+    description: "Default timeout of a teardown function in milliseconds (default: 10000)"
+    isPersistent: true
+    args:
+      name: "timeout"
+  - name: "--cache"
+    description: "Store the results of test runs to run failed and longer test files first (default: true)"
+    isPersistent: true
+  - name: "--maxConcurrency"
+    description: "Maximum number of concurrent tests and suites during test file execution (default: 5)"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--fsModuleCache"
+    description: "Cache transformed modules on the file system and reuse them between reruns (default: true)"
+    isPersistent: true
+  - name: "--fsModuleCachePath"
+    description: "Directory where the fsModuleCache is stored (default: node_modules/.vitest-cache)"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--expect.requireAssertions"
+    description: "Require that all tests have at least one assertion"
+    isPersistent: true
+  - name: "--expect.poll.interval"
+    description: "Poll interval in milliseconds for expect.poll() assertions (default: 50)"
+    isPersistent: true
+    args:
+      name: "interval"
+  - name: "--expect.poll.timeout"
+    description: "Poll timeout in milliseconds for expect.poll() assertions (default: 1000)"
+    isPersistent: true
+    args:
+      name: "timeout"
+  - name: "--printConsoleTrace"
+    description: "Always print console stack traces"
+    isPersistent: true
+  - name: "--includeTaskLocation"
+    description: "Collect test and suite locations in the location property"
+    isPersistent: true
+  - name: "--attachmentsDir"
+    description: "The directory where attachments from context.annotate are stored in (default: .vitest/attachments)"
+    isPersistent: true
+    args:
+      name: "dir"
+  - name: "--run"
+    description: "Disable watch mode"
+    isPersistent: true
+  - name: "--no-color"
+    description: "Removes colors from the console output"
+    isPersistent: true
+  - name: "--clearScreen"
+    description: "Clear terminal screen when re-running tests during watch mode (default: true)"
+    isPersistent: true
+  - name: "--configLoader"
+    description: "Use bundle to bundle the config with esbuild or runner (experimental) to process it on the fly"
+    isPersistent: true
+    args:
+      name: "loader"
+  - name: "--standalone"
+    description: "Start Vitest without running tests"
+    isPersistent: true
+  - name: "--listTags"
+    description: "List all available tags instead of running tests"
+    isPersistent: true
+    args:
+      name: "type"
+      isOptional: true
+  - name: "--clearCache"
+    description: "Delete all Vitest caches, including the fsModuleCache, without running any tests"
+    isPersistent: true
+  - name: "--tagsFilter"
+    description: "Run only tests with the specified tags"
+    isPersistent: true
+    args:
+      name: "expression"
+  - name: "--strictTags"
+    description: "Should Vitest throw an error if test has a tag that is not defined in the config"
+    isPersistent: true
+  - name: "--sharedViteServer"
+    description: "Let inline projects that don't modify the Vite config reuse the Vite server of the config that declares them"
+    isPersistent: true
+  - name: "--experimental.importDurations.print"
+    description: "When to print import breakdown to CLI terminal"
+    isPersistent: true
+    args:
+      name: "boolean|on-warn"
+  - name: "--experimental.importDurations.limit"
+    description: "Maximum number of imports to collect and display (default: 0, or 10 if print or UI is enabled)"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--experimental.importDurations.failOnDanger"
+    description: "Fail the test run if any import exceeds the danger threshold (default: false)"
+    isPersistent: true
+  - name: "--experimental.importDurations.thresholds.warn"
+    description: "Warning threshold - imports exceeding this are shown in yellow/orange (default: 100)"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--experimental.importDurations.thresholds.danger"
+    description: "Danger threshold - imports exceeding this are shown in red (default: 500)"
+    isPersistent: true
+    args:
+      name: "number"
+  - name: "--experimental.viteModuleRunner"
+    description: "Control whether Vitest uses Vite's module runner to run the code or fallback to the native import"
+    isPersistent: true
+  - name: "--experimental.nodeLoader"
+    description: "Controls whether Vitest will use Node.js Loader API to process in-source or mocked files"
+    isPersistent: true
+  - name: "--experimental.traceTimeline"
+    description: "Record expect.poll, vi.waitFor, and vi.waitUntil steps of each test and print them as a timeline when the test fails"
+    isPersistent: true
+  - name: "--experimental.vcsProvider"
+    description: "Provider for detecting changed files: git, mtime (requires experimental.recordDependencies) or a path to a custom provider"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+  - name: "--experimental.recordDependencies"
+    description: "Record the modules loaded by every test file in the cache and use the records with --changed and --related instead of the static module graph"
+    isPersistent: true
+  - name: "--experimental.preParse"
+    description: "Parse test specifications before running them"
+    isPersistent: true
+  - name: "--experimental.diagnostics.isolate"
+    description: "Print a hint estimating how much time isolate: false would save when isolate: true spends a significant amount of time spawning a worker per test file"
+    isPersistent: true
+  - name: "--experimental.diagnostics.environment"
+    description: "Print a hint when re-creating a DOM environment for every test file dominates the run and a vm pool would set it up once per worker"
+    isPersistent: true
+  - name: "--experimental.diagnostics.import"
+    description: "Print a hint when test files repeatedly evaluate the same module graph (typical for barrel-file imports) and isolate: false would evaluate it once per worker"
+    isPersistent: true
+  - name: "--experimental.diagnostics.transform"
+    description: "Print a hint when transforming modules dominates the run and fsModuleCache would persist the results across runs"
+    isPersistent: true
+subcommands:
+  - name: "run"
+    description: "Perform a single run without watch mode"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "watch"
+    description: "Run all test suites but watch for changes and rerun tests when they change"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "dev"
+    description: "Alias to vitest watch"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "related"
+    description: "Run only tests that cover a list of source files"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "bench"
+    description: "Run only benchmark tests, which compare performance results"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "init"
+    description: "vitest init <name> can be used to setup project configuration"
+  - name: "list"
+    description: "vitest list command inherits all vitest options to print the list of all matching tests"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+  - name: "doctor"
+    description: "vitest doctor measures how much faster the test suite would run under alternative configurations by running it under each of them"

@@ -1,0 +1,414 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# aider. Generated from aider/website/docs/config/options.md in github.com/Aider-AI/aider.
+name: aider
+description: AI pair programming in your terminal
+args:
+  name: files
+  description: Files to edit
+  isOptional: true
+  isVariadic: true
+  template: filepaths
+options:
+  - name: ["-h", "--help"]
+    description: "show this help message and exit"
+  - name: "--model"
+    description: "Specify the model to use for the main chat"
+    args:
+      name: "model"
+  - name: "--openai-api-key"
+    description: "Specify the OpenAI API key"
+    args:
+      name: "value"
+  - name: "--anthropic-api-key"
+    description: "Specify the Anthropic API key"
+    args:
+      name: "value"
+  - name: "--openai-api-base"
+    description: "Specify the api base url"
+    args:
+      name: "value"
+  - name: "--openai-api-type"
+    description: "(deprecated, use --set-env OPENAI_API_TYPE=<value>)"
+    args:
+      name: "value"
+  - name: "--openai-api-version"
+    description: "(deprecated, use --set-env OPENAI_API_VERSION=<value>)"
+    args:
+      name: "value"
+  - name: "--openai-api-deployment-id"
+    description: "(deprecated, use --set-env OPENAI_API_DEPLOYMENT_ID=<value>)"
+    args:
+      name: "value"
+  - name: "--openai-organization-id"
+    description: "(deprecated, use --set-env OPENAI_ORGANIZATION=<value>)"
+    args:
+      name: "value"
+  - name: "--set-env"
+    description: "Set an environment variable (to control API settings, can be used multiple times)"
+    args:
+      name: "env_var_name=value"
+  - name: "--api-key"
+    description: "Set an API key for a provider (eg: --api-key provider=<key> sets PROVIDER_API_KEY=<key>)"
+    args:
+      name: "provider=key"
+  - name: ["--list-models", "--models"]
+    description: "List known models which match the (partial) MODEL name"
+    args:
+      name: "model"
+  - name: "--model-settings-file"
+    description: "Specify a file with aider model settings for unknown models"
+    args:
+      name: "model_settings_file"
+      template: filepaths
+  - name: "--model-metadata-file"
+    description: "Specify a file with context window and costs for unknown models"
+    args:
+      name: "model_metadata_file"
+      template: filepaths
+  - name: "--alias"
+    description: "Add a model alias (can be used multiple times)"
+    args:
+      name: "alias:model"
+  - name: "--reasoning-effort"
+    description: "Set the reasoning_effort API parameter"
+    args:
+      name: "value"
+  - name: "--thinking-tokens"
+    description: "Set the thinking token budget for models that support it. Use 0 to disable"
+    args:
+      name: "value"
+  - name: ["--verify-ssl", "--no-verify-ssl"]
+    description: "Verify the SSL cert when connecting to models"
+  - name: "--timeout"
+    description: "Timeout in seconds for API calls"
+    args:
+      name: "value"
+  - name: ["--edit-format", "--chat-mode"]
+    description: "Specify what edit format the LLM should use (default depends on model)"
+    args:
+      name: "edit_format"
+  - name: "--architect"
+    description: "Use architect edit format for the main chat"
+  - name: ["--auto-accept-architect", "--no-auto-accept-architect"]
+    description: "Enable/disable automatic acceptance of architect changes"
+  - name: "--weak-model"
+    description: "Specify the model to use for commit messages and chat history summarization (default depends on --model)"
+    args:
+      name: "weak_model"
+  - name: "--editor-model"
+    description: "Specify the model to use for editor tasks (default depends on --model)"
+    args:
+      name: "editor_model"
+  - name: "--editor-edit-format"
+    description: "Specify the edit format for the editor model"
+    args:
+      name: "editor_edit_format"
+  - name: ["--show-model-warnings", "--no-show-model-warnings"]
+    description: "Only work with models that have meta-data available"
+  - name: ["--check-model-accepts-settings", "--no-check-model-accepts-settings"]
+    description: "Check if model accepts settings like reasoning_effort/thinking_tokens"
+  - name: "--max-chat-history-tokens"
+    description: "Soft limit on tokens for chat history, after which summarization begins. If unspecified, defaults to the model's max_chat_history_tokens"
+    args:
+      name: "value"
+  - name: ["--cache-prompts", "--no-cache-prompts"]
+    description: "Enable caching of prompts"
+  - name: "--cache-keepalive-pings"
+    description: "Number of times to ping at 5min intervals to keep prompt cache warm"
+    args:
+      name: "value"
+  - name: "--map-tokens"
+    description: "Suggested number of tokens to use for repo map, use 0 to disable"
+    args:
+      name: "value"
+  - name: "--map-refresh"
+    description: "Control how often the repo map is refreshed. Options: auto, always, files, manual"
+    args:
+      name: "value"
+  - name: "--map-multiplier-no-files"
+    description: "Multiplier for map tokens when no files are specified"
+    args:
+      name: "value"
+  - name: "--input-history-file"
+    description: "Specify the chat input history file"
+    args:
+      name: "input_history_file"
+      template: filepaths
+  - name: "--chat-history-file"
+    description: "Specify the chat history file"
+    args:
+      name: "chat_history_file"
+      template: filepaths
+  - name: ["--restore-chat-history", "--no-restore-chat-history"]
+    description: "Restore the previous chat history messages"
+  - name: "--llm-history-file"
+    description: "Log the conversation with the LLM to this file (for example, .aider.llm.history)"
+    args:
+      name: "llm_history_file"
+      template: filepaths
+  - name: "--dark-mode"
+    description: "Use colors suitable for a dark terminal background"
+  - name: "--light-mode"
+    description: "Use colors suitable for a light terminal background"
+  - name: ["--pretty", "--no-pretty"]
+    description: "Enable/disable pretty, colorized output"
+  - name: ["--stream", "--no-stream"]
+    description: "Enable/disable streaming responses"
+  - name: "--user-input-color"
+    description: "Set the color for user input"
+    args:
+      name: "value"
+  - name: "--tool-output-color"
+    description: "Set the color for tool output"
+    args:
+      name: "value"
+  - name: "--tool-error-color"
+    description: "Set the color for tool error messages"
+    args:
+      name: "value"
+  - name: "--tool-warning-color"
+    description: "Set the color for tool warning messages"
+    args:
+      name: "value"
+  - name: "--assistant-output-color"
+    description: "Set the color for assistant output"
+    args:
+      name: "value"
+  - name: "--completion-menu-color"
+    description: "Set the color for the completion menu"
+    args:
+      name: "color"
+  - name: "--completion-menu-bg-color"
+    description: "Set the background color for the completion menu"
+    args:
+      name: "color"
+  - name: "--completion-menu-current-color"
+    description: "Set the color for the current item in the completion menu"
+    args:
+      name: "color"
+  - name: "--completion-menu-current-bg-color"
+    description: "Set the background color for the current item in the completion menu"
+    args:
+      name: "color"
+  - name: "--code-theme"
+    description: "Set the markdown code theme"
+    args:
+      name: "value"
+  - name: "--show-diffs"
+    description: "Show diffs when committing changes"
+  - name: ["--git", "--no-git"]
+    description: "Enable/disable looking for a git repo"
+  - name: ["--gitignore", "--no-gitignore"]
+    description: "Enable/disable adding .aider* to .gitignore"
+  - name: ["--add-gitignore-files", "--no-add-gitignore-files"]
+    description: "Enable/disable the addition of files listed in .gitignore to Aider's editing scope"
+  - name: "--aiderignore"
+    description: "Specify the aider ignore file"
+    args:
+      name: "aiderignore"
+  - name: "--subtree-only"
+    description: "Only consider files in the current subtree of the git repository"
+  - name: ["--auto-commits", "--no-auto-commits"]
+    description: "Enable/disable auto commit of LLM changes"
+  - name: ["--dirty-commits", "--no-dirty-commits"]
+    description: "Enable/disable commits when repo is found dirty"
+  - name: ["--attribute-author", "--no-attribute-author"]
+    description: "Attribute aider code changes in the git author name. If explicitly set to True, overrides --attribute-co-authored-by precedence"
+  - name: ["--attribute-committer", "--no-attribute-committer"]
+    description: "Attribute aider commits in the git committer name. If explicitly set to True, overrides --attribute-co-authored-by precedence for aider edits"
+  - name: ["--attribute-commit-message-author", "--no-attribute-commit-message-author"]
+    description: "Prefix commit messages with 'aider: ' if aider authored the changes"
+  - name: ["--attribute-commit-message-committer", "--no-attribute-commit-message-committer"]
+    description: "Prefix all commit messages with 'aider: '"
+  - name: ["--attribute-co-authored-by", "--no-attribute-co-authored-by"]
+    description: "Attribute aider edits using the Co-authored-by trailer in the commit message. If True, this takes precedence over default --attribute-author and --attribute-committer behavior unless they are explicitly set to True"
+  - name: ["--git-commit-verify", "--no-git-commit-verify"]
+    description: "Enable/disable git pre-commit hooks with --no-verify"
+  - name: "--commit"
+    description: "Commit all pending changes with a suitable commit message, then exit"
+  - name: "--commit-prompt"
+    description: "Specify a custom prompt for generating commit messages"
+    args:
+      name: "prompt"
+  - name: ["--dry-run", "--no-dry-run"]
+    description: "Perform a dry run without modifying files"
+  - name: "--skip-sanity-check-repo"
+    description: "Skip the sanity check for the git repository"
+  - name: ["--watch-files", "--no-watch-files"]
+    description: "Enable/disable watching files for ai coding comments"
+  - name: "--lint"
+    description: "Lint and fix provided files, or dirty files if none provided"
+  - name: "--lint-cmd"
+    description: "Specify lint commands to run for different languages, eg: \"python: flake8 --select=...\" (can be used multiple times)"
+  - name: ["--auto-lint", "--no-auto-lint"]
+    description: "Enable/disable automatic linting after changes"
+  - name: "--test-cmd"
+    description: "Specify command to run tests"
+    args:
+      name: "value"
+  - name: ["--auto-test", "--no-auto-test"]
+    description: "Enable/disable automatic testing after changes"
+  - name: "--test"
+    description: "Run tests, fix problems found and then exit"
+  - name: ["--analytics", "--no-analytics"]
+    description: "Enable/disable analytics for current session"
+  - name: "--analytics-log"
+    description: "Specify a file to log analytics events"
+    args:
+      name: "analytics_log_file"
+      template: filepaths
+  - name: "--analytics-disable"
+    description: "Permanently disable analytics"
+  - name: "--analytics-posthog-host"
+    description: "Send analytics to custom PostHog instance"
+    args:
+      name: "analytics_posthog_host"
+  - name: "--analytics-posthog-project-api-key"
+    description: "Send analytics to custom PostHog project"
+    args:
+      name: "analytics_posthog_project_api_key"
+  - name: "--just-check-update"
+    description: "Check for updates and return status in the exit code"
+  - name: ["--check-update", "--no-check-update"]
+    description: "Check for new aider versions on launch"
+  - name: ["--show-release-notes", "--no-show-release-notes"]
+    description: "Show release notes on first run of new version"
+  - name: "--install-main-branch"
+    description: "Install the latest version from the main branch"
+  - name: ["--upgrade", "--update"]
+    description: "Upgrade aider to the latest version from PyPI"
+  - name: "--version"
+    description: "Show the version number and exit"
+  - name: ["--message", "--msg", "-m"]
+    description: "Specify a single message to send the LLM, process reply then exit (disables chat mode)"
+    args:
+      name: "command"
+  - name: ["--message-file", "-f"]
+    description: "Specify a file containing the message to send the LLM, process reply, then exit (disables chat mode)"
+    args:
+      name: "message_file"
+      template: filepaths
+  - name: ["--gui", "--no-gui", "--browser", "--no-browser"]
+    description: "Run aider in your browser"
+  - name: ["--copy-paste", "--no-copy-paste"]
+    description: "Enable automatic copy/paste of chat between aider and web UI"
+  - name: "--apply"
+    description: "Apply the changes from the given file instead of running the chat (debug)"
+    args:
+      name: "file"
+      template: filepaths
+  - name: "--apply-clipboard-edits"
+    description: "Apply clipboard contents as edits using the main model's editor format"
+  - name: "--exit"
+    description: "Do all startup activities then exit before accepting user input (debug)"
+  - name: "--show-repo-map"
+    description: "Print the repo map and exit (debug)"
+  - name: "--show-prompts"
+    description: "Print the system prompts and exit (debug)"
+  - name: "--voice-format"
+    description: "Audio format for voice recording. webm and mp3 require ffmpeg"
+    args:
+      name: "voice_format"
+  - name: "--voice-language"
+    description: "Specify the language for voice using ISO 639-1 code"
+    args:
+      name: "voice_language"
+  - name: "--voice-input-device"
+    description: "Specify the input device name for voice recording"
+    args:
+      name: "voice_input_device"
+  - name: "--disable-playwright"
+    description: "Never prompt for or attempt to install Playwright for web scraping"
+  - name: "--file"
+    description: "specify a file to edit (can be used multiple times)"
+    args:
+      name: "file"
+      template: filepaths
+    isRepeatable: true
+  - name: "--read"
+    description: "specify a read-only file (can be used multiple times)"
+    args:
+      name: "file"
+      template: filepaths
+    isRepeatable: true
+  - name: "--vim"
+    description: "Use VI editing mode in the terminal"
+  - name: "--chat-language"
+    description: "Specify the language to use in the chat"
+    args:
+      name: "chat_language"
+  - name: "--commit-language"
+    description: "Specify the language to use in the commit message"
+    args:
+      name: "commit_language"
+  - name: "--yes-always"
+    description: "Always say yes to every confirmation"
+  - name: ["-v", "--verbose"]
+    description: "Enable verbose output"
+  - name: "--load"
+    description: "Load and execute /commands from a file on launch"
+    args:
+      name: "load_file"
+      template: filepaths
+  - name: "--encoding"
+    description: "Specify the encoding for input and output"
+    args:
+      name: "value"
+  - name: "--line-endings"
+    description: "Line endings to use when writing files"
+    args:
+      name: "value"
+  - name: ["-c", "--config"]
+    description: "Specify the config file"
+    args:
+      name: "config_file"
+      template: filepaths
+  - name: "--env-file"
+    description: "Specify the .env file to load"
+    args:
+      name: "env_file"
+      template: filepaths
+  - name: ["--suggest-shell-commands", "--no-suggest-shell-commands"]
+    description: "Enable/disable suggesting shell commands"
+  - name: ["--fancy-input", "--no-fancy-input"]
+    description: "Enable/disable fancy input with history and completion"
+  - name: ["--multiline", "--no-multiline"]
+    description: "Enable/disable multi-line input mode with Meta-Enter to submit"
+  - name: ["--notifications", "--no-notifications"]
+    description: "Enable/disable terminal bell notifications when LLM responses are ready"
+  - name: "--notifications-command"
+    description: "Specify a command to run for notifications instead of the terminal bell. If not specified, a default command for your OS may be used"
+    args:
+      name: "command"
+  - name: ["--detect-urls", "--no-detect-urls"]
+    description: "Enable/disable detection and offering to add URLs to chat"
+  - name: "--editor"
+    description: "Specify which editor to use for the /editor command"
+    args:
+      name: "value"
+  - name: "--shell-completions"
+    description: "Print shell completion script for the specified SHELL and exit. Supported shells: bash, tcsh, zsh. Example: aider --shell-completions bash"
+    args:
+      name: "shell"
+  - name: "--opus"
+    description: "Use claude-3-opus-20240229 model for the main chat (deprecated, use --model)"
+  - name: "--sonnet"
+    description: "Use anthropic/claude-3-7-sonnet-20250219 model for the main chat (deprecated, use --model)"
+  - name: "--haiku"
+    description: "Use claude-3-5-haiku-20241022 model for the main chat (deprecated, use --model)"
+  - name: ["--4", "-4"]
+    description: "Use gpt-4-0613 model for the main chat (deprecated, use --model)"
+  - name: "--4o"
+    description: "Use gpt-4o model for the main chat (deprecated, use --model)"
+  - name: "--mini"
+    description: "Use gpt-4o-mini model for the main chat (deprecated, use --model)"
+  - name: "--4-turbo"
+    description: "Use gpt-4-1106-preview model for the main chat (deprecated, use --model)"
+  - name: ["--35turbo", "--35-turbo", "--3", "-3"]
+    description: "Use gpt-3.5-turbo model for the main chat (deprecated, use --model)"
+  - name: "--deepseek"
+    description: "Use deepseek/deepseek-chat model for the main chat (deprecated, use --model)"
+  - name: "--o1-mini"
+    description: "Use o1-mini model for the main chat (deprecated, use --model)"
+  - name: "--o1-preview"
+    description: "Use o1-preview model for the main chat (deprecated, use --model)"

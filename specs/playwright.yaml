@@ -1,68 +1,269 @@
-# Imported from withfig/autocomplete (MIT). You can edit this file; see docs/adding-a-command.md.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Playwright. Generated from docs/src/test-cli-js.md in github.com/microsoft/playwright.
 name: playwright
-description: ""
-subcommands:
-  - name: test
-    description: Run tests with Playwright Test
-    options:
-      - name: -g
-        description: Run the test with the title
-        args:
-          name: title
-      - name: --headed
-        description: Run tests in headed browsers
-      - name:
-          - --help
-          - -h
-        description: Display help for command
-        priority: 1
-    args:
-      name: tests
-      description: Test files to run
-      isOptional: true
-      isVariadic: true
-      template:
-        - filepaths
-        - folders
-  - name: install
-    description: Running without arguments will install default browsers
-    options:
-      - name: --with-deps
-        description: Install system dependencies for browsers
-      - name:
-          - --help
-          - -h
-        description: Display help for command
-        priority: 1
-    args:
-      name: browsers
-      description: Browser to install
-      isOptional: true
-      isVariadic: true
-      suggestions:
-        - name: chromium
-          displayName: Chromium
-        - name: chrome
-          displayName: Chrome
-        - name: chrome-beta
-          displayName: Chrome Beta
-        - name: msedge
-          displayName: Microsoft Edge
-        - name: msedge-beta
-          displayName: Microsoft Edge Beta
-        - name: msedge-dev
-          displayName: Microsoft Edge Dev
-        - name: firefox
-          displayName: Firefox
-        - name: webkit
-          displayName: WebKit
+description: Test and automate Chromium, Firefox and WebKit
 options:
-  - name:
-      - --version
-      - -V
-    description: Output the version number
-  - name:
-      - --help
-      - -h
-    description: Display help for command
-    priority: 1
+  - name: [-h, --help]
+    description: Display help
+  - name: [-V, --version]
+    description: Print the version
+subcommands:
+  - name: "test"
+    description: "Run your Playwright tests"
+    args:
+      name: filter
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: "--debug"
+        description: "Run tests with Playwright Inspector"
+        args:
+          name: "mode"
+          isOptional: true
+      - name: "--headed"
+        description: "Run tests in headed browsers (default: headless)"
+      - name: ["-g", "--grep"]
+        description: "Only run tests matching this regular expression (default: \".*\")"
+        args:
+          name: "grep"
+      - name: "--project"
+        description: "Only run tests from the specified list of projects, supports '*' wildcard (default: run all projects)"
+        args:
+          name: "project-name"
+          generators:
+            script: "node -e \"try{const c=require(require('path').resolve('playwright.config'));for(const p of (c.default||c).projects||[])console.log(p.name)}catch(e){}\" 2>/dev/null"
+      - name: "--ui"
+        description: "Run tests in interactive UI mode"
+      - name: ["-j", "--workers"]
+        description: "Number of concurrent workers or percentage of logical CPU cores, use 1 to run in a single worker (default: 50%)"
+        args:
+          name: "workers"
+      - name: "--add-reporter"
+        description: "Reporter to add on top of the reporters configured in the config file, comma-separated"
+        args:
+          name: "reporter"
+      - name: ["-c", "--config"]
+        description: "Configuration file, or a test directory with optional \"playwright.config.{m,c}?{js,ts}\""
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--fail-on-flaky-tests"
+        description: "Fail if any test is flagged as flaky (default: false)"
+      - name: "--forbid-only"
+        description: "Fail if test.only is called (default: false)"
+      - name: "--fully-parallel"
+        description: "Run all tests in parallel (default: false)"
+      - name: "--global-timeout"
+        description: "Maximum time this test suite can run in milliseconds (default: unlimited)"
+        args:
+          name: "timeout"
+      - name: ["-G", "--grep-invert"]
+        description: "Only run tests that do not match this regular expression"
+        args:
+          name: "grep"
+      - name: "--ignore-snapshots"
+        description: "Ignore screenshot and snapshot expectations"
+      - name: "--last-failed"
+        description: "Only re-run the failures"
+      - name: "--last-failed-file"
+        description: "Override the default last-run JSON path for --last-failed (default: <outputDir>/.last-run.json)"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--list"
+        description: "Collect all the tests and report them, but do not run"
+      - name: ["--max-failures", "-x"]
+        description: "Stop after the first N failures"
+        args:
+          name: "N"
+      - name: "--no-deps"
+        description: "Do not run project dependencies"
+      - name: "--output"
+        description: "Folder for output artifacts (default: \"test-results\")"
+        args:
+          name: "dir"
+          template: filepaths
+      - name: "--only-changed"
+        description: "Only run test files that have been changed between 'HEAD' and 'ref'"
+        args:
+          name: "ref"
+          isOptional: true
+      - name: "--pass-with-no-tests"
+        description: "Makes test run succeed even if no tests were found"
+      - name: "--quiet"
+        description: "Suppress stdio"
+      - name: "--repeat-each"
+        description: "Run each test N times (default: 1)"
+        args:
+          name: "N"
+      - name: "--reporter"
+        description: "Reporter to use, comma-separated, can be \"dot\", \"line\", \"list\", \"failures\", or others (default: \"list\" locally and \"dot\" on CI)"
+        args:
+          name: "reporter"
+          suggestions: [list, line, dot, html, json, junit, github, blob, "null"]
+      - name: "--retries"
+        description: "Maximum retry count for flaky tests, zero for no retries (default: no retries)"
+        args:
+          name: "retries"
+      - name: "--run-agents"
+        description: "Run agents to generate the code for page.perform"
+        args:
+          name: "mode"
+      - name: "--shard"
+        description: "Shard tests and execute only the selected shard, specified in the form \"current/all\", 1-based, e.g., \"3/5\""
+        args:
+          name: "shard"
+      - name: "--shuffle"
+        description: "Schedule tests in a random order: test files are shuffled, and so are individual tests in parallel mode"
+        args:
+          name: "seed"
+          isOptional: true
+      - name: "--test-list"
+        description: "Path to a file containing a list of tests to run"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--test-list-invert"
+        description: "Path to a file containing a list of tests to skip"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--timeout"
+        description: "Specify test timeout threshold in milliseconds, zero for unlimited (default: 30 seconds)"
+        args:
+          name: "timeout"
+      - name: "--trace"
+        description: "Force tracing mode, can be on, off, on-first-retry, on-all-retries, retain-on-failure, retain-on-first-failure, retain-on-failure-and-retries"
+        args:
+          name: "mode"
+      - name: "--tsconfig"
+        description: "Path to a single tsconfig applicable to all imported files (default: look up tsconfig for each imported file separately)"
+        args:
+          name: "path"
+          template: filepaths
+      - name: "--ui-host"
+        description: "Host to serve UI on; specifying this option opens UI in a browser tab"
+        args:
+          name: "host"
+      - name: "--ui-port"
+        description: "Port to serve UI on, 0 for any free port; specifying this option opens UI in a browser tab"
+        args:
+          name: "port"
+      - name: ["-u", "--update-snapshots"]
+        description: "Update snapshots with actual results"
+        args:
+          name: "mode"
+          isOptional: true
+          suggestions: [all, changed, missing, none]
+      - name: "--update-source-method"
+        description: "Chooses the way source is updated"
+        args:
+          name: "method"
+  - name: "show-report"
+    description: "Display HTML report from previous test run"
+    args:
+      name: path
+      isOptional: true
+      template: filepaths
+    options:
+      - name: "--host"
+        description: "Host to serve report on (default: localhost)"
+        args:
+          name: "host"
+      - name: "--port"
+        description: "Port to serve report on (default: 9323)"
+        args:
+          name: "port"
+  - name: "install"
+    description: "Install browsers required by Playwright"
+    args:
+      name: browser
+      isOptional: true
+      isVariadic: true
+      suggestions: [chromium, chrome, chrome-beta, msedge, firefox, webkit]
+    options:
+      - name: "--force"
+        description: "Force reinstall of already installed browsers"
+      - name: "--with-deps"
+        description: "Install browser system dependencies"
+      - name: "--dry-run"
+        description: "Don't perform installation, just print information"
+      - name: "--list"
+        description: "Print list of browsers from all Playwright installations"
+      - name: "--only-shell"
+        description: "Only install chromium-headless-shell instead of full Chromium"
+      - name: "--no-shell"
+        description: "Don't install chromium-headless-shell"
+      - name: "--no-progress"
+        description: "Don't show download progress bars"
+      - name: "--no-remove"
+        description: "Don't remove unused browsers"
+  - name: "install-deps"
+    description: "Install the system dependencies the browsers need"
+    args:
+      name: browser
+      isOptional: true
+      isVariadic: true
+      suggestions: [chromium, chrome, chrome-beta, msedge, firefox, webkit]
+    options:
+      - name: "--dry-run"
+        description: "Don't modify the system"
+  - name: "codegen"
+    description: "Record actions and generate tests for multiple languages"
+    options:
+      - name: "-b,"
+        description: "Browser to use: chromium, firefox, or webkit (default: chromium)"
+        args:
+          name: "name"
+      - name: "-o,"
+        description: "Output file for the generated script"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--target"
+        description: "Language to use: javascript, playwright-test, python, etc"
+        args:
+          name: "language"
+      - name: "--test-id-attribute"
+        description: "Attribute to use for test IDs"
+        args:
+          name: "attr"
+  - name: "show-trace"
+    description: "Analyze and view test traces for debugging"
+    args:
+      name: path
+      isOptional: true
+      template: filepaths
+    options:
+      - name: "-b,"
+        description: "Browser to use: chromium, firefox, or webkit (default: chromium)"
+        args:
+          name: "name"
+      - name: "-h,"
+        description: "Host to serve trace on"
+        args:
+          name: "host"
+      - name: "-p,"
+        description: "Port to serve trace on"
+        args:
+          name: "port"
+  - name: "merge-reports"
+    description: "Read blob reports and combine them"
+    args:
+      name: path
+      isOptional: true
+      template: filepaths
+    options:
+      - name: "-c,"
+        description: "Configuration file"
+        args:
+          name: "file"
+          template: filepaths
+      - name: "--reporter"
+        description: "Reporter to use, comma-separated, can be \"list\", \"line\", \"dot\", \"failures\", \"json\", \"junit\", \"null\", \"github\", \"html\", \"blob\", \"perfetto\" (default: \"list\" locally and \"dot\" on CI)"
+        args:
+          name: "reporter"
+          suggestions: [list, line, dot, html, json, junit, github, blob, "null"]
+  - name: "clear-cache"
+    description: "Clear all Playwright caches"

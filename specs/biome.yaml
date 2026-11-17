@@ -1,0 +1,1016 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rostik32/zest/main/schema/spec.schema.json
+# Biome. Generated from the CLI reference (src/content/docs/en/reference/cli.mdx) in github.com/biomejs/website.
+name: biome
+description: Format, lint and more for JavaScript, TypeScript, JSON, CSS and GraphQL
+options:
+  - name: ["-h", "--help"]
+    description: "Prints help information"
+    isPersistent: true
+  - name: ["-V", "--version"]
+    description: "Prints version information"
+    isPersistent: true
+  - name: "--colors"
+    description: "Controls ANSI styling: off disables it, while force enables it even when the output does not appear to support ANSI escapes"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["off", "force"]
+    requiresSeparator: true
+  - name: "--use-server"
+    description: "Connects to a running instance of the Biome daemon server"
+    isPersistent: true
+  - name: "--verbose"
+    description: "Shows additional diagnostic details and lists the files that were processed or modified"
+    isPersistent: true
+  - name: "--config-path"
+    description: "Sets the path to the configuration file or the directory where Biome should search for biome.json or biome.jsonc"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+    requiresSeparator: true
+  - name: "--max-diagnostics"
+    description: "Limits the number of diagnostics displayed"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["none", "NUMBER"]
+    requiresSeparator: true
+  - name: "--skip-parse-errors"
+    description: "Skips files containing syntax errors instead of emitting an error diagnostic"
+    isPersistent: true
+  - name: "--no-errors-on-unmatched"
+    description: "Does not emit an error when no files are processed"
+    isPersistent: true
+  - name: "--error-on-warnings"
+    description: "Exits with an error status if any warning diagnostics are emitted"
+    isPersistent: true
+  - name: "--diagnostic-level"
+    description: "Sets the minimum diagnostic severity to display: info, warn, or error"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["info", "warn", "error"]
+    requiresSeparator: true
+  - name: "--reporter"
+    description: "Changes how diagnostics and the run summary are written"
+    isPersistent: true
+    args:
+      name: "format"
+    requiresSeparator: true
+  - name: "--reporter-file"
+    description: "Writes the associated reporter's output to PATH"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+    requiresSeparator: true
+  - name: "--watcher-kind"
+    description: "Selects how the daemon server detects file changes"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["polling", "recommended", "none"]
+    requiresSeparator: true
+  - name: "--watcher-polling-interval"
+    description: "Sets how often the polling watcher checks for file changes, in milliseconds"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--json-parse-allow-comments"
+    description: "Allows parsing comments in .json files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-parse-allow-trailing-commas"
+    description: "Allows parsing trailing commas in .json files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--vcs-enabled"
+    description: "Whether Biome should integrate with the version control client"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--vcs-client-kind"
+    description: "The version control client"
+    isPersistent: true
+    args:
+      name: "git"
+    requiresSeparator: true
+  - name: "--vcs-use-ignore-file"
+    description: "When true, Biome ignores files listed in .gitignore, .ignore, and Git's local exclude file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--vcs-root"
+    description: "Sets the directory where Biome checks for version control files"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+    requiresSeparator: true
+  - name: "--vcs-default-branch"
+    description: "The project's default branch"
+    isPersistent: true
+    args:
+      name: "branch"
+    requiresSeparator: true
+  - name: "--files-max-size"
+    description: "The maximum source file size in bytes"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--files-ignore-unknown"
+    description: "Prevents Biome from emitting diagnostics for unrecognized file types"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--format-with-errors"
+    description: "Allows formatting files that contain syntax errors when set to true"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--indent-style"
+    description: "Uses tabs or spaces for indentation"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--indent-width"
+    description: "The indentation width"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--line-ending"
+    description: "Selects the line ending"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--line-width"
+    description: "The maximum line width"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--attribute-position"
+    description: "The attribute position style in HTML-like languages"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["multiline", "auto"]
+    requiresSeparator: true
+  - name: "--bracket-same-line"
+    description: "Places the > of a multiline HTML or JSX element at the end of the last line instead of on the next line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--bracket-spacing"
+    description: "Whether to insert spaces inside braces in object literals"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--delimiter-spacing"
+    description: "Controls spaces immediately inside supported delimiters when their content fits on one line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--expand"
+    description: "Controls whether arrays and objects are formatted on one line or multiple lines"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["auto", "always", "never"]
+    requiresSeparator: true
+  - name: "--trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--use-editorconfig"
+    description: "Uses .editorconfig files to configure the formatter"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--jsx-everywhere"
+    description: "When enabled, files such as .js, .mjs, and .cjs may contain JSX syntax"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-enabled"
+    description: "Controls the formatter for JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--jsx-quote-style"
+    description: "The type of quotes used in JSX"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["double", "single"]
+    requiresSeparator: true
+  - name: "--quote-properties"
+    description: "Controls when object properties are quoted"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["preserve", "as-needed"]
+    requiresSeparator: true
+  - name: "--trailing-commas"
+    description: "Prints trailing commas wherever possible in multiline comma-separated structures"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["all", "es5", "none"]
+    requiresSeparator: true
+  - name: "--semicolons"
+    description: "Prints semicolons after every statement or only where needed to avoid automatic semicolon insertion hazards"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["always", "as-needed"]
+    requiresSeparator: true
+  - name: "--arrow-parentheses"
+    description: "Whether to add parentheses around arrow function parameters"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["always", "as-needed"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-indent-style"
+    description: "The indent style applied to JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-indent-width"
+    description: "The indentation width applied to JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--javascript-formatter-line-ending"
+    description: "The line ending applied to JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-line-width"
+    description: "The maximum line width applied to JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--javascript-formatter-quote-style"
+    description: "The type of quotes used in JavaScript code"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["double", "single"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-attribute-position"
+    description: "The attribute position style in JSX elements"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["multiline", "auto"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-bracket-spacing"
+    description: "Whether to insert spaces inside braces in object literals"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-delimiter-spacing"
+    description: "Controls spaces immediately inside supported JavaScript and TypeScript delimiters when their content fits on one line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-expand"
+    description: "Uses the same auto, always, and never behavior as the global expansion setting"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["auto", "always", "never"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-operator-linebreak"
+    description: "When breaking binary expressions into multiple lines, whether to break them before or after the binary operator"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["before", "after"]
+    requiresSeparator: true
+  - name: "--javascript-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--javascript-linter-enabled"
+    description: "Controls the linter for JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--javascript-assist-enabled"
+    description: "Controls assist actions for JavaScript and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-formatter-enabled"
+    description: "Controls the formatter for JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-formatter-indent-style"
+    description: "The indent style applied to JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--json-formatter-indent-width"
+    description: "The indentation width applied to JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--json-formatter-line-ending"
+    description: "The line ending applied to JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--json-formatter-line-width"
+    description: "The maximum line width applied to JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--json-formatter-trailing-commas"
+    description: "Prints trailing commas wherever possible in multiline comma-separated structures"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["none", "all"]
+    requiresSeparator: true
+  - name: "--json-formatter-expand"
+    description: "Uses the same auto, always, and never behavior as the global expansion setting"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["auto", "always", "never"]
+    requiresSeparator: true
+  - name: "--json-formatter-bracket-spacing"
+    description: "Whether to insert spaces inside braces in object literals"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-formatter-delimiter-spacing"
+    description: "Controls spaces inside JSON square brackets when their content fits on one line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-linter-enabled"
+    description: "Controls the linter for JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--json-assist-enabled"
+    description: "Controls assist actions for JSON and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-parse-css-modules"
+    description: "Enables parsing of CSS Modules-specific features"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-parse-tailwind-directives"
+    description: "Enables parsing of Tailwind CSS 4.0 directives and functions"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-formatter-enabled"
+    description: "Controls the formatter for CSS and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-formatter-indent-style"
+    description: "The indent style applied to CSS and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--css-formatter-indent-width"
+    description: "The indentation width applied to CSS and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--css-formatter-line-ending"
+    description: "The line ending applied to CSS and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--css-formatter-line-width"
+    description: "The maximum line width for CSS and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--css-formatter-quote-style"
+    description: "The type of quotes used in CSS code"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["double", "single"]
+    requiresSeparator: true
+  - name: "--css-formatter-delimiter-spacing"
+    description: "Controls spaces inside CSS parentheses and square brackets when their content fits on one line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-linter-enabled"
+    description: "Controls the linter for CSS files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--css-assist-enabled"
+    description: "Controls assist actions for CSS files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--graphql-formatter-enabled"
+    description: "Controls the formatter for GraphQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--graphql-formatter-indent-style"
+    description: "The indent style applied to GraphQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--graphql-formatter-indent-width"
+    description: "The indentation width applied to GraphQL files"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--graphql-formatter-line-ending"
+    description: "The line ending applied to GraphQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--graphql-formatter-line-width"
+    description: "The maximum line width for GraphQL files"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--graphql-formatter-quote-style"
+    description: "The type of quotes used in GraphQL code"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["double", "single"]
+    requiresSeparator: true
+  - name: "--graphql-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--graphql-linter-enabled"
+    description: "Controls the linter for GraphQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--graphql-assist-enabled"
+    description: "Controls assist actions for GraphQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--grit-formatter-enabled"
+    description: "Controls the formatter for GritQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--grit-formatter-indent-style"
+    description: "The indent style applied to GritQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--grit-formatter-indent-width"
+    description: "The indentation width applied to GritQL files"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--grit-formatter-line-ending"
+    description: "The line ending applied to GritQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--grit-formatter-line-width"
+    description: "The maximum line width for GritQL files"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--grit-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--grit-linter-enabled"
+    description: "Controls the linter for GritQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--grit-assist-enabled"
+    description: "Controls assist actions for GritQL files"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-formatter-enabled"
+    description: "Controls the formatter for HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-formatter-indent-style"
+    description: "The indent style applied to HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["tab", "space"]
+    requiresSeparator: true
+  - name: "--html-formatter-indent-width"
+    description: "The indentation width applied to HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--html-formatter-line-ending"
+    description: "The line ending applied to HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["lf", "crlf", "cr", "auto"]
+    requiresSeparator: true
+  - name: "--html-formatter-line-width"
+    description: "The maximum line width for HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: "number"
+    requiresSeparator: true
+  - name: "--html-formatter-attribute-position"
+    description: "The attribute position style in HTML elements"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["multiline", "auto"]
+    requiresSeparator: true
+  - name: "--html-formatter-bracket-same-line"
+    description: "Whether to place the closing bracket of a multiline HTML tag at the end of the last line instead of on its own line"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-formatter-whitespace-sensitivity"
+    description: "Whether to account for whitespace sensitivity when formatting HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["css", "strict", "ignore"]
+    requiresSeparator: true
+  - name: "--html-formatter-indent-script-and-style"
+    description: "Whether to indent <script> and <style> tags in HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-formatter-self-close-void-elements"
+    description: "Controls whether void elements are self-closed"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["always", "never"]
+    requiresSeparator: true
+  - name: "--html-formatter-trailing-newline"
+    description: "Whether to add a trailing newline at the end of the file"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-linter-enabled"
+    description: "Controls the linter for HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--html-assist-enabled"
+    description: "Controls assist actions for HTML and languages that extend it"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["true", "false"]
+    requiresSeparator: true
+  - name: "--log-file"
+    description: "For file-processing commands, writes internal CLI logs to this file instead of standard output"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+    requiresSeparator: true
+  - name: "--log-prefix-name"
+    description: "When starting the daemon server, sets the file name prefix used for rotated log files"
+    isPersistent: true
+    args:
+      name: "string"
+    requiresSeparator: true
+  - name: "--log-path"
+    description: "When starting the daemon server, sets the directory where log files are stored"
+    isPersistent: true
+    args:
+      name: "path"
+      template: filepaths
+    requiresSeparator: true
+  - name: "--log-level"
+    description: "For file-processing commands, sets the internal CLI logging level to tracing, debug, info, warn, error, or none"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["none", "tracing", "debug", "info", "warn", "error"]
+    requiresSeparator: true
+  - name: "--log-kind"
+    description: "For file-processing commands, selects the internal CLI log format: pretty, compact, or json"
+    isPersistent: true
+    args:
+      name: value
+      suggestions: ["pretty", "compact", "json"]
+    requiresSeparator: true
+subcommands:
+  - name: "version"
+    description: "Prints the Biome CLI version and information about the connected daemon server, if any, then exits"
+  - name: "upgrade"
+    description: "Upgrades Biome to the latest stable version"
+  - name: "rage"
+    description: "Prints a troubleshooting report with CLI, platform, environment, configuration, workspace, and daemon server information"
+    options:
+      - name: "--daemon-logs"
+        description: "Includes the latest daemon server log"
+      - name: "--formatter"
+        description: "Includes the formatter settings loaded from the Biome configuration"
+      - name: "--linter"
+        description: "Includes the linter settings and enabled lint rules loaded from the Biome configuration"
+  - name: "start"
+    description: "Starts the Biome daemon server used for integration with third-party clients, such as editor extensions"
+  - name: "stop"
+    description: "Stops the Biome daemon server if it is running"
+  - name: "check"
+    description: "Checks the specified files for formatting, linting, and assist actions"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: ["--write", "--fix"]
+        description: "Applies formatting changes, safe lint fixes, and safe assist actions"
+      - name: "--unsafe"
+        description: "Allows --write or --fix to apply unsafe fixes and assist actions"
+      - name: "--formatter-enabled"
+        description: "Enables or disables formatting checks for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--linter-enabled"
+        description: "Enables or disables linting checks for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--assist-enabled"
+        description: "Enables or disables assist actions for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--enforce-assist"
+        description: "Enforces assist actions and causes the command to fail if required actions are not applied"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--profile-rules"
+        description: "Reports how long each rule takes to run"
+      - name: "--stdin-file-path"
+        description: "Reads code from standard input and writes the processed code to standard output"
+        args:
+          name: "path"
+          template: filepaths
+        requiresSeparator: true
+      - name: "--staged"
+        description: "Checks only staged files"
+      - name: "--changed"
+        description: "Checks only files with committed changes compared to the configured vcs.defaultBranch or the base reference specified by --since"
+      - name: "--since"
+        description: "Sets the base reference used by --changed, overriding vcs.defaultBranch"
+        args:
+          name: "ref"
+        requiresSeparator: true
+      - name: "--only"
+        description: "Runs only the given lint rule, assist action, group of rules and actions, or domain"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "ACTION", "PLUGIN"]
+        requiresSeparator: true
+      - name: "--skip"
+        description: "Skips the given lint rule, assist action, group of rules and actions, or domain"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "ACTION", "PLUGIN"]
+        requiresSeparator: true
+      - name: "--watch"
+        description: "After the initial run, watches the selected paths and reprocesses files modified afterward"
+  - name: "lint"
+    description: "Runs the linter on the specified files"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: ["--write", "--fix"]
+        description: "Applies safe lint fixes"
+      - name: "--unsafe"
+        description: "Allows --write or --fix to apply unsafe lint fixes"
+      - name: "--suppress"
+        description: "Writes comment suppressions for lint rule violations instead of applying rule fixes"
+      - name: "--reason"
+        description: "Adds an explanation to suppressions created by --suppress"
+        args:
+          name: "string"
+        requiresSeparator: true
+      - name: "--only"
+        description: "Runs only the given lint rule, rule group, or domain"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "PLUGIN"]
+        requiresSeparator: true
+      - name: "--skip"
+        description: "Skips the given lint rule, rule group, or domain by setting the affected rules to off"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "PLUGIN"]
+        requiresSeparator: true
+      - name: "--stdin-file-path"
+        description: "Reads code from standard input and writes the processed code to standard output"
+        args:
+          name: "path"
+          template: filepaths
+        requiresSeparator: true
+      - name: "--staged"
+        description: "Lints only staged files"
+      - name: "--changed"
+        description: "Lints only files with committed changes compared to the configured vcs.defaultBranch or the base reference specified by --since"
+      - name: "--since"
+        description: "Sets the base reference used by --changed, overriding vcs.defaultBranch"
+        args:
+          name: "ref"
+        requiresSeparator: true
+      - name: "--profile-rules"
+        description: "Reports how long each rule takes to run"
+      - name: "--watch"
+        description: "After the initial run, watches the selected paths and reprocesses files modified afterward"
+  - name: "format"
+    description: "Formats the specified files"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: "--stdin-file-path"
+        description: "Reads code from standard input and writes the processed code to standard output"
+        args:
+          name: "path"
+          template: filepaths
+        requiresSeparator: true
+      - name: ["--write", "--fix"]
+        description: "Applies formatting changes"
+      - name: "--staged"
+        description: "Formats only staged files"
+      - name: "--changed"
+        description: "Formats only files with committed changes compared to the configured vcs.defaultBranch or the base reference specified by --since"
+      - name: "--since"
+        description: "Sets the base reference used by --changed, overriding vcs.defaultBranch"
+        args:
+          name: "ref"
+        requiresSeparator: true
+      - name: "--watch"
+        description: "After the initial run, watches the selected paths and reprocesses files modified afterward"
+  - name: "ci"
+    description: "Runs formatting checks, linting checks, and assist actions in CI without modifying files"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: "--formatter-enabled"
+        description: "Enables or disables formatting checks for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--linter-enabled"
+        description: "Enables or disables linting checks for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--assist-enabled"
+        description: "Enables or disables assist actions for this command"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--enforce-assist"
+        description: "Enforces assist actions and causes the command to fail if required actions are not applied"
+        args:
+          name: value
+          suggestions: ["true", "false"]
+        requiresSeparator: true
+      - name: "--changed"
+        description: "Checks only files with committed changes compared to the configured vcs.defaultBranch or the base reference specified by --since"
+      - name: "--since"
+        description: "Sets the base reference used by --changed, overriding vcs.defaultBranch"
+        args:
+          name: "ref"
+        requiresSeparator: true
+      - name: "--threads"
+        description: "Sets the number of threads to use"
+        args:
+          name: "number"
+        requiresSeparator: true
+      - name: "--only"
+        description: "Runs only the given lint rule, assist action, group of rules and actions, or domain"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "ACTION", "PLUGIN"]
+        requiresSeparator: true
+      - name: "--skip"
+        description: "Skips the given lint rule, assist action, group of rules and actions, or domain"
+        args:
+          name: value
+          suggestions: ["GROUP", "RULE", "DOMAIN", "ACTION", "PLUGIN"]
+        requiresSeparator: true
+  - name: "init"
+    description: "Creates a default Biome configuration file in the current working directory"
+    options:
+      - name: "--jsonc"
+        description: "Creates biome.jsonc instead of biome.json"
+  - name: "inspect"
+    description: "Inspects Biome state without modifying files"
+  - name: "lsp-proxy"
+    description: "Ensures that the Biome daemon server is running, then forwards Language Server Protocol messages between the daemon server and standard input and output"
+  - name: "migrate"
+    description: "Previews configuration updates required by breaking changes"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: ["--write", "--fix"]
+        description: "Applies the proposed migration or imported settings"
+  - name: "search"
+    description: "EXPERIMENTAL: Finds code that matches a GritQL pattern, optionally limited to specific files or directories"
+    args:
+      name: path
+      isOptional: true
+      isVariadic: true
+      template: filepaths
+    options:
+      - name: ["-l", "--language"]
+        description: "Selects the language grammar used for the pattern and searched code: CSS, JavaScript, or JSON"
+        args:
+          name: value
+          suggestions: ["css", "javascript", "json"]
+  - name: "explain"
+    description: "Prints documentation for a lint rule or the path to the daemon server log directory"
+  - name: "clean"
+    description: "Removes the Biome daemon server log files"

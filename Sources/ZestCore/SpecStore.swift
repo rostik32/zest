@@ -181,7 +181,11 @@ public final class SpecStore: @unchecked Sendable {
         let encoder = YAMLEncoder()
         encoder.options.width = -1
         encoder.options.sortKeys = false
-        return try encoder.encode(spec)
+        // YAML 1.1 readers (editors, the schema check) take a bare y, n, yes, no, on or off
+        // as a boolean: quote them, e.g. the argument of `-j n`.
+        return try encoder.encode(spec).replacingOccurrences(
+            of: #"(?m)^(\s*(?:- )?(?:[\w-]+: )?)(y|Y|n|N|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF)$"#,
+            with: "$1'$2'", options: .regularExpression)
     }
 
     public static func encodeJSON(_ spec: Spec) throws -> Data {
