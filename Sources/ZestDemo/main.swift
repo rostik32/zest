@@ -97,20 +97,30 @@ final class Terminal: ObservableObject {
     @Published var replaceColumn = 0
     /// A label in the corner, e.g. ("Theme", "Dracula"), for the appearance demo.
     @Published var caption: (label: String, value: String)?
+    /// 0 = macOS in Dark mode, 1 = Light mode (the window and terminal colors follow it).
+    @Published var lightness = 0.0
     let popup = PopupModel()
     var cwd = project
 
     var promptLength: Int { folder.count + 3 }  // "<folder> ❯ "
 }
 
+/// A terminal color between its dark-mode and light-mode value.
+func mix(_ dark: UInt32, _ light: UInt32, _ t: Double) -> Color {
+    func c(_ v: UInt32, _ shift: UInt32) -> Double { Double((v >> shift) & 0xFF) / 255 }
+    func m(_ shift: UInt32) -> Double { c(dark, shift) + (c(light, shift) - c(dark, shift)) * t }
+    return Color(.sRGB, red: m(16), green: m(8), blue: m(0))
+}
+
 struct PromptText: View {
     let folder: String
     let text: String
+    var lightness = 0.0
 
     var body: some View {
-        Text(folder).foregroundColor(Theme.option)
-            + Text(" ❯ ").foregroundColor(Theme.command)
-            + Text(text).foregroundColor(Theme.text)
+        Text(folder).foregroundColor(mix(0x4AA5F0, 0x0969DA, lightness))
+            + Text(" ❯ ").foregroundColor(mix(0x8CC265, 0x1A7F37, lightness))
+            + Text(text).foregroundColor(mix(0xABB2BF, 0x24292F, lightness))
     }
 }
 
@@ -119,7 +129,7 @@ struct TerminalView: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            Color(hex: 0x15171B)
+            mix(0x15171B, 0xDADDE3, term.lightness)
             window.padding(28).shadow(color: .black.opacity(0.5), radius: 18, y: 8)
         }
         .frame(width: windowSize.width + 56, height: windowSize.height + 56)
@@ -132,23 +142,23 @@ struct TerminalView: View {
                     ForEach([0xFF5F57, 0xFEBC2E, 0x28C840], id: \.self) { Circle().fill(Color(hex: UInt32($0))).frame(width: 12, height: 12) }
                     Spacer()
                 }
-                Text("zsh — \(term.folder)").font(.system(size: 13, weight: .medium)).foregroundColor(Theme.dim)
+                Text("zsh — \(term.folder)").font(.system(size: 13, weight: .medium)).foregroundColor(mix(0x7F848E, 0x6E7781, term.lightness))
             }
             .padding(.horizontal, 14)
             .frame(height: titleHeight)
-            .background(Color(hex: 0x1E2227))
+            .background(mix(0x1E2227, 0xECECEC, term.lightness))
             ZStack(alignment: .topLeading) {
-                Color(hex: 0x23272E)
+                mix(0x23272E, 0xFFFFFF, term.lightness)
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(Array(term.lines.enumerated()), id: \.offset) { _, line in
                         Group {
-                            if let folder = line.prompt { PromptText(folder: folder, text: line.text) } else { Text(line.text).foregroundColor(Theme.text) }
+                            if let folder = line.prompt { PromptText(folder: folder, text: line.text, lightness: term.lightness) } else { Text(line.text).foregroundColor(mix(0xABB2BF, 0x24292F, term.lightness)) }
                         }
                         .frame(height: termLine, alignment: .leading)
                     }
                     ZStack(alignment: .topLeading) {
-                        PromptText(folder: term.folder, text: term.buffer)
-                        Rectangle().fill(Color(hex: 0x528BFF)).frame(width: cell, height: termLine - 3)
+                        PromptText(folder: term.folder, text: term.buffer, lightness: term.lightness)
+                        Rectangle().fill(mix(0x528BFF, 0x0969DA, term.lightness)).frame(width: cell, height: termLine - 3)
                             .offset(x: CGFloat(term.promptLength + term.cursor) * cell, y: 1)
                             .opacity(0.85)
                     }
@@ -164,14 +174,14 @@ struct TerminalView: View {
                 }
                 if let caption = term.caption {
                     HStack(spacing: 8) {
-                        Text(caption.label).foregroundColor(Theme.dim)
-                        Text(caption.value).foregroundColor(Color(hex: 0xD7DAE0)).fontWeight(.semibold)
+                        Text(caption.label).foregroundColor(mix(0x7F848E, 0x6E7781, term.lightness))
+                        Text(caption.value).foregroundColor(mix(0xD7DAE0, 0x24292F, term.lightness)).fontWeight(.semibold)
                     }
                     .font(.system(size: 14))
                     .padding(.horizontal, 14)
                     .frame(height: 32)
-                    .background(Capsule().fill(Color(hex: 0x2C313A)))
-                    .overlay(Capsule().stroke(Color.white.opacity(0.08), lineWidth: 1))
+                    .background(Capsule().fill(mix(0x2C313A, 0xF0F1F4, term.lightness)))
+                    .overlay(Capsule().stroke(mix(0x3A3F47, 0xD0D4DA, term.lightness), lineWidth: 1))
                     .frame(width: windowSize.width - 2 * inset, alignment: .trailing)
                     .offset(x: inset, y: windowSize.height - titleHeight - inset - 32)
                 }
@@ -425,6 +435,23 @@ func renderAppearance() throws {
     term.popup.showDescriptions = true
     term.caption = ("Descriptions", "On")
     r.frame(1.2)
+
+    // macOS switches to Light mode and back: the popup follows with its light theme.
+    if let dark = store.theme(id: "one-dark-pro-darker"), let light = store.theme(id: "github-light-default") {
+        term.caption = ("macOS Dark mode", "\(dark.name)")
+        r.frame(1.0)
+        for (from, to, goingLight) in [(dark, light, true), (light, dark, false)] {
+            term.caption = goingLight ? ("macOS Light mode", "\(light.name)") : ("macOS Dark mode", "\(dark.name)")
+            for step in 1...12 {
+                let t = Double(step) / 12
+                term.lightness = goingLight ? t : 1 - t
+                term.popup.palette = Palette(blend(from, to, t))
+                r.frame(0.04)
+            }
+            term.popup.palette = Palette(to)
+            r.frame(goingLight ? 1.8 : 1.4)
+        }
+    }
 
     try r.list.write(to: frames.appendingPathComponent("list.txt"), atomically: true, encoding: .utf8)
     let gif = output.appendingPathComponent("appearance.gif").path
