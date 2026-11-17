@@ -215,10 +215,24 @@ can turn off in Settings.
 Yes, under the MIT license. Because it is free, it is not notarized by Apple; the install script and
 the Homebrew cask take care of the warning macOS shows for such apps.
 
+## Roadmap
+
+Ideas, not promises. Help is welcome with any of them; for something big, say hi in
+[Discussions](https://github.com/rostik32/zest/discussions/categories/ideas) first.
+
+- **More commands.** Popular tools that still have no spec are listed as
+  [good first issues](https://github.com/rostik32/zest/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+- **More terminals.** WezTerm, kitty, Alacritty and others haven't been tried yet
+  ([#18](https://github.com/rostik32/zest/issues/18)).
+- **bash and fish.** The app doesn't depend on zsh: each shell needs its own small script like
+  [`shell/zest.zsh`](shell/zest.zsh) that sends the command line and asks about keys.
+
 ## Contributing
 
 Specs, bug fixes and ideas are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to set up the
-project, run the tests and send a pull request. Most contributions are a single YAML file.
+project, run the tests and send a pull request. Most contributions are a single YAML file; the
+[good first issues](https://github.com/rostik32/zest/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+are a good place to start. Questions go to [Discussions](https://github.com/rostik32/zest/discussions).
 
 ## Credits
 

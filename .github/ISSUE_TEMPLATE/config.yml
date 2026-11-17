@@ -1,5 +1,11 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Ask a question
+    url: https://github.com/rostik32/zest/discussions/categories/q-a
+    about: How do I…, does zest work with…, is something supported. Ask in Discussions.
+  - name: Suggest an idea
+    url: https://github.com/rostik32/zest/discussions/categories/ideas
+    about: Ideas for zest itself (new shells, terminals, features). Bugs go in a new issue.
   - name: How to add a command
     url: https://github.com/rostik32/zest/blob/main/docs/adding-a-command.md
     about: Most commands only need a small YAML file.
