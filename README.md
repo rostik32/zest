@@ -164,6 +164,23 @@ To share a spec with everyone, add it to [`specs/`](specs) and open a pull reque
 [Adding a command](docs/adding-a-command.md) walks through it, and the
 [spec format reference](docs/spec-format.md) lists every field.
 
+## Performance
+
+The shell sends each change of the command line to the app and moves on without waiting. It only
+waits for an answer when you press Tab, ↑, ↓, Enter or Esc while the popup is open. Measured with
+`zsh scripts/bench.zsh` on an Apple M1 with macOS 27:
+
+| What | Cost |
+| --- | --- |
+| Shell startup | +10 ms on a bare `zsh -f`. With oh-my-zsh it's lost in run-to-run noise, since oh-my-zsh already loads the modules zest uses. |
+| Each key press, in the shell | 0.06 ms (median): it sends the line and returns. |
+| Tab, ↑, ↓ while the popup is open | 0.8 ms median, 1.9 ms p95, until the shell has the app's answer. |
+| App memory | 20 MB after launch, 30 MB after typing a few commands, about 50 MB with specs for hundreds of commands loaded. |
+| App CPU | 0% when idle. About 1.5% of one core while the popup is open, because it follows the terminal window. |
+| Over time | Memory stays flat over 1,200 shell sessions, 150 window moves and resizes, and 25 windows opened and closed. The only leaks `leaks` reports are three objects macOS's App Intents framework creates at launch. |
+
+Run `zsh scripts/bench.zsh` while Zest.app is running to measure your Mac.
+
 ## How it works
 
 ```
@@ -220,10 +237,23 @@ the Homebrew cask take care of the warning macOS shows for such apps.
 Ideas, not promises. Help is welcome with any of them; for something big, say hi in
 [Discussions](https://github.com/rostik32/zest/discussions/categories/ideas) first.
 
+- **Themes and a live preview.** The Settings preview changes as you change a setting. A theme
+  picker with search and the popular editor themes (One Dark Pro, Dracula, Catppuccin, Tokyo Night,
+  GitHub, Nord, Gruvbox, …), a light and a dark theme that follow the macOS appearance, a font
+  picker, `zest theme import` for any VS Code theme, and an option to use the theme your VS Code or
+  Cursor is using right now. A theme is a small file of color tokens, so adding one is easy.
+- **Suggestions for commands without a spec.** zsh already ships completions for thousands of
+  commands. When zest has no spec for a command, it can show what zsh's own completion offers, in
+  the same popup.
+- **More terminals.** Terminals that don't tell macOS where their cursor is could be asked by the
+  shell automatically, as Ghostty is now, so WezTerm, kitty and Alacritty work without setup
+  ([#18](https://github.com/rostik32/zest/issues/18)). The terminal in JetBrains IDEs needs a
+  look of its own. Warp can't be supported: it edits the command line itself instead of zsh.
+- **Works with your zsh setup.** Check and document zest with oh-my-zsh, powerlevel10k,
+  zsh-autosuggestions, zsh-syntax-highlighting, fzf and fzf-tab, and zsh-vi-mode, and fix what
+  conflicts.
 - **More commands.** Popular tools that still have no spec are listed as
   [good first issues](https://github.com/rostik32/zest/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
-- **More terminals.** WezTerm, kitty, Alacritty and others haven't been tried yet
-  ([#18](https://github.com/rostik32/zest/issues/18)).
 - **bash and fish.** The app doesn't depend on zsh: each shell needs its own small script like
   [`shell/zest.zsh`](shell/zest.zsh) that sends the command line and asks about keys.
 

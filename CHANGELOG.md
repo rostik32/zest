@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- New shells start faster: zest reads the existing key bindings without starting a subshell per
+  key (about 6 ms less on a bare zsh).
+- `scripts/bench.zsh` measures what zest costs: shell startup, each key press, the wait for Tab,
+  ↑ and ↓, and the app's memory and CPU. The numbers are in the README.
+
 ## 0.1.5 — 2026-11-16
 
 - Ghostty is supported: the shell asks Ghostty where the cursor is, so the popup opens right under

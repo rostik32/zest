@@ -72,6 +72,10 @@ so you will be asked to grant it again after each rebuild: remove the old zest e
 Settings → Privacy & Security → Accessibility and add the new one. Maintainers can avoid this with
 `scripts/setup-local-signing.sh` (see [Releasing](docs/releasing.md)).
 
+For changes to `shell/zest.zsh` or anything on the path of a key press, compare
+`zsh scripts/bench.zsh` before and after: it measures shell startup, the cost of each key and the
+wait for Tab, ↑ and ↓.
+
 If the popup doesn't open in some terminal, watch the app's debug messages while you type there. They
 say whether the terminal was in front and what it reported as the text cursor:
 

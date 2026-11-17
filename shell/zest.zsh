@@ -203,10 +203,24 @@ _zest_right() {
   _zest_fallback "$KEYS"
 }
 
+# Sets REPLY to the widget a raw key sequence is bound to in the emacs keymap.
+# $(bindkey …) would start a subshell for each key (about a millisecond each, at every
+# shell start), so the answer goes through a file in zest's own folder instead.
+typeset -g _zest_keys_file="${_zest_socket:h}/.keys.$$"
+[[ -d ${_zest_socket:h} && -w ${_zest_socket:h} ]] || _zest_keys_file=""
+_zest_binding() {
+  if [[ -n $_zest_keys_file ]] && bindkey -M emacs "$1" >| $_zest_keys_file 2>/dev/null; then
+    REPLY=$(<$_zest_keys_file)
+  else
+    REPLY=$(bindkey -M emacs "$1" 2>/dev/null)
+  fi
+  REPLY=${REPLY##* }
+}
+
 _zest_bind() {
   local key=$1 widget=$2 current
-  current=$(bindkey -M emacs "$key" 2>/dev/null)
-  current=${current##* }
+  _zest_binding "$key"
+  current=${REPLY:-undefined-key}
   [[ $current == _zest_* ]] && return
   _zest_original[$key]=$current
   bindkey -M emacs "$key" "$widget"
@@ -233,6 +247,10 @@ _zest_bind $'\r' _zest_enter
 _zest_bind $'\e' _zest_escape
 _zest_bind $'\e[C' _zest_right
 _zest_bind $'\eOC' _zest_right
+if [[ -n $_zest_keys_file ]]; then
+  zmodload -F zsh/files b:zf_rm 2>/dev/null && zf_rm -f -- $_zest_keys_file || command rm -f -- $_zest_keys_file
+fi
+unset _zest_keys_file
 
 add-zle-hook-widget line-pre-redraw _zest_redraw
 add-zle-hook-widget line-finish _zest_finish
