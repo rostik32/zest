@@ -1,0 +1,15 @@
+name: "Dark Modern (VS Code)"
+appearance: dark
+source: "Default Themes (built-in) by Microsoft (MIT)"
+colors:
+  background: "#202020"
+  border: "#313131"
+  selection: "#04395E"
+  text: "#CCCCCC"
+  selectedText: "#CCCCCC"
+  match: "#0078D4"
+  description: "#989898"
+  command: "#0DBC79"
+  subcommand: "#BC3FBC"
+  option: "#2472C8"
+  argument: "#E5E510"

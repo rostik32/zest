@@ -1,0 +1,15 @@
+name: "Catppuccin Frappé"
+appearance: dark
+source: "Catppuccin for VSCode by Catppuccin (MIT)"
+colors:
+  background: "#292C3C"
+  border: "#626880"
+  selection: "#414559"
+  text: "#C6D0F5"
+  selectedText: "#C6D0F5"
+  match: "#CA9EE6"
+  description: "#979FBD"
+  command: "#A6D189"
+  subcommand: "#F4B8E4"
+  option: "#8CAAEE"
+  argument: "#E5C890"

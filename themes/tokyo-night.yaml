@@ -1,0 +1,15 @@
+name: "Tokyo Night"
+appearance: dark
+source: "Tokyo Night by enkia (MIT)"
+colors:
+  background: "#16161E"
+  border: "#101014"
+  selection: "#20222C"
+  text: "#A9B1D6"
+  selectedText: "#A9B1D6"
+  match: "#6183BB"
+  description: "#7D839F"
+  command: "#73DACA"
+  subcommand: "#BB9AF7"
+  option: "#7AA2F7"
+  argument: "#E0AF68"

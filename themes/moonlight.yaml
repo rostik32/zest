@@ -1,0 +1,15 @@
+name: "Moonlight"
+appearance: dark
+source: "Moonlight by atomiks (MIT)"
+colors:
+  background: "#1A1E30"
+  border: "#272B3D"
+  selection: "#121521"
+  text: "#AAB3E5"
+  selectedText: "#FFFFFF"
+  match: "#74A0F1"
+  description: "#7F86AF"
+  command: "#C7F59B"
+  subcommand: "#BAACFF"
+  option: "#70B0FF"
+  argument: "#FFDB8E"

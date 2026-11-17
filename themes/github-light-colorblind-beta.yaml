@@ -1,0 +1,15 @@
+name: "GitHub Light Colorblind (Beta)"
+appearance: light
+source: "GitHub Theme by GitHub (MIT)"
+colors:
+  background: "#FFFFFF"
+  border: "#D0D7DE"
+  selection: "#EFF1F3"
+  text: "#24292F"
+  selectedText: "#24292F"
+  match: "#0969DA"
+  description: "#66696D"
+  command: "#0550AE"
+  subcommand: "#8250DF"
+  option: "#0969DA"
+  argument: "#4D2D00"

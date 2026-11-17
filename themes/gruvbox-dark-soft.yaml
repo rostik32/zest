@@ -1,0 +1,15 @@
+name: "Gruvbox Dark Soft"
+appearance: dark
+source: "Gruvbox Theme by jdinhify (MIT)"
+colors:
+  background: "#32302F"
+  border: "#3C3836"
+  selection: "#363332"
+  text: "#EBDBB2"
+  selectedText: "#8EC07C"
+  match: "#689D6A"
+  description: "#B3A88B"
+  command: "#98971A"
+  subcommand: "#B16286"
+  option: "#458588"
+  argument: "#D79921"

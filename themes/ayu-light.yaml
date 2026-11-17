@@ -1,0 +1,15 @@
+name: "Ayu Light"
+appearance: light
+source: "Ayu by teabyii (MIT)"
+colors:
+  background: "#FAFAFA"
+  border: "#E9EBED"
+  selection: "#E6E8EB"
+  text: "#5B6166"
+  selectedText: "#545A60"
+  match: "#F29718"
+  description: "#8B8F92"
+  command: "#5B6166"
+  subcommand: "#A176CB"
+  option: "#21A1E2"
+  argument: "#949800"

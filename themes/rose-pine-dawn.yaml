@@ -1,0 +1,15 @@
+name: "Rosé Pine Dawn"
+appearance: light
+source: "Rosé Pine by Rosé Pine (MIT)"
+colors:
+  background: "#FFFAF3"
+  border: "#F2E9E1"
+  selection: "#F4EFEA"
+  text: "#797593"
+  selectedText: "#575279"
+  match: "#D7827E"
+  description: "#A19DB0"
+  command: "#286983"
+  subcommand: "#907AA9"
+  option: "#56949F"
+  argument: "#949800"

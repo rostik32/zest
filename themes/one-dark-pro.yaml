@@ -1,0 +1,15 @@
+name: "One Dark Pro"
+appearance: dark
+source: "One Dark Pro by zhuangtongfa (MIT)"
+colors:
+  background: "#21252B"
+  border: "#181A1F"
+  selection: "#2C313A"
+  text: "#ABB2BF"
+  selectedText: "#D7DAE0"
+  match: "#ECEBEB"
+  description: "#828893"
+  command: "#8CC265"
+  subcommand: "#C162DE"
+  option: "#4AA5F0"
+  argument: "#D18F52"

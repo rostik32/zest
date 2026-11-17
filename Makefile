@@ -12,7 +12,7 @@ endif
 
 BIN_DIR ?= $(HOME)/.local/bin
 
-.PHONY: help build test specs zsh-test check app install icons demo
+.PHONY: help build test specs zsh-test check app install icons themes demo
 help: ## Show this help
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
 
@@ -44,5 +44,9 @@ install: app ## Build, install to /Applications and link the zest command
 icons: ## Download the icon sets again (Material Icon Theme, Codicons)
 	scripts/update-icons.sh
 
-demo: app ## Render docs/images/demo.gif and hero.png (needs ffmpeg)
+themes: ## Download the bundled VS Code themes again and convert them (themes/)
+	scripts/update-themes.sh
+
+demo: app ## Render docs/images/demo.gif, hero.png and appearance.gif (needs ffmpeg)
 	swift run -c release ZestDemo
+	swift run -c release ZestDemo appearance

@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import ZestCore
 import ZestUI
@@ -19,9 +20,27 @@ struct SettingsView: View {
             UpdatesTab(updater: updater)
                 .tabItem { Label("Updates", systemImage: "arrow.down.circle") }
         }
-        .frame(width: 520)
+        // Resizable; starts large enough that the theme list and preview fit.
+        .frame(minWidth: 640, idealWidth: 760, maxWidth: .infinity,
+               minHeight: 560, idealHeight: 820, maxHeight: .infinity)
         .padding(.vertical, 8)
+        .background(ResizableWindow())
     }
+}
+
+/// SwiftUI's Settings window has a fixed size; this lets you resize it.
+private struct ResizableWindow: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            guard let window = view.window else { return }
+            window.styleMask.insert(.resizable)
+            window.minSize = NSSize(width: 640, height: 560)
+        }
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }
 
 private struct StatusRow: View {
@@ -119,46 +138,220 @@ private struct BehaviorTab: View {
 private struct AppearanceTab: View {
     @ObservedObject var model: AppModel
     @AppStorage(Pref.fontSize) private var fontSize = 13.0
+    @AppStorage(Pref.fontName) private var fontName = "Menlo"
     @AppStorage(Pref.rows) private var rows = 8
     @AppStorage(Pref.width) private var width = 440.0
     @AppStorage(Pref.descriptions) private var descriptions = true
+    @AppStorage(Pref.themeDark) private var darkTheme = ZestTheme.oneDarkProDarker.id
+    @AppStorage(Pref.themeLight) private var lightTheme = "github-light-default"
+    @AppStorage(Pref.themeFollowsAppearance) private var followsAppearance = false
+    @AppStorage(Pref.themeMatchesEditor) private var matchesEditor = true
+    @State private var editingLight = false
+    @State private var search = ""
+    @State private var fonts: [String] = []
 
     var body: some View {
+        let themes = model.themes.all()
+        let _ = model.themesVersion  // reload the list after an import
         Form {
-            Section {
-                LabeledContent("Theme", value: "One Dark Pro Darker")
-                LabeledContent("Icons", value: "Material Icon Theme, Codicons")
+            Section("Theme") {
+                Toggle("Use a light theme when macOS is in Light mode", isOn: $followsAppearance)
+                let appearance: ZestTheme.Appearance? = followsAppearance ? (editingLight ? .light : .dark) : nil
+                let shown = ThemeList.filter(themes, search: search, appearance: appearance)
+                HStack(spacing: 12) {
+                    if followsAppearance {
+                        Picker("Editing", selection: $editingLight) {
+                            Text("Dark theme").tag(false)
+                            Text("Light theme").tag(true)
+                        }
+                        .pickerStyle(.segmented)
+                        .labelsHidden()
+                        .fixedSize()
+                    }
+                    Spacer()
+                    if !search.trimmingCharacters(in: .whitespaces).isEmpty {
+                        Text("\(shown.count) found").font(.caption).foregroundStyle(.secondary)
+                    }
+                    TextField("Search themes", text: $search, prompt: Text("Search \(themes.count) themes"))
+                        .textFieldStyle(.roundedBorder)
+                        .labelsHidden()
+                        .frame(width: 240)
+                }
+                ThemeList(themes: shown, search: search, slot: editingLight && followsAppearance,
+                          selection: editingLight && followsAppearance ? $lightTheme : $darkTheme)
+                Toggle("In VS Code and Cursor, use the editor's theme", isOn: $matchesEditor)
+                if matchesEditor {
+                    Text(editorThemes)
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                HStack {
+                    Button("Import VS Code Theme…") { importTheme() }
+                    Button("Open Themes Folder") { model.openThemesFolder() }
+                }
+            }
+            Section("Text") {
+                Picker("Font", selection: $fontName) {
+                    ForEach(fonts.contains(fontName) ? fonts : [fontName] + fonts, id: \.self) { name in
+                        Text(name == PopupFont.system ? "SF Mono (system)" : name).tag(name)
+                    }
+                }
                 Stepper("Font size: \(Int(fontSize))", value: $fontSize, in: 10...20)
                 Stepper("Visible rows: \(rows)", value: $rows, in: 3...20)
                 Slider(value: $width, in: 300...800, step: 20) { Text("Width: \(Int(width))") }
                 Toggle("Show descriptions", isOn: $descriptions)
             }
             Section("Preview") {
-                PreviewPopup(model: model)
-                    .frame(height: model.popup.model.height(itemCount: 4))
+                let theme = previewTheme(themes)
+                PreviewPopup(theme: theme, fontName: fontName, fontSize: fontSize, rows: rows, descriptions: descriptions)
+                    .frame(maxWidth: CGFloat(width))
+                    .frame(maxWidth: .infinity)
+                Text("\(theme.name)\(theme.source.map { " · " + $0 } ?? "")")
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)
+        .onAppear { if fonts.isEmpty { fonts = PopupFont.families() } }
+    }
+
+    /// The theme being edited, so picking one shows it right away.
+    private func previewTheme(_ themes: [ZestTheme]) -> ZestTheme {
+        let id = followsAppearance && editingLight ? lightTheme : darkTheme
+        return themes.first { $0.id == id } ?? .oneDarkProDarker
+    }
+
+    private var editorThemes: String {
+        let dark = AppModel.systemIsDark
+        return EditorTheme.Editor.allCases.map { editor in
+            "\(editor == .vscode ? "VS Code" : "Cursor"): \(EditorTheme.name(for: editor, darkMode: dark))"
+        }.joined(separator: " · ")
+    }
+
+    private func importTheme() {
+        let panel = NSOpenPanel()
+        panel.title = "Import VS Code Themes"
+        panel.message = "Choose a theme's .json file, or an extension folder (with package.json)."
+        panel.allowsMultipleSelection = true
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = true
+        panel.allowedContentTypes = [.json]
+        guard panel.runModal() == .OK else { return }
+        let imported = model.importThemes(from: panel.urls)
+        if let first = imported.first {
+            search = ""
+            if followsAppearance && first.appearance == .light { lightTheme = first.id; editingLight = true }
+            else { darkTheme = first.id; editingLight = false }
+        }
     }
 }
 
-/// A static popup with sample items, so appearance changes are visible right away.
-private struct PreviewPopup: View {
-    @ObservedObject var model: AppModel
+/// The list of themes, with a color swatch for each.
+private struct ThemeList: View {
+    /// Already filtered with `filter`.
+    let themes: [ZestTheme]
+    let search: String
+    /// Changes when you switch between the dark and the light theme.
+    let slot: Bool
+    @Binding var selection: String
+
+    static func filter(_ themes: [ZestTheme], search: String, appearance: ZestTheme.Appearance?) -> [ZestTheme] {
+        let query = search.trimmingCharacters(in: .whitespaces).lowercased()
+        return themes.filter { theme in
+            (appearance == nil || theme.appearance == appearance)
+                && (query.isEmpty || theme.name.lowercased().contains(query) || (theme.source ?? "").lowercased().contains(query))
+        }
+    }
 
     var body: some View {
-        let icons = IconResolver(
-            indexURL: Paths.icons?.appendingPathComponent("material.json"),
-            iconsDirectory: Paths.icons?.appendingPathComponent("material"))
-        PopupView(model: Self.sample(model.popup.model), icons: icons)
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(spacing: 2) {
+                    ForEach(themes) { theme in
+                        ThemeRow(theme: theme, selected: theme.id == selection)
+                            .id(theme.id)
+                            .contentShape(Rectangle())
+                            .onTapGesture { selection = theme.id }
+                    }
+                    if themes.isEmpty {
+                        Text("No themes match “\(search)”.").foregroundStyle(.secondary).padding(.vertical, 20)
+                    }
+                }
+                .padding(4)
+            }
+            .frame(height: 260)
+            .background(RoundedRectangle(cornerRadius: 6).fill(Color(nsColor: .textBackgroundColor)))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color(nsColor: .separatorColor)))
+            .onAppear { proxy.scrollTo(selection, anchor: .center) }
+            .onChange(of: slot) { _, _ in proxy.scrollTo(selection, anchor: .center) }
+        }
+    }
+}
+
+private struct ThemeRow: View {
+    let theme: ZestTheme
+    let selected: Bool
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Swatch(theme: theme)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(theme.name)
+                Text(theme.appearance == .dark ? "Dark" : "Light")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Spacer()
+            if selected { Image(systemName: "checkmark").foregroundStyle(Color.accentColor) }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(RoundedRectangle(cornerRadius: 5).fill(selected ? Color.accentColor.opacity(0.15) : .clear))
+    }
+}
+
+/// The theme's background with its text and kind colors.
+private struct Swatch: View {
+    let theme: ZestTheme
+
+    var body: some View {
+        HStack(spacing: 3) {
+            Text("Aa").font(.system(size: 11, weight: .semibold, design: .monospaced))
+                .foregroundStyle(Color(theme[.text]))
+            ForEach([ZestTheme.Token.command, .subcommand, .option, .argument], id: \.self) { token in
+                Circle().fill(Color(theme[token])).frame(width: 6, height: 6)
+            }
+        }
+        .padding(.horizontal, 6)
+        .frame(width: 66, height: 24)
+        .background(RoundedRectangle(cornerRadius: 4).fill(Color(theme[.background])))
+        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(theme[.border]), lineWidth: 1))
+    }
+}
+
+/// A popup with sample items, drawn with the settings as they are being changed.
+private struct PreviewPopup: View {
+    let theme: ZestTheme
+    let fontName: String
+    let fontSize: Double
+    let rows: Int
+    let descriptions: Bool
+
+    private static let icons = IconResolver(
+        indexURL: Paths.icons?.appendingPathComponent("material.json"),
+        iconsDirectory: Paths.icons?.appendingPathComponent("material"))
+
+    var body: some View {
+        let model = sample()
+        PopupView(model: model, icons: Self.icons)
+            .frame(height: model.height(itemCount: model.items.count))
     }
 
     @MainActor
-    static func sample(_ base: PopupModel) -> PopupModel {
+    private func sample() -> PopupModel {
         let preview = PopupModel()
-        preview.fontSize = base.fontSize
-        preview.visibleRows = 4
-        preview.showDescriptions = base.showDescriptions
+        preview.fontSize = CGFloat(fontSize)
+        preview.fontName = fontName
+        preview.visibleRows = min(rows, 10)
+        preview.showDescriptions = descriptions
+        preview.palette = Palette(theme)
         func item(_ kind: CompletionKind, _ name: String, _ description: String?, _ matched: [Int]) -> Completion {
             Completion(kind: kind, name: name, insertText: name, description: description, icon: nil,
                        matchedIndices: matched, score: 0, appendSpace: true, replaceStart: 0, replaceEnd: 0,
@@ -167,8 +360,14 @@ private struct PreviewPopup: View {
         preview.items = [
             item(.subcommand, "checkout", "Switch branches or restore working tree files", [0, 1]),
             item(.subcommand, "cherry-pick", "Apply the changes introduced by some commits", [0, 1]),
+            item(.option, "--force", "Throw away local changes", []),
+            item(.argument, "main", "Branch", []),
             item(.folder, "src/", nil, []),
             item(.file, "Package.swift", nil, []),
+            item(.history, "git checkout -b feature", "From history", []),
+            item(.command, "git", "The stupid content tracker", []),
+            item(.subcommand, "clone", "Clone a repository into a new directory", []),
+            item(.subcommand, "commit", "Record changes to the repository", []),
         ]
         return preview
     }

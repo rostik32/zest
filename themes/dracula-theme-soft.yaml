@@ -1,0 +1,15 @@
+name: "Dracula Theme Soft"
+appearance: dark
+source: "Dracula Theme Official by dracula-theme (MIT)"
+colors:
+  background: "#262626"
+  border: "#BF9EEE"
+  selection: "#44475A"
+  text: "#F6F6F4"
+  selectedText: "#F6F6F4"
+  match: "#97E1F1"
+  description: "#B8B8B6"
+  command: "#62E884"
+  subcommand: "#F286C4"
+  option: "#BF9EEE"
+  argument: "#E7EE98"

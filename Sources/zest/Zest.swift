@@ -9,7 +9,7 @@ struct Zest: ParsableCommand {
         abstract: "Autocomplete popup for zsh on macOS.",
         discussion: "The popup itself runs in Zest.app. This tool helps you write and check specs.",
         version: ZestVersion.current,
-        subcommands: [Complete.self, Validate.self, Gen.self, BuildSpecs.self, Init.self, Doctor.self, Serve.self]
+        subcommands: [Complete.self, Validate.self, Gen.self, BuildSpecs.self, Init.self, Doctor.self, Serve.self, ThemeCommand.self]
     )
 }
 
@@ -333,5 +333,100 @@ struct Serve: ParsableCommand {
         signal(SIGINT) { _ in Foundation.exit(0) }
         signal(SIGTERM) { _ in Foundation.exit(0) }
         dispatchMain()
+    }
+}
+
+// MARK: - theme
+
+struct ThemeCommand: ParsableCommand {
+    static let configuration = CommandConfiguration(
+        commandName: "theme",
+        abstract: "List themes, or import VS Code themes.",
+        subcommands: [List.self, Import.self, Editor.self])
+
+    struct List: ParsableCommand {
+        static let configuration = CommandConfiguration(abstract: "List the themes zest can use.")
+
+        @ArgumentParser.Option(help: "Theme folder to read instead of the usual ones. Can be repeated.")
+        var from: [String] = []
+
+        func run() {
+            let store = from.isEmpty ? ThemeStore() : ThemeStore(directories: from.map { URL(fileURLWithPath: $0) })
+            for theme in store.all() {
+                print("\(theme.id.padding(toLength: 34, withPad: " ", startingAt: 0)) \(theme.appearance.rawValue.padding(toLength: 6, withPad: " ", startingAt: 0)) \(theme.name)")
+            }
+        }
+    }
+
+    struct Import: ParsableCommand {
+        static let configuration = CommandConfiguration(
+            abstract: "Convert VS Code color themes into zest themes.",
+            discussion: """
+            Give a theme's .json file, or an extension folder (with package.json) to import every \
+            theme it contributes. Themes are written to ~/.config/zest/themes, where zest finds them.
+            """)
+
+        @Argument(help: "Theme .json files or extension folders.")
+        var paths: [String]
+
+        @ArgumentParser.Option(help: "Name for the theme (only with a single .json file).")
+        var name: String?
+
+        @ArgumentParser.Option(help: "Output folder.")
+        var out: String = ThemeStore.userDirectory.path
+
+        @ArgumentParser.Option(help: "Where the themes come from, saved in each file, e.g. \"Dracula (MIT)\".")
+        var source: String?
+
+        @ArgumentParser.Option(help: "Text added to each theme's name, e.g. \" (VS Code)\".")
+        var suffix: String = ""
+
+        func run() throws {
+            let outURL = URL(fileURLWithPath: out, isDirectory: true)
+            for path in paths {
+                let url = URL(fileURLWithPath: path)
+                var themes: [ZestTheme] = []
+                if url.pathExtension == "json" {
+                    let text = try String(contentsOf: url, encoding: .utf8)
+                    let base = url.deletingLastPathComponent()
+                    themes.append(try VSCodeTheme.convert(json: text, name: name, source: source) { include in
+                        try String(contentsOf: base.appendingPathComponent(include).standardizedFileURL, encoding: .utf8)
+                    })
+                } else {
+                    let contributed = VSCodeExtension.themes(in: url)
+                    if contributed.isEmpty { throw ValidationError("\(path): no themes found (expected a .json file or an extension folder with package.json)") }
+                    for theme in contributed { themes.append(try VSCodeExtension.convert(theme, source: source)) }
+                }
+                for var theme in themes {
+                    if !suffix.isEmpty {
+                        theme.name += suffix
+                        theme.id = ZestTheme.slug(theme.name)
+                    }
+                    let file = try ThemeStore.save(theme, to: outURL)
+                    print("\(theme.appearance.rawValue.padding(toLength: 6, withPad: " ", startingAt: 0)) \(theme.name) -> \(file.path)")
+                }
+            }
+        }
+    }
+
+    struct Editor: ParsableCommand {
+        static let configuration = CommandConfiguration(abstract: "Show the theme VS Code or Cursor is using, as zest sees it.")
+
+        @Argument(help: "vscode or cursor.")
+        var editor: String = "vscode"
+
+        @Flag(help: "Assume macOS is in Light mode.")
+        var light = false
+
+        func run() throws {
+            guard let which = EditorTheme.Editor(rawValue: editor) else { throw ValidationError("editor must be vscode or cursor") }
+            let name = EditorTheme.name(for: which, darkMode: !light)
+            print("\(editor) uses \"\(name)\"")
+            guard let theme = EditorTheme.current(for: which, darkMode: !light) else {
+                print("Theme files not found in the editor's extension folders.")
+                throw ExitCode(1)
+            }
+            print(theme.yaml, terminator: "")
+        }
     }
 }

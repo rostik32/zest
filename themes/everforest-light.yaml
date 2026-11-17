@@ -1,0 +1,15 @@
+name: "Everforest Light"
+appearance: light
+source: "Everforest by sainnhe (MIT)"
+colors:
+  background: "#EFEBD4"
+  border: "#EFEBD4"
+  selection: "#E6E2CC"
+  text: "#5C6A72"
+  selectedText: "#5C6A72"
+  match: "#8DA101"
+  description: "#88918F"
+  command: "#5C6A72"
+  subcommand: "#DF69BA"
+  option: "#3A94C5"
+  argument: "#949800"

@@ -1,0 +1,15 @@
+name: "Dark High Contrast (VS Code)"
+appearance: dark
+source: "Default Themes (built-in) by Microsoft (MIT)"
+colors:
+  background: "#000000"
+  border: "#454545"
+  selection: "#04395E"
+  text: "#FFFFFF"
+  selectedText: "#FFFFFF"
+  match: "#2AAAFF"
+  description: "#B3B3B3"
+  command: "#0DBC79"
+  subcommand: "#BC3FBC"
+  option: "#2472C8"
+  argument: "#E5E510"

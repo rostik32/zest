@@ -1,0 +1,15 @@
+name: "Night Owl"
+appearance: dark
+source: "Night Owl by sdras (MIT)"
+colors:
+  background: "#2C3043"
+  border: "#2B2F40"
+  selection: "#5F7E97"
+  text: "#D6DEEB"
+  selectedText: "#FFFFFF"
+  match: "#FFFFFF"
+  description: "#A3AAB9"
+  command: "#22DA6E"
+  subcommand: "#C792EA"
+  option: "#82AAFF"
+  argument: "#C5E478"

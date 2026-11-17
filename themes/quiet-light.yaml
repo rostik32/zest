@@ -1,0 +1,15 @@
+name: "Quiet Light"
+appearance: light
+source: "Quiet Light Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#F5F5F5"
+  border: "#C8C8C8"
+  selection: "#CADEB9"
+  text: "#000000"
+  selectedText: "#6C6C6C"
+  match: "#9769DC"
+  description: "#4A4A4A"
+  command: "#000000"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#949800"

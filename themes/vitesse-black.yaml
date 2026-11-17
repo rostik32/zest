@@ -1,0 +1,15 @@
+name: "Vitesse Black"
+appearance: dark
+source: "Vitesse Theme by antfu (MIT)"
+colors:
+  background: "#000000"
+  border: "#191919"
+  selection: "#121212"
+  text: "#AFACA2"
+  selectedText: "#B3B0A5"
+  match: "#4D9375"
+  description: "#7B7871"
+  command: "#4D9375"
+  subcommand: "#D9739F"
+  option: "#6394BF"
+  argument: "#E6CC77"

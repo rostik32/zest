@@ -1,0 +1,15 @@
+name: "Vitesse Dark Soft"
+appearance: dark
+source: "Vitesse Theme by antfu (MIT)"
+colors:
+  background: "#222222"
+  border: "#252525"
+  selection: "#292929"
+  text: "#CFCBBF"
+  selectedText: "#CFCBBF"
+  match: "#4D9375"
+  description: "#9B9890"
+  command: "#4D9375"
+  subcommand: "#D9739F"
+  option: "#6394BF"
+  argument: "#E6CC77"

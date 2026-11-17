@@ -1,0 +1,15 @@
+name: "Everforest Dark"
+appearance: dark
+source: "Everforest by sainnhe (MIT)"
+colors:
+  background: "#3D484D"
+  border: "#3D484D"
+  selection: "#475258"
+  text: "#D3C6AA"
+  selectedText: "#D3C6AA"
+  match: "#A7C080"
+  description: "#A6A08E"
+  command: "#A7C080"
+  subcommand: "#D699B6"
+  option: "#7FBBB3"
+  argument: "#DBBC7F"

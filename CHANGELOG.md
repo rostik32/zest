@@ -1,11 +1,18 @@
 # Changelog
 
-## Unreleased
+## 0.1.6 — 2026-11-17
 
+- Themes: pick one of 74 VS Code themes in Settings → Appearance, with search and a live preview.
+  One Dark Pro, Dracula, Catppuccin, Tokyo Night, GitHub, Nord, Gruvbox, Solarized, Rosé Pine,
+  Ayu and more.
+- In VS Code and Cursor the popup uses the editor's own theme. You can turn this off.
+- A light and a dark theme can follow the macOS appearance.
+- Choose the font: any installed monospaced font.
+- Import any VS Code theme from Settings or with `zest theme import`; `zest theme list` shows
+  them all. See docs/themes.md.
+- The Settings preview changes as you change the theme, font, size, rows or descriptions.
 - New shells start faster: zest reads the existing key bindings without starting a subshell per
-  key (about 6 ms less on a bare zsh).
-- `scripts/bench.zsh` measures what zest costs: shell startup, each key press, the wait for Tab,
-  ↑ and ↓, and the app's memory and CPU. The numbers are in the README.
+  key. `scripts/bench.zsh` measures what zest costs, and the README has the numbers.
 
 ## 0.1.5 — 2026-11-16
 

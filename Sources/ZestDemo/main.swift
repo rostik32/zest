@@ -1,4 +1,5 @@
-// Renders the README demo (docs/images/demo.gif and docs/images/hero.png).
+// Renders the README demo (docs/images/demo.gif and docs/images/hero.png), and with
+// `appearance` the themes demo (docs/images/appearance.gif).
 //
 // This is not a screen recording: it types a script into the real completion engine
 // (CompletionController + built-in specs) inside a throwaway sample project, runs the real
@@ -94,6 +95,8 @@ final class Terminal: ObservableObject {
     @Published var cursor = 0
     @Published var popupVisible = false
     @Published var replaceColumn = 0
+    /// A label in the corner, e.g. ("Theme", "Dracula"), for the appearance demo.
+    @Published var caption: (label: String, value: String)?
     let popup = PopupModel()
     var cwd = project
 
@@ -158,6 +161,19 @@ struct TerminalView: View {
                         .frame(width: 440, height: term.popup.height(itemCount: term.popup.items.count))
                         .shadow(color: .black.opacity(0.45), radius: 10, y: 4)
                         .offset(x: popupX, y: inset + CGFloat(term.lines.count + 1) * termLine + 4)
+                }
+                if let caption = term.caption {
+                    HStack(spacing: 8) {
+                        Text(caption.label).foregroundColor(Theme.dim)
+                        Text(caption.value).foregroundColor(Color(hex: 0xD7DAE0)).fontWeight(.semibold)
+                    }
+                    .font(.system(size: 14))
+                    .padding(.horizontal, 14)
+                    .frame(height: 32)
+                    .background(Capsule().fill(Color(hex: 0x2C313A)))
+                    .overlay(Capsule().stroke(Color.white.opacity(0.08), lineWidth: 1))
+                    .frame(width: windowSize.width - 2 * inset, alignment: .trailing)
+                    .offset(x: inset, y: windowSize.height - titleHeight - inset - 32)
                 }
             }
         }
@@ -334,8 +350,100 @@ func render() throws {
     print("Wrote \(gif) (\(r.index) frames) and \(hero.path)")
 }
 
+// MARK: - Appearance demo
+
+/// `a` and `b` mixed, `t` from 0 (a) to 1 (b).
+func blend(_ a: ZestTheme, _ b: ZestTheme, _ t: Double) -> ZestTheme {
+    var colors: [ZestTheme.Token: RGBA] = [:]
+    for token in ZestTheme.Token.allCases {
+        let x = a[token], y = b[token]
+        colors[token] = RGBA(red: x.red + (y.red - x.red) * t, green: x.green + (y.green - x.green) * t,
+                             blue: x.blue + (y.blue - x.blue) * t)
+    }
+    return ZestTheme(id: "blend", name: "", appearance: t < 0.5 ? a.appearance : b.appearance, colors: colors)
+}
+
+/// docs/images/appearance.gif: the popup changing theme, font, size and rows in place.
+@MainActor
+func renderAppearance() throws {
+    let frames = work.appendingPathComponent("frames")
+    try FileManager.default.createDirectory(at: frames, withIntermediateDirectories: true)
+    let r = Recorder(frames: frames)
+    let term = r.term
+    let store = ThemeStore(directories: [root.appendingPathComponent("themes")])
+    let ids = ["one-dark-pro-darker", "dracula-theme", "catppuccin-mocha", "tokyo-night", "github-light-default",
+               "rose-pine-dawn", "gruvbox-dark-medium", "nord", "one-dark-pro-darker"]
+    let themes = ids.compactMap { store.theme(id: $0) }
+    term.popup.visibleRows = 6
+    term.popup.palette = Palette(themes[0])
+
+    r.frame(0.5)
+    r.type("git c", each: 0.09)
+    term.caption = ("Theme", themes[0].name)
+    r.frame(1.2)
+
+    // Themes, each fading into the next.
+    for (i, next) in themes.enumerated().dropFirst() {
+        let previous = themes[i - 1]
+        for step in 1...8 {
+            term.popup.palette = Palette(blend(previous, next, Double(step) / 8))
+            r.frame(0.035)
+        }
+        term.popup.palette = Palette(next)
+        term.caption = ("Theme", next.name)
+        r.frame(0.55)
+        if i < themes.count - 1 { r.press(i % 3 == 2 ? .up : .down, hold: 0.55) } else { r.frame(0.6) }
+    }
+
+    // Fonts.
+    for name in ["SF Mono", "Monaco", "PT Mono", "Menlo"] {
+        term.popup.fontName = name == "SF Mono" ? PopupFont.system : name
+        term.caption = ("Font", name)
+        r.frame(0.9)
+    }
+
+    // Size: grows, then shrinks back.
+    term.caption = ("Size", "13")
+    for size in Array(stride(from: 13.0, through: 16.0, by: 0.5)) + Array(stride(from: 15.5, through: 13.0, by: -0.5)) {
+        term.popup.fontSize = size
+        term.caption = ("Size", "\(Int(size.rounded()))")
+        r.frame(size == 16 ? 0.8 : 0.06)
+    }
+    r.frame(0.4)
+
+    // Rows.
+    for rows in [3, 4, 5, 6, 7, 8] {
+        term.popup.visibleRows = rows
+        term.caption = ("Visible rows", "\(rows)")
+        r.frame(rows == 3 || rows == 8 ? 0.7 : 0.12)
+    }
+
+    // Descriptions off and on.
+    term.popup.showDescriptions = false
+    term.caption = ("Descriptions", "Off")
+    r.frame(1.0)
+    term.popup.showDescriptions = true
+    term.caption = ("Descriptions", "On")
+    r.frame(1.2)
+
+    try r.list.write(to: frames.appendingPathComponent("list.txt"), atomically: true, encoding: .utf8)
+    let gif = output.appendingPathComponent("appearance.gif").path
+    let ffmpeg = ["/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg"].first { FileManager.default.fileExists(atPath: $0) } ?? "ffmpeg"
+    let filter = "scale=936:-1:flags=lanczos,split[a][b];[a]palettegen=stats_mode=full:max_colors=192[p];[b][p]paletteuse=dither=none:diff_mode=rectangle"
+    let p = Process()
+    p.executableURL = URL(fileURLWithPath: ffmpeg)
+    p.arguments = ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", "list.txt", "-vf", filter, "-loop", "0", gif]
+    p.currentDirectoryURL = frames
+    try p.run()
+    p.waitUntilExit()
+    print("Wrote \(gif) (\(r.index) frames)")
+}
+
 MainActor.assumeIsolated {
     _ = NSApplication.shared
     IconCache.shared.configure(icons: iconsDir)
-    do { try render() } catch { print("error: \(error)"); exit(1) }
+    do {
+        if CommandLine.arguments.contains("appearance") { try renderAppearance() }
+        else { try render() }
+    } catch { print("error: \(error)"); exit(1) }
 }

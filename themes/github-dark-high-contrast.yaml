@@ -1,0 +1,15 @@
+name: "GitHub Dark High Contrast"
+appearance: dark
+source: "GitHub Theme by GitHub (MIT)"
+colors:
+  background: "#272B33"
+  border: "#7A828E"
+  selection: "#575D66"
+  text: "#F0F3F6"
+  selectedText: "#F0F3F6"
+  match: "#71B7FF"
+  description: "#B4B7BC"
+  command: "#26CD4D"
+  subcommand: "#CB9EFF"
+  option: "#71B7FF"
+  argument: "#F0B72F"

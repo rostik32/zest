@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir _site
           cp site/* _site/
-          cp docs/images/demo.gif docs/images/hero.png assets/icon.png assets/social-preview.png _site/
+          cp docs/images/demo.gif docs/images/appearance.gif docs/images/hero.png assets/icon.png assets/social-preview.png _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -34,8 +34,9 @@ small native app instead of a web view with a terminal proxy in front of every s
   from the open-source [Fig spec collection](https://github.com/withfig/autocomplete), plus files,
   folders and command history.
 - **Adding a command is one YAML file.** Run `zest gen mytool` to draft it from `--help`.
-- **Looks like your editor.** One Dark Pro Darker colors, Material Icon Theme file icons and
-  Codicons, as in VS Code and Cursor.
+- **Looks like your editor.** 74 themes from VS Code (One Dark Pro, Dracula, Catppuccin, Tokyo
+  Night, GitHub, …), or the theme your VS Code or Cursor uses right now. Material Icon Theme file
+  icons and Codicons, as in the editor.
 - **Private.** Everything runs on your Mac. zest makes no network requests except checking
   GitHub for updates, which you can turn off.
 
@@ -120,11 +121,28 @@ bindings and zsh's own completion.
 
 The menu bar icon lets you turn suggestions on and off (<kbd>⌘P</kbd>), open **Settings**, check for
 updates, reload specs or quit. In Settings you can change the Enter key behavior, fuzzy matching,
-history suggestions, font size, popup width and the number of visible rows.
+history suggestions, the theme, the font, the popup width and the number of visible rows.
 
 <p align="center">
   <img src="docs/images/hero.png" width="720" alt="zest listing git branches for git checkout">
 </p>
+
+## Themes and fonts
+
+Make the popup look like the rest of your setup. In **Settings → Appearance** you pick one of 74
+themes from VS Code (search the list; the preview changes as you click), the font, its size, how
+many rows to show and whether to show descriptions.
+
+<p align="center">
+  <img src="docs/images/appearance.gif" width="760" alt="The zest popup in the terminal switching between One Dark Pro Darker, Dracula, Catppuccin Mocha, Tokyo Night, GitHub Light, Rosé Pine Dawn, Gruvbox and Nord, then changing font, size, rows and descriptions">
+</p>
+
+- **74 themes**: One Dark Pro, Dracula, Catppuccin, Tokyo Night, GitHub, Nord, Gruvbox, Solarized,
+  Rosé Pine, Ayu, Night Owl, the VS Code defaults and more.
+- **Light and dark**: pick one of each and the popup follows the macOS appearance.
+- **Your editor's theme**: in VS Code and Cursor the popup uses the editor's current theme.
+- **Any VS Code theme**: import it from Settings or with `zest theme import`. A theme is a small
+  YAML file of colors; see [Themes](docs/themes.md).
 
 ## Add a command
 
@@ -237,11 +255,6 @@ the Homebrew cask take care of the warning macOS shows for such apps.
 Ideas, not promises. Help is welcome with any of them; for something big, say hi in
 [Discussions](https://github.com/rostik32/zest/discussions/categories/ideas) first.
 
-- **Themes and a live preview.** The Settings preview changes as you change a setting. A theme
-  picker with search and the popular editor themes (One Dark Pro, Dracula, Catppuccin, Tokyo Night,
-  GitHub, Nord, Gruvbox, …), a light and a dark theme that follow the macOS appearance, a font
-  picker, `zest theme import` for any VS Code theme, and an option to use the theme your VS Code or
-  Cursor is using right now. A theme is a small file of color tokens, so adding one is easy.
 - **Suggestions for commands without a spec.** zsh already ships completions for thousands of
   commands. When zest has no spec for a command, it can show what zsh's own completion offers, in
   the same popup.
@@ -269,7 +282,8 @@ are a good place to start. Questions go to [Discussions](https://github.com/rost
 - Command specs: [withfig/autocomplete](https://github.com/withfig/autocomplete), MIT license.
 - File and folder icons: [Material Icon Theme](https://github.com/material-extensions/vscode-material-icon-theme), MIT license.
 - Symbol icons: [Codicons](https://github.com/microsoft/vscode-codicons), CC BY 4.0.
-- Colors: [One Dark Pro](https://github.com/Binaryify/OneDark-Pro), MIT license.
+- Themes: converted from VS Code themes by their authors, each under its own license (all MIT);
+  see [themes/SOURCES.md](themes/SOURCES.md).
 - [Yams](https://github.com/jpsim/Yams) and [Swift Argument Parser](https://github.com/apple/swift-argument-parser).
 
 zest is not affiliated with Fig, Amazon or Kiro.

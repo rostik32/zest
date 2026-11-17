@@ -1,0 +1,15 @@
+name: "Catppuccin Mocha"
+appearance: dark
+source: "Catppuccin for VSCode by Catppuccin (MIT)"
+colors:
+  background: "#181825"
+  border: "#585B70"
+  selection: "#313244"
+  text: "#CDD6F4"
+  selectedText: "#CDD6F4"
+  match: "#CBA6F7"
+  description: "#979DB6"
+  command: "#A6E3A1"
+  subcommand: "#F5C2E7"
+  option: "#89B4FA"
+  argument: "#F9E2AF"

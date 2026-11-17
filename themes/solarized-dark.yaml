@@ -1,0 +1,15 @@
+name: "Solarized Dark"
+appearance: dark
+source: "Solarized Dark Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#00212B"
+  border: "#00212B"
+  selection: "#005A6F"
+  text: "#839496"
+  selectedText: "#839496"
+  match: "#1EBCC5"
+  description: "#5C7276"
+  command: "#859900"
+  subcommand: "#D33682"
+  option: "#268BD2"
+  argument: "#B58900"

@@ -1,0 +1,15 @@
+name: "Catppuccin Latte"
+appearance: light
+source: "Catppuccin for VSCode by Catppuccin (MIT)"
+colors:
+  background: "#E6E9EF"
+  border: "#ACB0BE"
+  selection: "#CCD0DA"
+  text: "#4C4F69"
+  selectedText: "#4C4F69"
+  match: "#8839EF"
+  description: "#7A7D91"
+  command: "#40A02B"
+  subcommand: "#BC05BC"
+  option: "#1E66F5"
+  argument: "#949800"

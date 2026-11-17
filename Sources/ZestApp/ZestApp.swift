@@ -19,6 +19,7 @@ struct ZestApp: App {
         Settings {
             SettingsView(model: model, updater: model.updater)
         }
+        .windowResizability(.contentMinSize)
     }
 }
 

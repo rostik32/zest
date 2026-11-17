@@ -1,0 +1,15 @@
+name: "Ayu Dark"
+appearance: dark
+source: "Ayu by teabyii (MIT)"
+colors:
+  background: "#141821"
+  border: "#1B1F29"
+  selection: "#212732"
+  text: "#C0BEB7"
+  selectedText: "#C3C2BC"
+  match: "#E6B450"
+  description: "#8C8C8A"
+  command: "#70BF56"
+  subcommand: "#D0A1FF"
+  option: "#4FBFFF"
+  argument: "#FDB04C"

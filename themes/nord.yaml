@@ -1,0 +1,15 @@
+name: "Nord"
+appearance: dark
+source: "Nord by Arctic Ice Studio (MIT)"
+colors:
+  background: "#2E3440"
+  border: "#3B4252"
+  selection: "#434C5E"
+  text: "#D8DEE9"
+  selectedText: "#D8DEE9"
+  match: "#88C0D0"
+  description: "#A5ABB6"
+  command: "#A3BE8C"
+  subcommand: "#B48EAD"
+  option: "#81A1C1"
+  argument: "#EBCB8B"

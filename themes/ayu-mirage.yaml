@@ -1,0 +1,15 @@
+name: "Ayu Mirage"
+appearance: dark
+source: "Ayu by teabyii (MIT)"
+colors:
+  background: "#282E3B"
+  border: "#171B24"
+  selection: "#313949"
+  text: "#CCCBC3"
+  selectedText: "#CFCDC6"
+  match: "#FFCC66"
+  description: "#9B9C9A"
+  command: "#87D96C"
+  subcommand: "#DDBBFF"
+  option: "#6ACDFF"
+  argument: "#FCCA60"

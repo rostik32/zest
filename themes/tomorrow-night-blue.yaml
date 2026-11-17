@@ -1,0 +1,15 @@
+name: "Tomorrow Night Blue"
+appearance: dark
+source: "Tomorrow Night Blue Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#001C40"
+  border: "#404F7D"
+  selection: "#607188"
+  text: "#FFFFFF"
+  selectedText: "#FFFFFF"
+  match: "#BBDAFF"
+  description: "#B3BBC6"
+  command: "#D1F1A9"
+  subcommand: "#EBBBFF"
+  option: "#BBDAFF"
+  argument: "#FFEEAD"

@@ -13,6 +13,11 @@ enum Pref {
     static let fontSize = "fontSize"
     static let width = "popupWidth"
     static let descriptions = "showDescriptions"
+    static let fontName = "fontName"
+    static let themeDark = "themeDark"
+    static let themeLight = "themeLight"
+    static let themeFollowsAppearance = "themeFollowsAppearance"
+    static let themeMatchesEditor = "themeMatchesEditor"
     static let autoCheckUpdates = "autoCheckUpdates"
     static let autoInstallUpdates = "autoInstallUpdates"
     static let lastUpdateCheck = "lastUpdateCheck"
@@ -30,6 +35,11 @@ enum Pref {
             fontSize: 13.0,
             width: 440.0,
             descriptions: true,
+            fontName: "Menlo",
+            themeDark: ZestTheme.oneDarkProDarker.id,
+            themeLight: "github-light-default",
+            themeFollowsAppearance: false,
+            themeMatchesEditor: true,
             autoCheckUpdates: true,
             autoInstallUpdates: false,
         ])

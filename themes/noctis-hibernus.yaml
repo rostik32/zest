@@ -1,0 +1,15 @@
+name: "Noctis Hibernus"
+appearance: light
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#E0EFF1"
+  border: "#D0EDF1"
+  selection: "#BBE0F7"
+  text: "#6A7A7C"
+  selectedText: "#005661"
+  match: "#0099AD"
+  description: "#6A7A7C"
+  command: "#6A7A7C"
+  subcommand: "#FF5792"
+  option: "#0094F0"
+  argument: "#949800"

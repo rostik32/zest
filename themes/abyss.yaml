@@ -1,0 +1,15 @@
+name: "Abyss"
+appearance: dark
+source: "Abyss Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#262641"
+  border: "#2B2B4A"
+  selection: "#08286B"
+  text: "#6688CC"
+  selectedText: "#6688CC"
+  match: "#0063A5"
+  description: "#536BA2"
+  command: "#D1F1A9"
+  subcommand: "#EBBBFF"
+  option: "#BBDAFF"
+  argument: "#FFEEAD"

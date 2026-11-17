@@ -1,0 +1,15 @@
+name: "SynthWave '84"
+appearance: dark
+source: "SynthWave '84 by Robb Owen (MIT)"
+colors:
+  background: "#191723"
+  border: "#383640"
+  selection: "#4A4851"
+  text: "#FFFFFF"
+  selectedText: "#FFFFFF"
+  match: "#F97E72"
+  description: "#BAB9BD"
+  command: "#72F1B8"
+  subcommand: "#FF7EDB"
+  option: "#03EDF9"
+  argument: "#F3E70F"

@@ -33,6 +33,7 @@ cp "$bin/zest" "$app/Contents/Helpers/zest"
 "$bin/zest" build-specs --from specs --to "$app/Contents/Resources/specs"
 cp shell/zest.zsh "$app/Contents/Resources/zest.zsh"
 cp -R assets/icons "$app/Contents/Resources/icons"
+cp -R themes "$app/Contents/Resources/themes"
 [ -f assets/AppIcon.icns ] && cp assets/AppIcon.icns "$app/Contents/Resources/AppIcon.icns"
 
 cat > "$app/Contents/Info.plist" <<PLIST

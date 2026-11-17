@@ -1,0 +1,15 @@
+name: "Light+ (VS Code)"
+appearance: light
+source: "Default Themes (built-in) by Microsoft (MIT)"
+colors:
+  background: "#F3F3F3"
+  border: "#D4D4D4"
+  selection: "#D6EBFF"
+  text: "#000000"
+  selectedText: "#000000"
+  match: "#0066BF"
+  description: "#494949"
+  command: "#000000"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#949800"

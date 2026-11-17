@@ -1,0 +1,15 @@
+name: "GitHub Light"
+appearance: light
+source: "GitHub Theme by GitHub (MIT)"
+colors:
+  background: "#F6F8FA"
+  border: "#E1E4E8"
+  selection: "#E2E5E9"
+  text: "#24292E"
+  selectedText: "#2F363D"
+  match: "#2188FF"
+  description: "#63676B"
+  command: "#28A745"
+  subcommand: "#5A32A3"
+  option: "#0366D6"
+  argument: "#B08800"

@@ -1,0 +1,15 @@
+name: "Rosé Pine Moon"
+appearance: dark
+source: "Rosé Pine by Rosé Pine (MIT)"
+colors:
+  background: "#2A273F"
+  border: "#393552"
+  selection: "#37344D"
+  text: "#908CAA"
+  selectedText: "#E0DEF4"
+  match: "#EA9A97"
+  description: "#716E8A"
+  command: "#3E8FB0"
+  subcommand: "#C4A7E7"
+  option: "#9CCFD8"
+  argument: "#F6C177"

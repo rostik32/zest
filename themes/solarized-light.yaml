@@ -1,0 +1,15 @@
+name: "Solarized Light"
+appearance: light
+source: "Solarized Light Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#EEE8D5"
+  border: "#DDD6C1"
+  selection: "#E8DCB6"
+  text: "#657B83"
+  selectedText: "#6C6C6C"
+  match: "#B58900"
+  description: "#657B83"
+  command: "#859900"
+  subcommand: "#D33682"
+  option: "#268BD2"
+  argument: "#B58900"

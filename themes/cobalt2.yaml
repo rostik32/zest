@@ -1,0 +1,15 @@
+name: "Cobalt2"
+appearance: dark
+source: "Cobalt2 Theme Official by wesbos (MIT)"
+colors:
+  background: "#15232D"
+  border: "#15232D"
+  selection: "#193549"
+  text: "#AAAAAA"
+  selectedText: "#AAAAAA"
+  match: "#FFC600"
+  description: "#7D8284"
+  command: "#3AD900"
+  subcommand: "#FB94FF"
+  option: "#0088FF"
+  argument: "#FFC600"

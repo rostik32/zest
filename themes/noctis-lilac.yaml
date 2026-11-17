@@ -1,0 +1,15 @@
+name: "Noctis Lilac"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#DEDBF5"
+  border: "#D4D0F1"
+  selection: "#CAC4F3"
+  text: "#666284"
+  selectedText: "#0C006B"
+  match: "#7060EB"
+  description: "#8A86A6"
+  command: "#666284"
+  subcommand: "#BC3FBC"
+  option: "#2472C8"
+  argument: "#666284"

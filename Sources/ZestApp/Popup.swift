@@ -46,6 +46,27 @@ final class PopupController {
     /// popup stays closed until the next key, when the shell reports where it is.
     var onDismiss: (() -> Void)?
 
+    /// The chosen theme's colors, used everywhere except in VS Code and Cursor when
+    /// `matchEditor` is on.
+    var basePalette = Palette.default
+    var matchEditor = true
+    private let editorThemes = EditorThemeCache()
+    private var lastFront: NSRunningApplication?
+
+    /// Picks the palette for the app in front: the editor's theme in VS Code and Cursor.
+    func refreshPalette(for front: NSRunningApplication? = nil) {
+        let app = front ?? lastFront
+        var palette = basePalette
+        if matchEditor, let app, let editor = EditorThemeCache.editor(for: app),
+           let theme = editorThemes.theme(for: editor, onUpdate: { [weak self] in
+               guard let self else { return }
+               self.refreshPalette()
+           }) {
+            palette = Palette(theme)
+        }
+        if model.palette != palette { model.palette = palette }
+    }
+
     // Follow the terminal window while the popup is open.
     private var followTimer: Timer?
     private var missedTicks = 0
@@ -125,6 +146,8 @@ final class PopupController {
         }
         Log.popup.debug("shown in \(bundle, privacy: .public) at \(caret.rect.debugDescription, privacy: .public)")
 
+        lastFront = front
+        refreshPalette(for: front)
         if model.items != state.items { model.items = state.items }
         if model.selected != state.selected { model.selected = state.selected }
         if model.isLoading != state.isLoading { model.isLoading = state.isLoading }
@@ -164,3 +187,46 @@ final class PopupController {
     }
 }
 
+
+/// The themes VS Code and Cursor are using, read in the background and kept until the
+/// editor's settings or the macOS appearance change.
+@MainActor
+final class EditorThemeCache {
+    private struct Entry {
+        var settingsDate: Date?
+        var dark: Bool
+        var theme: ZestTheme?
+    }
+
+    private var entries: [EditorTheme.Editor: Entry] = [:]
+    private var loading: Set<EditorTheme.Editor> = []
+
+    static func editor(for app: NSRunningApplication) -> EditorTheme.Editor? {
+        guard let bundle = app.bundleIdentifier else { return nil }
+        if bundle == "com.microsoft.VSCode" || bundle == "com.microsoft.VSCodeInsiders" || bundle == "com.vscodium" {
+            return .vscode
+        }
+        return bundle.hasPrefix("com.todesktop.") ? .cursor : nil
+    }
+
+    /// The cached theme (possibly a little stale); starts a refresh when needed and calls
+    /// `onUpdate` when it has a new one.
+    func theme(for editor: EditorTheme.Editor, onUpdate: @escaping @MainActor () -> Void) -> ZestTheme? {
+        let date = EditorTheme.settingsDate(for: editor)
+        let dark = AppModel.systemIsDark
+        let entry = entries[editor]
+        if entry == nil || entry?.settingsDate != date || entry?.dark != dark, !loading.contains(editor) {
+            loading.insert(editor)
+            Task.detached(priority: .utility) {
+                let theme = EditorTheme.current(for: editor, darkMode: dark)
+                await MainActor.run {
+                    self.entries[editor] = Entry(settingsDate: date, dark: dark, theme: theme)
+                    self.loading.remove(editor)
+                    Log.popup.debug("editor theme for \(editor.rawValue, privacy: .public): \(theme?.name ?? "not found", privacy: .public)")
+                    onUpdate()
+                }
+            }
+        }
+        return entry?.theme
+    }
+}

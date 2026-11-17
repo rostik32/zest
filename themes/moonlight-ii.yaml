@@ -1,0 +1,15 @@
+name: "Moonlight II"
+appearance: dark
+source: "Moonlight by atomiks (MIT)"
+colors:
+  background: "#191A2A"
+  border: "#141522"
+  selection: "#2F334D"
+  text: "#A9B8E8"
+  selectedText: "#FFFFFF"
+  match: "#86E1FC"
+  description: "#7E89AF"
+  command: "#C3E88D"
+  subcommand: "#FCA7EA"
+  option: "#82AAFF"
+  argument: "#FFC777"

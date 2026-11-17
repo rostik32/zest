@@ -1,0 +1,15 @@
+name: "Tokyo Night Light"
+appearance: dark
+source: "Tokyo Night by enkia (MIT)"
+colors:
+  background: "#DCDEE3"
+  border: "#C1C2C7"
+  selection: "#E8E9ED"
+  text: "#343B59"
+  selectedText: "#363C4D"
+  match: "#2959AA"
+  description: "#666C82"
+  command: "#33635C"
+  subcommand: "#7B43BA"
+  option: "#2959AA"
+  argument: "#8F5E15"

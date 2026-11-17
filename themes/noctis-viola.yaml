@@ -1,0 +1,15 @@
+name: "Noctis Viola"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#462D5D"
+  border: "#1C1226"
+  selection: "#593A78"
+  text: "#B3A5C0"
+  selectedText: "#EDEBFF"
+  match: "#BF8EF1"
+  description: "#9281A2"
+  command: "#49E9A6"
+  subcommand: "#DF769B"
+  option: "#49ACE9"
+  argument: "#E4B781"

@@ -1,0 +1,15 @@
+name: "Noctis Sereno"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#083D44"
+  border: "#0F1415"
+  selection: "#0E6671"
+  text: "#87A7AB"
+  selectedText: "#EBFDFF"
+  match: "#40D4E7"
+  description: "#61878C"
+  command: "#49E9A6"
+  subcommand: "#DF769B"
+  option: "#49ACE9"
+  argument: "#E4B781"

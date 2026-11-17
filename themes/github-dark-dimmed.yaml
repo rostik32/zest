@@ -1,0 +1,15 @@
+name: "GitHub Dark Dimmed"
+appearance: dark
+source: "GitHub Theme by GitHub (MIT)"
+colors:
+  background: "#2D333B"
+  border: "#444C56"
+  selection: "#434B55"
+  text: "#ADBAC7"
+  selectedText: "#ADBAC7"
+  match: "#539BF5"
+  description: "#87929D"
+  command: "#57AB5A"
+  subcommand: "#B083F0"
+  option: "#539BF5"
+  argument: "#C69026"

@@ -1,0 +1,15 @@
+name: "Atom One Light"
+appearance: light
+source: "Atom One Light Theme by akamud (MIT)"
+colors:
+  background: "#EAEAEB"
+  border: "#DBDBDC"
+  selection: "#FFFFFF"
+  text: "#383A42"
+  selectedText: "#232324"
+  match: "#121417"
+  description: "#6D6F75"
+  command: "#383A42"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#949800"

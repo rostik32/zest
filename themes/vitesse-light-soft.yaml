@@ -1,0 +1,15 @@
+name: "Vitesse Light Soft"
+appearance: light
+source: "Vitesse Theme by antfu (MIT)"
+colors:
+  background: "#F1F0E9"
+  border: "#E7E5DB"
+  selection: "#E7E5DB"
+  text: "#393A34"
+  selectedText: "#393A34"
+  match: "#1C6B48"
+  description: "#70716A"
+  command: "#1E754F"
+  subcommand: "#A13865"
+  option: "#296AA3"
+  argument: "#949800"

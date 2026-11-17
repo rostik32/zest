@@ -23,7 +23,11 @@ final class AppModel: ObservableObject {
     let controller: CompletionController
     let popup: PopupController
     let updater = Updater()
+    let themes = ThemeStore()
+    /// Bumped when the theme files change (an import), so the theme list reloads.
+    @Published private(set) var themesVersion = 0
     private var server: SocketServer?
+    private var appearanceObservation: NSKeyValueObservation?
     private var observers: [Any] = []
     private var permissionTimer: Timer?
 
@@ -63,6 +67,10 @@ final class AppModel: ObservableObject {
         ) { [weak self] _ in
             Task { @MainActor in self?.applyPreferences() }
         })
+        // Light and dark themes follow the macOS appearance.
+        appearanceObservation = NSApp.observe(\.effectiveAppearance) { [weak self] _, _ in
+            Task { @MainActor in self?.applyPreferences() }
+        }
         // Hide the popup as soon as another app comes to the front.
         observers.append(NSWorkspace.shared.notificationCenter.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main
@@ -126,12 +134,62 @@ final class AppModel: ObservableObject {
         if model.visibleRows != rows { model.visibleRows = rows }
         let descriptions = d.bool(forKey: Pref.descriptions)
         if model.showDescriptions != descriptions { model.showDescriptions = descriptions }
+        let fontName = d.string(forKey: Pref.fontName) ?? "Menlo"
+        if model.fontName != fontName { model.fontName = fontName }
+        popup.basePalette = Palette(currentTheme)
+        popup.matchEditor = d.bool(forKey: Pref.themeMatchesEditor)
+        popup.refreshPalette()
         let ghost = d.bool(forKey: Pref.ghostText)
         if ghost != lastGhostText {
             lastGhostText = ghost
             ShellIntegration.writeSettings(ghostText: ghost)
         }
         if !enabled { popup.hide() }
+    }
+
+    // MARK: - Themes
+
+    static var systemIsDark: Bool {
+        NSApp.effectiveAppearance.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+    }
+
+    /// The theme for the current macOS appearance (outside VS Code and Cursor).
+    var currentTheme: ZestTheme {
+        let d = Pref.defaults
+        let light = d.bool(forKey: Pref.themeFollowsAppearance) && !Self.systemIsDark
+        let id = d.string(forKey: light ? Pref.themeLight : Pref.themeDark) ?? ZestTheme.oneDarkProDarker.id
+        return themes.theme(id: id) ?? .oneDarkProDarker
+    }
+
+    /// Imports VS Code themes (.json files or extension folders) into your themes folder.
+    /// Returns the imported themes.
+    @discardableResult
+    func importThemes(from urls: [URL]) -> [ZestTheme] {
+        var imported: [ZestTheme] = []
+        for url in urls {
+            do {
+                var themes: [ZestTheme] = []
+                if url.pathExtension.lowercased() == "json" {
+                    let text = try String(contentsOf: url, encoding: .utf8)
+                    let base = url.deletingLastPathComponent()
+                    themes = [try VSCodeTheme.convert(json: text) { try String(contentsOf: base.appendingPathComponent($0), encoding: .utf8) }]
+                } else {
+                    themes = try VSCodeExtension.themes(in: url).map { try VSCodeExtension.convert($0) }
+                }
+                if themes.isEmpty { throw ThemeError.notFound("No color themes in \(url.lastPathComponent).") }
+                for theme in themes { try ThemeStore.save(theme) }
+                imported += themes
+            } catch {
+                show(error: "Could not import \(url.lastPathComponent)", error)
+            }
+        }
+        themesVersion += 1
+        return imported
+    }
+
+    func openThemesFolder() {
+        try? FileManager.default.createDirectory(at: ThemeStore.userDirectory, withIntermediateDirectories: true)
+        NSWorkspace.shared.open(ThemeStore.userDirectory)
     }
 
     // MARK: - Actions

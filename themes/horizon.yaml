@@ -1,0 +1,15 @@
+name: "Horizon"
+appearance: dark
+source: "Horizon Theme by Jonathan Olaleye (MIT)"
+colors:
+  background: "#232530"
+  border: "#232530"
+  selection: "#292B37"
+  text: "#D5D8DA"
+  selectedText: "#D5D8DA"
+  match: "#E95378"
+  description: "#A0A2A7"
+  command: "#29D398"
+  subcommand: "#EE64AC"
+  option: "#26BBD9"
+  argument: "#FAB795"

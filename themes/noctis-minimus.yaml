@@ -1,0 +1,15 @@
+name: "Noctis Minimus"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#14242E"
+  border: "#101213"
+  selection: "#2C414E"
+  text: "#96A8B6"
+  selectedText: "#EBF7FF"
+  match: "#5998C0"
+  description: "#6F808D"
+  command: "#72C09F"
+  subcommand: "#C28097"
+  option: "#6196B8"
+  argument: "#C8A984"

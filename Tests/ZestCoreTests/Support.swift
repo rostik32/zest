@@ -114,3 +114,21 @@ func temporaryFile(bytes: [UInt8]) throws -> String {
     try Data(bytes).write(to: url)
     return url.path
 }
+
+enum TempFiles {
+    /// A new folder with the given files (relative path -> contents).
+    static func folder(_ files: [String: String]) -> URL {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("zest-test-\(UUID().uuidString)")
+        for (path, text) in files {
+            let url = dir.appendingPathComponent(path)
+            try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try? text.write(to: url, atomically: true, encoding: .utf8)
+        }
+        return dir
+    }
+
+    /// The themes that ship with zest (themes/ in the repository).
+    static var bundledThemes: URL {
+        URL(fileURLWithPath: #filePath).deletingLastPathComponent().appendingPathComponent("../../themes").standardized
+    }
+}

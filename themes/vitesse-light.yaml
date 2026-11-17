@@ -1,0 +1,15 @@
+name: "Vitesse Light"
+appearance: light
+source: "Vitesse Theme by antfu (MIT)"
+colors:
+  background: "#FFFFFF"
+  border: "#F0F0F0"
+  selection: "#F7F7F7"
+  text: "#393A34"
+  selectedText: "#393A34"
+  match: "#1C6B48"
+  description: "#747571"
+  command: "#1E754F"
+  subcommand: "#A13865"
+  option: "#296AA3"
+  argument: "#949800"

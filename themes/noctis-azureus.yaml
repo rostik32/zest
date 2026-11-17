@@ -1,0 +1,15 @@
+name: "Noctis Azureus"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#002942"
+  border: "#0F1315"
+  selection: "#0C3F5F"
+  text: "#9FB6C6"
+  selectedText: "#EBF7FF"
+  match: "#49ACE9"
+  description: "#6F8C9E"
+  command: "#49E9A6"
+  subcommand: "#DF769B"
+  option: "#49ACE9"
+  argument: "#E4B781"

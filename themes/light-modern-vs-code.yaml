@@ -1,0 +1,15 @@
+name: "Light Modern (VS Code)"
+appearance: light
+source: "Default Themes (built-in) by Microsoft (MIT)"
+colors:
+  background: "#F8F8F8"
+  border: "#E5E5E5"
+  selection: "#E8E8E8"
+  text: "#3B3B3B"
+  selectedText: "#000000"
+  match: "#005FB8"
+  description: "#747474"
+  command: "#3B3B3B"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#949800"

@@ -1,0 +1,15 @@
+name: "Rosé Pine"
+appearance: dark
+source: "Rosé Pine by Rosé Pine (MIT)"
+colors:
+  background: "#1F1D2E"
+  border: "#26233A"
+  selection: "#2F2C40"
+  text: "#908CAA"
+  selectedText: "#E0DEF4"
+  match: "#EBBCBA"
+  description: "#6E6B85"
+  command: "#31748F"
+  subcommand: "#C4A7E7"
+  option: "#9CCFD8"
+  argument: "#F6C177"

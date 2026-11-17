@@ -1,0 +1,15 @@
+name: "Monokai Dimmed"
+appearance: dark
+source: "Monokai Dimmed Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#1E1E1E"
+  border: "#454545"
+  selection: "#707070"
+  text: "#C5C8C6"
+  selectedText: "#C5C8C6"
+  match: "#E58520"
+  description: "#939594"
+  command: "#86B42B"
+  subcommand: "#8C6BC8"
+  option: "#6A7EC8"
+  argument: "#B3B42B"

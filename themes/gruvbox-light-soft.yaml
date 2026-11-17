@@ -1,0 +1,15 @@
+name: "Gruvbox Light Soft"
+appearance: light
+source: "Gruvbox Theme by jdinhify (MIT)"
+colors:
+  background: "#F2E5BC"
+  border: "#EBDBB2"
+  selection: "#EFE1B8"
+  text: "#3C3836"
+  selectedText: "#427B58"
+  match: "#689D6A"
+  description: "#736C5E"
+  command: "#79740E"
+  subcommand: "#B16286"
+  option: "#458588"
+  argument: "#B57614"

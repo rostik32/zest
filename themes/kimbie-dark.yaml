@@ -1,0 +1,15 @@
+name: "Kimbie Dark"
+appearance: dark
+source: "Kimbie Dark Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#131510"
+  border: "#454545"
+  selection: "#593C1B"
+  text: "#D3AF86"
+  selectedText: "#D3AF86"
+  match: "#E3B583"
+  description: "#998163"
+  command: "#0DBC79"
+  subcommand: "#BC3FBC"
+  option: "#2472C8"
+  argument: "#E5E510"

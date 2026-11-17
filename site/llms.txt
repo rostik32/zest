@@ -8,6 +8,7 @@ Facts:
 - Install: `curl -fsSL https://raw.githubusercontent.com/rostik32/zest/main/install.sh | sh`, or `brew tap rostik32/tap && brew trust rostik32/tap && brew install --cask zest`.
 - Ships with specs for 1,500 commands (git, docker, kubectl, npm, brew, aws, gcloud, …) converted from the open-source Fig spec collection.
 - A new command is one YAML file in `~/.config/zest/specs`; `zest gen <command>` drafts it from `--help`, `zest validate` checks it.
+- Themes: 74 bundled VS Code themes, a light/dark pair that follows macOS, the current VS Code or Cursor theme, or any VS Code theme imported with `zest theme import`. Font, size, rows and width are configurable.
 - Runs locally; the only network request is the GitHub update check, which can be turned off.
 - Uses about 20–30 MB of memory. zsh talks to the app over a Unix socket; there is no terminal proxy.
 
@@ -17,6 +18,7 @@ Facts:
 - [Adding a command](https://raw.githubusercontent.com/rostik32/zest/main/docs/adding-a-command.md): writing a spec step by step
 - [Spec format](https://raw.githubusercontent.com/rostik32/zest/main/docs/spec-format.md): every field of the YAML spec
 - [Architecture](https://raw.githubusercontent.com/rostik32/zest/main/docs/architecture.md): how the zsh script, the socket and the app work together
+- [Themes](https://raw.githubusercontent.com/rostik32/zest/main/docs/themes.md): theme files, importing VS Code themes
 - [Contributing](https://raw.githubusercontent.com/rostik32/zest/main/CONTRIBUTING.md): building, testing and sending pull requests
 
 ## Optional

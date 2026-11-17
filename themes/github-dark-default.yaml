@@ -1,0 +1,15 @@
+name: "GitHub Dark Default"
+appearance: dark
+source: "GitHub Theme by GitHub (MIT)"
+colors:
+  background: "#161B22"
+  border: "#30363D"
+  selection: "#393F48"
+  text: "#E6EDF3"
+  selectedText: "#E6EDF3"
+  match: "#2F81F7"
+  description: "#A8AEB4"
+  command: "#3FB950"
+  subcommand: "#BC8CFF"
+  option: "#58A6FF"
+  argument: "#D29922"

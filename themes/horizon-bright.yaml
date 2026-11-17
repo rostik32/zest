@@ -1,0 +1,15 @@
+name: "Horizon Bright"
+appearance: light
+source: "Horizon Theme by Jonathan Olaleye (MIT)"
+colors:
+  background: "#FADAD1"
+  border: "#FADAD1"
+  selection: "#F9D2C7"
+  text: "#06060C"
+  selectedText: "#06060C"
+  match: "#E84A72"
+  description: "#4F4647"
+  command: "#06060C"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#06060C"

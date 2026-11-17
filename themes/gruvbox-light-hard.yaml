@@ -1,0 +1,15 @@
+name: "Gruvbox Light Hard"
+appearance: light
+source: "Gruvbox Theme by jdinhify (MIT)"
+colors:
+  background: "#F9F5D7"
+  border: "#EBDBB2"
+  selection: "#F4EBC9"
+  text: "#3C3836"
+  selectedText: "#427B58"
+  match: "#689D6A"
+  description: "#757166"
+  command: "#98971A"
+  subcommand: "#B16286"
+  option: "#458588"
+  argument: "#B57614"

@@ -7,6 +7,7 @@ Thanks for helping! There are three common kinds of contribution:
 | Add or fix suggestions for a command | [Adding a command](docs/adding-a-command.md): usually one YAML file, no Swift needed |
 | Fix a bug or add a feature | This page and [Architecture](docs/architecture.md) |
 | Report a problem or ask for a command | [Open an issue](https://github.com/rostik32/zest/issues/new/choose) |
+| Add a theme | [Themes](docs/themes.md): add the VS Code extension to `scripts/update-themes.sh` |
 | Ask a question or suggest an idea | [Discussions](https://github.com/rostik32/zest/discussions) |
 
 New here? The [good first issues](https://github.com/rostik32/zest/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)

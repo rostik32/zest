@@ -1,0 +1,15 @@
+name: "Monokai"
+appearance: dark
+source: "Monokai Theme (built-in) by Microsoft (MIT)"
+colors:
+  background: "#272822"
+  border: "#75715E"
+  selection: "#414339"
+  text: "#F8F8F2"
+  selectedText: "#F8F8F2"
+  match: "#F8F8F2"
+  description: "#B9BAB4"
+  command: "#86B42B"
+  subcommand: "#8C6BC8"
+  option: "#6A7EC8"
+  argument: "#B3B42B"

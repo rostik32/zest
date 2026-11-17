@@ -1,0 +1,15 @@
+name: "Noctis Bordo"
+appearance: dark
+source: "Noctis by liviuschera (MIT)"
+colors:
+  background: "#3E2E33"
+  border: "#1F191B"
+  selection: "#563440"
+  text: "#BBAAB0"
+  selectedText: "#EDEBFF"
+  match: "#F18EB0"
+  description: "#96858B"
+  command: "#49E9A6"
+  subcommand: "#DF769B"
+  option: "#49ACE9"
+  argument: "#E4B781"

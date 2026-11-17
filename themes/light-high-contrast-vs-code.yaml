@@ -1,0 +1,15 @@
+name: "Light High Contrast (VS Code)"
+appearance: light
+source: "Default Themes (built-in) by Microsoft (MIT)"
+colors:
+  background: "#FFFFFF"
+  border: "#C8C8C8"
+  selection: "#D6EBFF"
+  text: "#000000"
+  selectedText: "#000000"
+  match: "#0066BF"
+  description: "#4D4D4D"
+  command: "#00BC00"
+  subcommand: "#BC05BC"
+  option: "#0451A5"
+  argument: "#949800"
