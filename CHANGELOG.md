@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7 — 2026-11-17
+
+- The popup works with the mouse: scroll the list, and click a suggestion to insert it, as Tab
+  does. The keyboard stays with the terminal.
+- The row under the pointer is highlighted.
+
 ## 0.1.6 — 2026-11-17
 
 - Themes: pick one of 74 VS Code themes in Settings → Appearance, with search and a live preview.

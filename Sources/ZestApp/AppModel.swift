@@ -43,6 +43,7 @@ final class AppModel: ObservableObject {
         IconCache.shared.configure(icons: Paths.icons)
         popup = PopupController(icons: icons)
         popup.onDismiss = { [controller] in controller.hide() }
+        popup.model.onSelect = { [weak self] index in self?.select(index) }
     }
 
     func start() {
@@ -145,6 +146,20 @@ final class AppModel: ObservableObject {
             ShellIntegration.writeSettings(ghostText: ghost)
         }
         if !enabled { popup.hide() }
+    }
+
+    /// A click on a suggestion: select it and press Tab in the terminal, so the shell
+    /// inserts it exactly as if you had chosen it with the keyboard. The terminal keeps
+    /// the keyboard focus (the popup never takes it).
+    private func select(_ index: Int) {
+        guard controller.select(index: index) else { return }
+        let tab: CGKeyCode = 48
+        for down in [true, false] {
+            guard let event = CGEvent(keyboardEventSource: CGEventSource(stateID: .hidSystemState), virtualKey: tab, keyDown: down)
+            else { return }
+            event.flags = []
+            event.post(tap: .cghidEventTap)
+        }
     }
 
     // MARK: - Themes

@@ -115,6 +115,7 @@ Type a command. The popup appears while you type and disappears when there is no
 | <kbd>Enter</kbd> | Insert while you are typing a word; after a space it runs the command. You can change this in Settings. |
 | <kbd>Esc</kbd> | Close the popup for this line |
 | <kbd>→</kbd> | Accept the grey ghost text from your history |
+| Mouse | Scroll the list; click a suggestion to insert it |
 
 When the popup is closed, every key does exactly what it did before, including your own key
 bindings and zsh's own completion.

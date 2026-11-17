@@ -15,6 +15,10 @@ public final class PopupModel: ObservableObject {
     @Published public var showDescriptions = true
     @Published public var palette = Palette.default
     @Published public var fontName = "Menlo"
+    /// The row under the mouse pointer.
+    @Published public var hovered: Int?
+    /// Called with the row that was clicked.
+    public var onSelect: ((Int) -> Void)?
 
     func font(bold: Bool = false) -> Font { PopupFont.font(fontName, size: fontSize, bold: bold) }
 
@@ -44,8 +48,14 @@ public struct PopupView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(spacing: 0) {
                         ForEach(Array(model.items.enumerated()), id: \.offset) { index, item in
-                            Row(item: item, selected: index == model.selected, model: model, icons: icons)
+                            Row(item: item, selected: index == model.selected, hovered: index == model.hovered,
+                                model: model, icons: icons)
                                 .id(index)
+                                .contentShape(Rectangle())
+                                .onHover { inside in
+                                    if inside { model.hovered = index } else if model.hovered == index { model.hovered = nil }
+                                }
+                                .onTapGesture { model.onSelect?(index) }
                         }
                     }
                 }
@@ -68,6 +78,7 @@ public struct PopupView: View {
 private struct Row: View {
     let item: Completion
     let selected: Bool
+    var hovered = false
     @ObservedObject var model: PopupModel
     let icons: IconResolver
 
@@ -90,7 +101,7 @@ private struct Row: View {
         }
         .padding(.horizontal, 8)
         .frame(height: model.rowHeight)
-        .background(selected ? model.palette.selection : .clear)
+        .background(selected ? model.palette.selection : hovered ? model.palette.selection.opacity(0.5) : .clear)
         .clipShape(RoundedRectangle(cornerRadius: 3))
         .padding(.horizontal, 4)
     }

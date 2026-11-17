@@ -33,6 +33,17 @@ import Testing
         #expect(press(.tab, "git ch") == .set(cursor: 13, buffer: "git checkout "))
     }
 
+    @Test func clickedItemIsInsertedByTheNextTab() throws {
+        type("git c")
+        let items = controller.current.items
+        let index = try #require(items.firstIndex { $0.name == "clone" })
+        #expect(index != 0)
+        #expect(controller.select(index: index))
+        #expect(controller.current.selected == index)
+        #expect(press(.tab, "git c") == .set(cursor: 10, buffer: "git clone "))
+        #expect(!controller.select(index: 99))
+    }
+
     @Test func arrowsMoveSelection() {
         type("git c")
         #expect(press(.down, "git c") == .consumed)

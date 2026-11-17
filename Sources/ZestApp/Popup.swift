@@ -18,7 +18,10 @@ final class PopupPanel: NSPanel {
         hasShadow = true
         isOpaque = false
         backgroundColor = .clear
-        ignoresMouseEvents = true
+        // Clicks pick a suggestion and the wheel scrolls the list. The panel never becomes
+        // key, so the keyboard stays with the terminal.
+        ignoresMouseEvents = false
+        acceptsMouseMovedEvents = true
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient, .ignoresCycle]
         isReleasedWhenClosed = false
     }
@@ -36,7 +39,7 @@ final class PopupController {
 
     init(icons: IconResolver) {
         self.icons = icons
-        let host = NSHostingView(rootView: PopupView(model: model, icons: icons))
+        let host = FirstMouseHostingView(rootView: PopupView(model: model, icons: icons))
         host.translatesAutoresizingMaskIntoConstraints = true
         panel.contentView = host
     }
@@ -229,4 +232,9 @@ final class EditorThemeCache {
         }
         return entry?.theme
     }
+}
+
+/// Takes the first click (the panel is never key, so every click is a first one).
+final class FirstMouseHostingView<Content: View>: NSHostingView<Content> {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }

@@ -86,6 +86,19 @@ public final class CompletionController: @unchecked Sendable {
         }
     }
 
+    /// Makes `index` the selected item, e.g. after a mouse click; the next Tab inserts it.
+    /// Returns false when the popup is closed or the index is out of range.
+    @discardableResult
+    public func select(index: Int) -> Bool {
+        queue.sync {
+            guard state.visible, state.items.indices.contains(index) else { return false }
+            state.selected = index
+            navigated = true
+            publish(visible: true)
+            return true
+        }
+    }
+
     /// Accepts an item, e.g. after a mouse click. Returns the new line.
     public func accept(index: Int) -> ShellProtocol.Line? {
         queue.sync {
